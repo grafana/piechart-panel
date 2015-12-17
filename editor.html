@@ -5,8 +5,8 @@
 				<li class="tight-form-item" style="width: 80px">
 					<strong>Type</strong>
 				</li>
-				<li class="tight-form-item">
-					<select class="input-mini tight-form-input" ng-model="panel.pieType" ng-options="t for t in ['pie', 'donut']" ng-change="render()"></select>
+				<li>
+					<select class="input-small tight-form-input last" ng-model="panel.pieType" ng-options="t for t in ['pie', 'donut']" ng-change="render()"></select>
 				</li>
 			</ul>
 			<div class="clearfix"></div>
@@ -15,7 +15,7 @@
 </div>
 <div class="editor-row">
 	<div class="section">
-		<div class="tight-form last">
+		<div class="tight-form">
 			<ul class="tight-form-list">
 				<li class="tight-form-item" style="width: 110px">
 					<strong>Legend</strong>
@@ -23,17 +23,19 @@
 				<li class="tight-form-item">
 					<editor-checkbox text="Show" model="panel.legend.show" change="get_data()"></editor-checkbox>
 				</li>
-				<li class="tight-form-item">
-					<select class="input-mini tight-form-input" ng-model="panel.legendType" ng-options="t for t in ['On graph', 'Table', 'Right side']" ng-change="render()"></select>
+				<li>
+					<select class="input-medium tight-form-input last" ng-model="panel.legendType" ng-options="t for t in ['On graph', 'Table', 'Right side']" ng-change="render()"></select>
 				</li>
 			</ul>
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<div class="section">
+</div>
+<div class="editor-row">
+	<div class="section" style="margin-bottom: 20px">
 		<div class="tight-form last">
 			<ul class="tight-form-list">
-				<li class="tight-form-item" style="width: 105px">
+				<li class="tight-form-item" style="width: 110px">
 					<strong>Legend values</strong>
 				</li>
 				<li class="tight-form-item">
@@ -45,7 +47,7 @@
 				<li class="tight-form-item">
 					<editor-checkbox text="Avg" model="panel.legend.avg" change="legendValuesOptionChanged()"></editor-checkbox>
 				</li>
-				<li class="tight-form-item">
+				<li class="tight-form-item last">
 					<editor-checkbox text="Current" model="panel.legend.current" change="legendValuesOptionChanged()"></editor-checkbox>
 				</li>
 			</ul>
