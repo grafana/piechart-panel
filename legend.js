@@ -1,15 +1,17 @@
 define([
   'angular',
   'lodash',
-  'kbn',
+  'app/core/utils/kbn',
+  'app/app',
   'jquery',
   'jquery.flot',
   'jquery.flot.time',
 ],
-function (angular, _, kbn, $) {
+function (angular, _, kbn, app, $) {
   'use strict';
 
-  var module = angular.module('grafana.panels.piechart');
+  var module = angular.module('grafana.panels.piechart', []);
+  app.useModule(module);
 
   module.directive('piechartLegend', function() {
 

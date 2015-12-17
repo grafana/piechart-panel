@@ -17,7 +17,7 @@ function (angular, app, _, kbn, TimeSeries, PanelMeta) {
   module.directive('grafanaPanelPiechart', function() {
     return {
       controller: 'PieChartCtrl',
-      templateUrl: 'app/panels/piechart/module.html',
+      templateUrl: 'public/plugins/piechart/module.html'
     };
   });
 
@@ -30,7 +30,7 @@ function (angular, app, _, kbn, TimeSeries, PanelMeta) {
       metricsEditor: true
     });
 
-    $scope.panelMeta.addEditorTab('Options', 'app/panels/piechart/editor.html');
+    $scope.panelMeta.addEditorTab('Options', 'public/plugins/piechart/editor.html');
     $scope.panelMeta.addEditorTab('Time range', 'app/features/panel/partials/panelTime.html');
 
     // Set and populate defaults
