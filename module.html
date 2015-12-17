@@ -1,7 +1,7 @@
 <grafana-panel>
   <div class="graph-wrapper" ng-class="{'graph-legend-rightside': panel.legendType == 'Right side'}">
     <div class="graph-canvas-wrapper">
-      <div class="piechart-panel" piechart-panel></div>
+      <div class="piechart-panel" style="position: relative; display: table; width: 100%;" piechart-panel></div>
     </div>
     <div class="graph-legend-wrapper" ng-if="panel.legend.show" piechart-legend></div>
   </div>
