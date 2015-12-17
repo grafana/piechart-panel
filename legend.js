@@ -77,7 +77,6 @@ function (angular, _, kbn, app, $) {
         }
 
         function render() {
-          console.log(panel.legendType);
           if(panel.legendType === 'On graph') {
             $container.empty();
             return;
