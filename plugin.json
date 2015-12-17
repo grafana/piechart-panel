@@ -1,0 +1,14 @@
+{
+  "pluginType": "panel",
+
+  "name": "PieChart",
+  "type": "piechart",
+
+  "module": "plugins/piechart/module",
+
+  "staticRoot": {
+    "url": "piechart",
+    "path": "."
+  }
+
+}
