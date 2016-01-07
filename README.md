@@ -7,7 +7,6 @@ git clone git@github.com:grafana/panel-plugin-piechart.git
 sudo service grafana-server restart
 ```
 
-
 ## Clone into a directory of your choice
 
 The edit your grafana.ini config file (Default location is at /etc/grafana/grafana.ini) and add this:
