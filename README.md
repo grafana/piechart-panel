@@ -20,3 +20,5 @@ path = /home/your/clone/dir/panel-plugin-piechart
 Note that if you clone it into the grafana plugins directory you do not need to add the above config option. That is only
 if you want to place the plugin in a directory outside the standard plugins directory. Be aware that grafana-server
 needs read access to the directory.
+
+test
