@@ -1,9 +1,12 @@
+You need the last grafana build to enable plugin support. You can get it here : http://grafana.org/download/builds.html
+Unfortunately, the docker image, the package available in the repos don't have plugin support enabled.
+
 ## Clone into plugins directory
 Either clone this repo into your grafana plugins directory (default /var/lib/grafana/plugins if your installing grafana with package).
 Restart grafana-server and the plugin should be automatically detected and used.
 
 ```
-git clone git@github.com:grafana/panel-plugin-piechart.git
+git clone https://github.com/grafana/panel-plugin-piechart.git
 sudo service grafana-server restart
 ```
 
