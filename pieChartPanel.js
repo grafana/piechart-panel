@@ -18,6 +18,8 @@ function (angular, app, _, $) {
       link: function(scope, elem) {
         var data, panel;
 
+        var $tooltip = $('<div id="tooltip">');
+
         scope.$on('render', function() {
           render();
           scope.panelRenderingComplete();
@@ -68,9 +70,9 @@ function (angular, app, _, $) {
                   show: scope.panel.legend.show && scope.panel.legendType === 'On graph'
                 }
               }
-            //},
-            //grid: {
-            //  hoverable: true
+            },
+            grid: {
+              hoverable: true
             }
           };
 
@@ -81,7 +83,23 @@ function (angular, app, _, $) {
           elem.html(plotCanvas);
 
           $.plot(plotCanvas, scope.data, options);
-        }
+          plotCanvas.bind("plothover", function (event, pos, item) {
+            if (!item) {
+			  $tooltip.detach();
+			  return;
+            }
+
+		    var body;
+		    var percent = parseFloat(item.series.percent).toFixed(2);
+
+		    body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
+		    body += '<div class="graph-tooltip-value">' + item.series.label + ': ' + item.series.data[0][1];
+		    body += " (" + percent + "%)" + '</div>';
+		    body += "</div></div>";
+
+            $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
+          });
+        };
 
         function render() {
           if (!scope.data) { return; }
