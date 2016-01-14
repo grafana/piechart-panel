@@ -59,6 +59,8 @@ function (angular, app, _, $) {
 
           plotCanvas.css(plotCss);
 
+          var $panelContainer = elem.parents('.panel-container');
+          var strokecolor = $panelContainer.css('background-color');
           var options = {
             legend: {
               show: false
@@ -66,6 +68,10 @@ function (angular, app, _, $) {
             series: {
               pie: {
                 show: true,
+                stroke: {
+                    color: strokecolor,
+                    width: 0.3
+                },
                 label: {
                   show: scope.panel.legend.show && scope.panel.legendType === 'On graph'
                 }
