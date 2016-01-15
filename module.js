@@ -14,14 +14,7 @@ function (angular, app, _, kbn, TimeSeries, PanelMeta) {
   var module = angular.module('grafana.panels.piechart');
   app.useModule(module);
 
-  module.directive('grafanaPanelPiechart', function() {
-    return {
-      controller: 'PieChartCtrl',
-      templateUrl: 'public/plugins/piechart/module.html'
-    };
-  });
-
-  module.controller('PieChartCtrl', function($scope, $rootScope, panelSrv, panelHelper) {
+  function PieChartCtrl($scope, $rootScope, panelSrv, panelHelper) {
 
     $scope.panelMeta = new PanelMeta({
       panelName: 'Piechart',
@@ -193,5 +186,16 @@ function (angular, app, _, kbn, TimeSeries, PanelMeta) {
     };
 
     $scope.init();
-  });
+  }
+
+   function pieChartPanelDirective() {
+     return {
+       controller: PieChartCtrl,
+       templateUrl: 'public/plugins/piechart/module.html'
+     };
+   }
+
+   return {
+     panel: pieChartPanelDirective
+   };
 });
