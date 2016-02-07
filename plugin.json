@@ -1,9 +1,7 @@
 {
-  "name": "PieChart",
   "type": "panel",
+  "name": "Pie Chart",
   "id": "piechart",
-
-  "module": "plugins/piechart/module",
 
   "staticRoot": "."
 }

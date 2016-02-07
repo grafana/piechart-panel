@@ -6,7 +6,7 @@
 					<strong>Type</strong>
 				</li>
 				<li>
-					<select class="input-small tight-form-input last" ng-model="panel.pieType" ng-options="t for t in ['pie', 'donut']" ng-change="render()"></select>
+					<select class="input-small tight-form-input last" ng-model="ctrl.panel.pieType" ng-options="t for t in ['pie', 'donut']" ng-change="ctrl.render()"></select>
 				</li>
 			</ul>
 			<div class="clearfix"></div>
@@ -21,10 +21,10 @@
 					<strong>Legend</strong>
 				</li>
 				<li class="tight-form-item">
-					<editor-checkbox text="Show" model="panel.legend.show" change="get_data()"></editor-checkbox>
+					<editor-checkbox text="Show" model="ctrl.panel.legend.show" change="ctrl.refresh()"></editor-checkbox>
 				</li>
 				<li>
-					<select class="input-medium tight-form-input last" ng-model="panel.legendType" ng-options="t for t in ['On graph', 'Table', 'Right side']" ng-change="render()"></select>
+					<select class="input-medium tight-form-input last" ng-model="ctrl.panel.legendType" ng-options="t for t in ['On graph', 'Table', 'Right side']" ng-change="ctrl.render()"></select>
 				</li>
 			</ul>
 			<div class="clearfix"></div>
@@ -39,16 +39,16 @@
 					<strong>Legend values</strong>
 				</li>
 				<li class="tight-form-item">
-					<editor-checkbox text="Min" model="panel.legend.min" change="legendValuesOptionChanged()"></editor-checkbox>
+					<editor-checkbox text="Min" model="ctrl.panel.legend.min" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
 				</li>
 				<li class="tight-form-item">
-					<editor-checkbox text="Max" model="panel.legend.max" change="legendValuesOptionChanged()"></editor-checkbox>
+					<editor-checkbox text="Max" model="ctrl.panel.legend.max" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
 				</li>
 				<li class="tight-form-item">
-					<editor-checkbox text="Avg" model="panel.legend.avg" change="legendValuesOptionChanged()"></editor-checkbox>
+					<editor-checkbox text="Avg" model="ctrl.panel.legend.avg" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
 				</li>
 				<li class="tight-form-item last">
-					<editor-checkbox text="Current" model="panel.legend.current" change="legendValuesOptionChanged()"></editor-checkbox>
+					<editor-checkbox text="Current" model="ctrl.panel.legend.current" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
 				</li>
 			</ul>
 			<div class="clearfix"></div>

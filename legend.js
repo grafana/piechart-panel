@@ -2,16 +2,14 @@ define([
   'angular',
   'lodash',
   'app/core/utils/kbn',
-  'app/app',
   'jquery',
   'jquery.flot',
   'jquery.flot.time',
 ],
-function (angular, _, kbn, app, $) {
+function (angular, _, kbn, $) {
   'use strict';
 
-  var module = angular.module('grafana.panels.piechart', []);
-  app.useModule(module);
+  var module = angular.module('grafana.directives');
 
   module.directive('piechartLegend', function() {
 
@@ -19,16 +17,17 @@ function (angular, _, kbn, app, $) {
       link: function(scope, elem) {
         var $container = $('<section class="graph-legend"></section>');
         var firstRender = true;
-        var panel = scope.panel;
+        var ctrl = scope.ctrl;
+        var panel = ctrl.panel;
         var data;
         var seriesList;
         var i;
 
         scope.$on('render', function() {
-          data = scope.series;
+          data = ctrl.series;
           if (data) {
             for(var i in data) {
-              data[i].color = scope.data[i].color;
+              data[i].color = ctrl.data[i].color;
             }
             render();
           }
@@ -42,7 +41,7 @@ function (angular, _, kbn, app, $) {
           var el = $(e.currentTarget);
           var index = getSeriesIndexForElement(el);
           var seriesInfo = seriesList[index];
-          scope.toggleSeries(seriesInfo, e);
+          ctrl.toggleSeries(seriesInfo, e);
         }
 
         function sortLegend(e) {

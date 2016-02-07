@@ -1,106 +1,101 @@
 define([
-  'angular',
-  'app/app',
   'lodash',
+  'app/plugins/sdk',
   'app/core/utils/kbn',
   'app/core/time_series',
-  'app/features/panel/panel_meta',
-  './pieChartPanel',
+  './rendering',
   './legend',
 ],
-function (angular, app, _, kbn, TimeSeries, PanelMeta) {
+function (_, sdk, kbn, TimeSeries, rendering) {
   'use strict';
 
-  var module = angular.module('grafana.panels.piechart');
-  app.useModule(module);
-
-  function PieChartCtrl($scope, $rootScope, panelSrv, panelHelper) {
-
-    $scope.panelMeta = new PanelMeta({
-      panelName: 'Piechart',
-      editIcon:  "fa fa-dashboard",
-      fullscreen: true,
-      metricsEditor: true
-    });
-
-    $scope.panelMeta.addEditorTab('Options', 'public/plugins/piechart/editor.html');
-    $scope.panelMeta.addEditorTab('Time range', 'app/features/panel/partials/panelTime.html');
-
     // Set and populate defaults
-    var _d = {
-      pieType: 'pie',
-      legend: {
-        show: true, // disable/enable legend
-        legendType: 'rightSide',
-        values: false, // disable/enable legend values
-        min: false,
-        max: false,
-        current: false,
-        total: false,
-        avg: false
-      },
-      links: [],
-      datasource: null,
-      maxDataPoints: 3,
-      interval: null,
-      targets: [{}],
-      cacheTimeout: null,
-      nullText: null,
-      nullPointMode: 'connected'
+  var panelDefaults = {
+    pieType: 'pie',
+    legend: {
+      show: true, // disable/enable legend
+      legendType: 'rightSide',
+      values: false, // disable/enable legend values
+      min: false,
+      max: false,
+      current: false,
+      total: false,
+      avg: false
+    },
+    links: [],
+    datasource: null,
+    maxDataPoints: 3,
+    interval: null,
+    targets: [{}],
+    cacheTimeout: null,
+    nullText: null,
+    nullPointMode: 'connected'
+  };
+
+
+  var PieChartCtrl = (function(_super) {
+
+    function PieChartCtrl($scope, $injector, $rootScope) {
+      _super.call(this, $scope, $injector);
+      this.$rootScope = $rootScope;
+
+      _.defaults(this.panel, panelDefaults);
+      _.defaults(this.panel.legend, panelDefaults.legend);
+    }
+
+    PieChartCtrl.prototype = Object.create(_super.prototype);
+    PieChartCtrl.prototype.constructor = PieChartCtrl;
+
+    PieChartCtrl.templateUrl = 'public/plugins/piechart/module.html';
+
+    PieChartCtrl.prototype.initEditMode = function() {
+      _super.prototype.initEditMode.call(this);
+      this.icon =  "fa fa-dashboard";
+      this.addEditorTab('Options', 'public/plugins/piechart/editor.html', 2);
+      this.unitFormats = kbn.getUnitFormats();
     };
 
-    _.defaults($scope.panel, _d);
-    _.defaults($scope.panel.legend, _d.legend);
-
-    $scope.unitFormats = kbn.getUnitFormats();
-
-    $scope.setUnitFormat = function(subItem) {
-      $scope.panel.format = subItem.value;
-      $scope.render();
+    PieChartCtrl.prototype.setUnitFormat = function(subItem) {
+      this.panel.format = subItem.value;
+      this.render();
     };
 
-    $scope.init = function() {
-      panelSrv.init($scope);
+    PieChartCtrl.prototype.refreshData = function(datasource) {
+      return this.issueQueries(datasource)
+      .then(this.dataHandler.bind(this))
+      .catch(function(err) {
+        this.series = [];
+        this.render();
+        throw err;
+      }.bind(this));
     };
 
-    $scope.refreshData = function(datasource) {
-      panelHelper.updateTimeRange($scope);
-
-      return panelHelper.issueMetricQuery($scope, datasource)
-        .then($scope.dataHandler, function(err) {
-          $scope.series = [];
-          $scope.render();
-          throw err;
-        });
+    PieChartCtrl.prototype.dataHandler = function(results) {
+      this.series = _.map(results.data, this.seriesHandler.bind(this));
+      this.render();
     };
 
-    $scope.dataHandler = function(results) {
-      $scope.series = _.map(results.data, $scope.seriesHandler);
-      $scope.render();
-    };
-
-    $scope.seriesHandler = function(seriesData) {
+    PieChartCtrl.prototype.seriesHandler = function(seriesData) {
       var series = new TimeSeries({
         datapoints: seriesData.datapoints,
         alias: seriesData.target
       });
 
-      series.flotpairs = series.getFlotPairs($scope.panel.nullPointMode);
-
+      series.flotpairs = series.getFlotPairs(this.panel.nullPointMode);
       return series;
     };
 
-    $scope.getDecimalsForValue = function(value) {
-      if (_.isNumber($scope.panel.decimals)) {
-        return { decimals: $scope.panel.decimals, scaledDecimals: null };
+    PieChartCtrl.prototype.getDecimalsForValue = function(value) {
+      if (_.isNumber(this.panel.decimals)) {
+        return { decimals: this.panel.decimals, scaledDecimals: null };
       }
 
       var delta = value / 2;
       var dec = -Math.floor(Math.log(delta) / Math.LN10);
 
-      var magn = Math.pow(10, -dec),
-          norm = delta / magn, // norm is between 1.0 and 10.0
-          size;
+      var magn = Math.pow(10, -dec);
+      var norm = delta / magn; // norm is between 1.0 and 10.0
+      var size;
 
       if (norm < 1.5) {
         size = 1;
@@ -129,24 +124,24 @@ function (angular, app, _, kbn, TimeSeries, PanelMeta) {
       return result;
     };
 
-    $scope.render = function() {
+    PieChartCtrl.prototype.render = function() {
       var data = [];
 
-      if ($scope.series && $scope.series.length > 0) {
-        for (var i=0; i < $scope.series.length; i++) {
-          data.push({label: $scope.series[i].alias, data: $scope.series[i].stats.current, color: $rootScope.colors[i]});
+      if (this.series && this.series.length > 0) {
+        for (var i=0; i < this.series.length; i++) {
+          data.push({label: this.series[i].alias, data: this.series[i].stats.current, color: this.$rootScope.colors[i]});
         }
       }
 
-      $scope.data = data;
-      panelHelper.broadcastRender($scope, data);
+      this.data = data;
+      this.broadcastRender(data);
     };
 
-    $scope.setValues = function(data) {
+    PieChartCtrl.prototype.setValues = function(data) {
       data.flotpairs = [];
 
-      if ($scope.series && $scope.series.length > 0) {
-        var lastPoint = _.last($scope.series[0].datapoints);
+      if (this.series && this.series.length > 0) {
+        var lastPoint = _.last(this.series[0].datapoints);
         var lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
 
         if (_.isString(lastValue)) {
@@ -154,11 +149,11 @@ function (angular, app, _, kbn, TimeSeries, PanelMeta) {
           data.valueFormated = lastValue;
           data.valueRounded = 0;
         } else {
-          data.value = $scope.series[0].stats[$scope.panel.valueName];
-          data.flotpairs = $scope.series[0].flotpairs;
+          data.value = this.series[0].stats[this.panel.valueName];
+          data.flotpairs = this.series[0].flotpairs;
 
-          var decimalInfo = $scope.getDecimalsForValue(data.value);
-          var formatFunc = kbn.valueFormats[$scope.panel.format];
+          var decimalInfo = this.getDecimalsForValue(data.value);
+          var formatFunc = kbn.valueFormats[this.panel.format];
           data.valueFormated = formatFunc(data.value, decimalInfo.decimals, decimalInfo.scaledDecimals);
           data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
         }
@@ -169,33 +164,31 @@ function (angular, app, _, kbn, TimeSeries, PanelMeta) {
       }
     };
 
-    $scope.removeValueMap = function(map) {
-      var index = _.indexOf($scope.panel.valueMaps, map);
-      $scope.panel.valueMaps.splice(index, 1);
-      $scope.render();
+    PieChartCtrl.prototype.removeValueMap = function(map) {
+      var index = _.indexOf(this.panel.valueMaps, map);
+      this.panel.valueMaps.splice(index, 1);
+      this.render();
     };
 
-    $scope.addValueMap = function() {
-      $scope.panel.valueMaps.push({value: '', op: '=', text: '' });
+    PieChartCtrl.prototype.addValueMap = function() {
+      this.panel.valueMaps.push({value: '', op: '=', text: '' });
     };
 
-    $scope.legendValuesOptionChanged = function() {
-      var legend = $scope.panel.legend;
+    PieChartCtrl.prototype.legendValuesOptionChanged = function() {
+      var legend = this.panel.legend;
       legend.values = legend.min || legend.max || legend.avg || legend.current || legend.total;
-      $scope.render();
+      this.render();
     };
 
-    $scope.init();
-  }
+    PieChartCtrl.prototype.link = function(scope, elem, attrs, ctrl) {
+      rendering.link(scope, elem, attrs, ctrl);
+    };
 
-   function pieChartPanelDirective() {
-     return {
-       controller: PieChartCtrl,
-       templateUrl: 'public/plugins/piechart/module.html'
-     };
-   }
+    return PieChartCtrl;
 
-   return {
-     panel: pieChartPanelDirective
-   };
+  })(sdk.MetricsPanelCtrl);
+
+  return {
+    PanelCtrl: PieChartCtrl
+  };
 });
