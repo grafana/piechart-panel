@@ -3,5 +3,25 @@
   "name": "Pie Chart",
   "id": "piechart",
 
-  "staticRoot": "."
+  "staticRoot": ".",
+
+  "info": {
+    "description": "Pie chart panel for grafana",
+    "author": {
+      "name": "Raintank Inc.",
+      "url": "http://raintank.io"
+    },
+    "keywords": ["piechart", "panel"],
+    "links": [
+      {"name": "Project site", "url": "http://project.com"},
+      {"name": "License & Terms", "url": "http://license.com"}
+    ],
+    "version": "1.0.0",
+    "updated": "2015-02-10"
+  },
+
+  "dependencies": {
+    "grafanaVersion": "2.6.x",
+    "plugins": [ ]
+  }
 }
