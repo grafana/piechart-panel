@@ -32,7 +32,6 @@ function (_, sdk, kbn, TimeSeries, rendering) {
     nullPointMode: 'connected'
   };
 
-
   var PieChartCtrl = (function(_super) {
 
     function PieChartCtrl($scope, $injector, $rootScope) {
