@@ -20,7 +20,7 @@ function (_, $) {
 
     function setElementHeight() {
       try {
-        var height = ctrl.height || panel.height || scope.row.height;
+        var height = ctrl.height || panel.height || ctrl.row.height;
         if (_.isString(height)) {
           height = parseInt(height.replace('px', ''), 10);
         }
@@ -106,9 +106,9 @@ function (_, $) {
       data = ctrl.data;
       panel = ctrl.panel;
 
-      setElementHeight();
-
-      addPieChart();
+      if (setElementHeight()) {
+        addPieChart();
+      }
     }
   }
 
