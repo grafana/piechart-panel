@@ -13,6 +13,24 @@
 		</div>
 	</div>
 </div>
+
+<div class="editor-row">
+	<div class="section">
+		<div class="tight-form">
+			<ul class="tight-form-list">
+				<li class="tight-form-item" style="width: 110px">
+					<strong>Unit</strong>
+				</li>
+				<li class="dropdown" style="width: 140px;"
+					ng-model="ctrl.panel.format"
+					dropdown-typeahead="ctrl.unitFormats"
+					dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem)">
+				</li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
 <div class="editor-row">
 	<div class="section">
 		<div class="tight-form">
