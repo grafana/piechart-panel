@@ -14,7 +14,6 @@ function (_, sdk, kbn, TimeSeries, rendering) {
     pieType: 'pie',
     legend: {
       show: true, // disable/enable legend
-      legendType: 'rightSide',
       values: false, // disable/enable legend values
       min: false,
       max: false,
@@ -29,7 +28,8 @@ function (_, sdk, kbn, TimeSeries, rendering) {
     targets: [{}],
     cacheTimeout: null,
     nullText: null,
-    nullPointMode: 'connected'
+    nullPointMode: 'connected',
+    legendType: 'rightSide'
   };
 
 
