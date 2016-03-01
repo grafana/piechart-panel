@@ -14,7 +14,6 @@ function (_, sdk, kbn, TimeSeries, rendering) {
     pieType: 'pie',
     legend: {
       show: true, // disable/enable legend
-      legendType: 'rightSide',
       values: false, // disable/enable legend values
       min: false,
       max: false,
@@ -29,7 +28,9 @@ function (_, sdk, kbn, TimeSeries, rendering) {
     targets: [{}],
     cacheTimeout: null,
     nullText: null,
-    nullPointMode: 'connected'
+    nullPointMode: 'connected',
+    legendType: 'rightSide',
+    format: 'short'
   };
 
   var PieChartCtrl = (function(_super) {
@@ -152,8 +153,7 @@ function (_, sdk, kbn, TimeSeries, rendering) {
           data.flotpairs = this.series[0].flotpairs;
 
           var decimalInfo = this.getDecimalsForValue(data.value);
-          var formatFunc = kbn.valueFormats[this.panel.format];
-          data.valueFormated = formatFunc(data.value, decimalInfo.decimals, decimalInfo.scaledDecimals);
+          data.valueFormated = formatValue(data.value);
           data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
         }
       }
@@ -161,6 +161,15 @@ function (_, sdk, kbn, TimeSeries, rendering) {
       if (data.value === null || data.value === void 0) {
         data.valueFormated = "no value";
       }
+    };
+
+    PieChartCtrl.prototype.formatValue = function(value) {
+      var decimalInfo = this.getDecimalsForValue(value);
+      var formatFunc = kbn.valueFormats[this.panel.format];
+      if (formatFunc) {
+        return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
+      }
+      return value;
     };
 
     PieChartCtrl.prototype.removeValueMap = function(map) {
