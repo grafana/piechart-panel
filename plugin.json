@@ -1,7 +1,7 @@
 {
   "type": "panel",
   "name": "Pie Chart",
-  "id": "piechart",
+  "id": "piechart-panel",
 
   "staticRoot": ".",
 
