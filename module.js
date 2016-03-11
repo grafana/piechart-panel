@@ -45,13 +45,12 @@ function (_, sdk, kbn, TimeSeries, rendering) {
 
     PieChartCtrl.prototype = Object.create(_super.prototype);
     PieChartCtrl.prototype.constructor = PieChartCtrl;
-
-    PieChartCtrl.templateUrl = 'public/plugins/piechart/module.html';
+    PieChartCtrl.templateUrl = 'module.html';
 
     PieChartCtrl.prototype.initEditMode = function() {
       _super.prototype.initEditMode.call(this);
       this.icon =  "fa fa-dashboard";
-      this.addEditorTab('Options', 'public/plugins/piechart/editor.html', 2);
+      this.addEditorTab('Options', 'public/plugins/piechart-panel/editor.html', 2);
       this.unitFormats = kbn.getUnitFormats();
     };
 
