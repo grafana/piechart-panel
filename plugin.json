@@ -3,8 +3,6 @@
   "name": "Pie Chart",
   "id": "piechart-panel",
 
-  "staticRoot": ".",
-
   "info": {
     "description": "Pie chart panel for grafana",
     "author": {
