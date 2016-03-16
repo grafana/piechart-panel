@@ -1,9 +1,20 @@
-You need the last grafana build to enable plugin support. You can get it here : http://grafana.org/download/builds.html
-Unfortunately, the docker image, the package available in the repos don't have plugin support enabled.
+Use the new grafana-cli tool to install piechart-panel from the commandline:
 
-## Clone into plugins directory
-Either clone this repo into your grafana plugins directory (default /var/lib/grafana/plugins if your installing grafana with package).
-Restart grafana-server and the plugin should be automatically detected and used.
+```
+grafana-cli install piechart-panel
+```
+
+The plugin will be installed into your grafana plugins directory; the default is /var/lib/grafana/plugins if you installed the grafana package.
+
+More instructions on the cli tool can be found [here](http://docs.grafana.org/v3.0/plugins/installation/).
+
+You need the lastest grafana build for Grafana 3.0 to enable plugin support. You can get it here : http://grafana.org/download/builds.html
+
+## Alternative installation method
+
+It is also possible to clone this repo directly into your plugins directory.
+
+Afterwards restart grafana-server and the plugin should be automatically detected and used.
 
 ```
 git clone https://github.com/grafana/piechart-panel.git
@@ -13,7 +24,7 @@ sudo service grafana-server restart
 
 ## Clone into a directory of your choice
 
-The edit your grafana.ini config file (Default location is at /etc/grafana/grafana.ini) and add this:
+If the plugin is cloned to a directory that is not the default plugins directory then you need to edit your grafana.ini config file (Default location is at /etc/grafana/grafana.ini) and add this:
 
 ```ini
 [plugin.piechart]
