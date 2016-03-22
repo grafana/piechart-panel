@@ -19,6 +19,13 @@
       {"name": "Blog Post", "url": "https://blog.raintank.io/friends-dont-let-friends-abuse-pie-charts/"},
       {"name": "MIT License", "url": "https://github.com/grafana/piechart-panel/blob/master/LICENSE"}
     ],
+    "screenshots": [
+      {"name": "Donut!", "path": "img/piechart-donut.png"},
+      {"name": "Legend on the graph", "path": "img/piechart-legend-on-graph.png"},
+      {"name": "Legend to the right", "path": "img/piechart-legend-rhs.png"},
+      {"name": "Legend underneath", "path": "img/piechart-legend-under.png"},
+      {"name": "Piechart options", "path": "img/piechart-options.png"}     
+    ],
     "version": "1.0.0",
     "updated": "2015-02-10"
   },
