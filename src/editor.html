@@ -1,0 +1,74 @@
+<div class="editor-row">
+	<div class="section" style="margin-bottom: 20px">
+		<div class="tight-form last">
+			<ul class="tight-form-list">
+				<li class="tight-form-item" style="width: 80px">
+					<strong>Type</strong>
+				</li>
+				<li>
+					<select class="input-small tight-form-input last" ng-model="ctrl.panel.pieType" ng-options="t for t in ['pie', 'donut']" ng-change="ctrl.render()"></select>
+				</li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+<div class="editor-row">
+	<div class="section">
+		<div class="tight-form">
+			<ul class="tight-form-list">
+				<li class="tight-form-item" style="width: 110px">
+					<strong>Unit</strong>
+				</li>
+				<li class="dropdown" style="width: 140px;"
+					ng-model="ctrl.panel.format"
+					dropdown-typeahead="ctrl.unitFormats"
+					dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem)">
+				</li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<div class="editor-row">
+	<div class="section">
+		<div class="tight-form">
+			<ul class="tight-form-list">
+				<li class="tight-form-item" style="width: 110px">
+					<strong>Legend</strong>
+				</li>
+				<li class="tight-form-item">
+					<editor-checkbox text="Show" model="ctrl.panel.legend.show" change="ctrl.refresh()"></editor-checkbox>
+				</li>
+				<li>
+					<select class="input-medium tight-form-input last" ng-model="ctrl.panel.legendType" ng-options="t for t in ['On graph', 'Under graph', 'Table', 'Right side']" ng-change="ctrl.render()"></select>
+				</li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<div class="editor-row">
+	<div class="section" style="margin-bottom: 20px">
+		<div class="tight-form last">
+			<ul class="tight-form-list">
+				<li class="tight-form-item" style="width: 110px">
+					<strong>Legend values</strong>
+				</li>
+				<li class="tight-form-item">
+					<editor-checkbox text="Min" model="ctrl.panel.legend.min" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
+				</li>
+				<li class="tight-form-item">
+					<editor-checkbox text="Max" model="ctrl.panel.legend.max" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
+				</li>
+				<li class="tight-form-item">
+					<editor-checkbox text="Avg" model="ctrl.panel.legend.avg" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
+				</li>
+				<li class="tight-form-item last">
+					<editor-checkbox text="Current" model="ctrl.panel.legend.current" change="ctrl.legendValuesOptionChanged()"></editor-checkbox>
+				</li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+</div>

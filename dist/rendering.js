@@ -1,19 +1,15 @@
-define([
-  'lodash',
-  'jquery',
-  'jquery.flot',
-  'jquery.flot.pie',
-],
-function (_, $) {
-  'use strict';
+'use strict';
 
-  function panelLink(scope, elem, attrs, ctrl) {
+System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  var _, $;
+
+  function link(scope, elem, attrs, ctrl) {
     var data, panel;
     elem = elem.find('.piechart-panel');
 
     var $tooltip = $('<div id="tooltip">');
 
-    ctrl.events.on('render', function() {
+    ctrl.events.on('render', function () {
       render();
       ctrl.renderingCompleted();
     });
@@ -31,7 +27,8 @@ function (_, $) {
         elem.css('height', height + 'px');
 
         return true;
-      } catch(e) { // IE throws errors sometimes
+      } catch (e) {
+        // IE throws errors sometimes
         return false;
       }
     }
@@ -48,7 +45,7 @@ function (_, $) {
       plotCss.top = '10px';
       plotCss.margin = 'auto';
       plotCss.position = 'relative';
-      plotCss.height = (size - 20) + 'px';
+      plotCss.height = size - 20 + 'px';
 
       plotCanvas.css(plotCss);
 
@@ -102,7 +99,9 @@ function (_, $) {
     }
 
     function render() {
-      if (!ctrl.data) { return; }
+      if (!ctrl.data) {
+        return;
+      }
 
       data = ctrl.data;
       panel = ctrl.panel;
@@ -113,7 +112,15 @@ function (_, $) {
     }
   }
 
+  _export('default', link);
+
   return {
-    link: panelLink
+    setters: [function (_lodash) {
+      _ = _lodash.default;
+    }, function (_jquery) {
+      $ = _jquery.default;
+    }, function (_jqueryFlot) {}, function (_jqueryFlotPie) {}],
+    execute: function () {}
   };
 });
+//# sourceMappingURL=rendering.js.map
