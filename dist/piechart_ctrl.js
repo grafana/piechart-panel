@@ -251,9 +251,6 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         }, {
           key: 'link',
           value: function link(scope, elem, attrs, ctrl) {
-            console.log('this', this);
-            console.log('kbn', kbn);
-            console.log('rendering ', rendering);
             rendering(scope, elem, attrs, ctrl);
           }
         }]);
