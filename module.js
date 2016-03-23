@@ -41,15 +41,18 @@ function (_, sdk, kbn, TimeSeries, rendering) {
 
       _.defaults(this.panel, panelDefaults);
       _.defaults(this.panel.legend, panelDefaults.legend);
+
+      this.events.on('data-received', this.onDataReceived.bind(this));
+      this.events.on('data-error', this.onDataError.bind(this));
+      this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
+      this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
     }
 
     PieChartCtrl.prototype = Object.create(_super.prototype);
     PieChartCtrl.prototype.constructor = PieChartCtrl;
     PieChartCtrl.templateUrl = 'module.html';
 
-    PieChartCtrl.prototype.initEditMode = function() {
-      _super.prototype.initEditMode.call(this);
-      this.icon =  "fa fa-dashboard";
+    PieChartCtrl.prototype.onInitEditMode = function() {
       this.addEditorTab('Options', 'public/plugins/piechart-panel/editor.html', 2);
       this.unitFormats = kbn.getUnitFormats();
     };
@@ -59,19 +62,20 @@ function (_, sdk, kbn, TimeSeries, rendering) {
       this.render();
     };
 
-    PieChartCtrl.prototype.refreshData = function(datasource) {
-      return this.issueQueries(datasource)
-      .then(this.dataHandler.bind(this))
-      .catch(function(err) {
-        this.series = [];
-        this.render();
-        throw err;
-      }.bind(this));
+    PieChartCtrl.prototype.onDataError = function() {
+      this.series = [];
+      this.render();
     };
 
-    PieChartCtrl.prototype.dataHandler = function(results) {
-      this.series = _.map(results.data, this.seriesHandler.bind(this));
-      this.render();
+    PieChartCtrl.prototype.onDataReceived = function(dataList) {
+      this.series = dataList.map(this.seriesHandler.bind(this));
+
+      this.data = [];
+      for (var i=0; i < this.series.length; i++) {
+        this.data.push({label: this.series[i].alias, data: this.series[i].stats.current, color: this.$rootScope.colors[i]});
+      }
+
+      this.render(this.data);
     };
 
     PieChartCtrl.prototype.seriesHandler = function(seriesData) {
@@ -121,19 +125,6 @@ function (_, sdk, kbn, TimeSeries, rendering) {
       result.scaledDecimals = result.decimals - Math.floor(Math.log(size) / Math.LN10) + 2;
 
       return result;
-    };
-
-    PieChartCtrl.prototype.render = function() {
-      var data = [];
-
-      if (this.series && this.series.length > 0) {
-        for (var i=0; i < this.series.length; i++) {
-          data.push({label: this.series[i].alias, data: this.series[i].stats.current, color: this.$rootScope.colors[i]});
-        }
-      }
-
-      this.data = data;
-      this.broadcastRender(data);
     };
 
     PieChartCtrl.prototype.setValues = function(data) {

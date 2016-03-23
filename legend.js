@@ -23,7 +23,7 @@ function (angular, _, kbn, $) {
         var seriesList;
         var i;
 
-        scope.$on('render', function() {
+        ctrl.events.on('render', function() {
           data = ctrl.series;
           if (data) {
             for(var i in data) {

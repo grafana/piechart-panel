@@ -13,7 +13,7 @@ function (_, $) {
 
     var $tooltip = $('<div id="tooltip">');
 
-    scope.$on('render', function() {
+    ctrl.events.on('render', function() {
       render();
       ctrl.renderingCompleted();
     });
