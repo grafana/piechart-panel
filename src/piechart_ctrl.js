@@ -44,7 +44,7 @@ export class PieChartCtrl extends MetricsPanelCtrl {
   }
 
   onInitEditMode() {
-    this.addEditorTab('Options', 'public/plugins/piechart-panel/editor.html', 2);
+    this.addEditorTab('Options', 'public/plugins/grafana-piechart-panel/editor.html', 2);
     this.unitFormats = kbn.getUnitFormats();
   }
 
