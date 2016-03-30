@@ -1,7 +1,7 @@
 Use the new grafana-cli tool to install piechart-panel from the commandline:
 
 ```
-grafana-cli plugins install piechart-panel
+grafana-cli plugins install grafana-piechart-panel
 ```
 
 The plugin will be installed into your grafana plugins directory; the default is /var/lib/grafana/plugins if you installed the grafana package.
