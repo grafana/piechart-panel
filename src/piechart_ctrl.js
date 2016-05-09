@@ -25,6 +25,7 @@ var panelDefaults = {
   nullText: null,
   nullPointMode: 'connected',
   legendType: 'rightSide',
+  aliasColors: {},
   format: 'short'
 };
 
@@ -37,6 +38,7 @@ export class PieChartCtrl extends MetricsPanelCtrl {
     _.defaults(this.panel, panelDefaults);
     _.defaults(this.panel.legend, panelDefaults.legend);
 
+    this.events.on('render', this.onRender.bind(this));
     this.events.on('data-received', this.onDataReceived.bind(this));
     this.events.on('data-error', this.onDataError.bind(this));
     this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
@@ -58,15 +60,44 @@ export class PieChartCtrl extends MetricsPanelCtrl {
     this.render();
   }
 
-  onDataReceived(dataList) {
-    this.series = dataList.map(this.seriesHandler.bind(this));
+  changeSeriesColor(series, color) {
+    series.color = color;
+    this.panel.aliasColors[series.alias] = series.color;
+    this.render();
+  }
 
-    this.data = [];
-    for (var i=0; i < this.series.length; i++) {
-      this.data.push({label: this.series[i].alias, data: this.series[i].stats.current, color: this.$rootScope.colors[i]});
+  onRender() {
+    console.log('onRender');
+    this.data = this.parseSeries(this.series);
+  }
+
+  parseSeries(series) {
+    if (!series) {
+      console.log(' no series! ');
+      return [];
     }
 
+    var data = [];
+    for (var i=0; i < this.series.length; i++) {
+      var alias = this.series[i].alias;
+      //var color = this.panel.aliasColors[alias] || this.colors[colorIndex];
+      var color = this.panel.aliasColors[alias] || this.$rootScope.colors[i];
+      console.log(color);
+      //this.data.push({label: this.series[i].alias, data: this.series[i].stats.current, color: this.$rootScope.colors[i]});
+      data.push({
+        label: alias,
+        data: this.series[i].stats.current,
+        color: color});
+    }
+
+    return data;
+  }
+
+  onDataReceived(dataList) {
+    this.series = dataList.map(this.seriesHandler.bind(this));
+    this.data = this.parseSeries(this.series);
     this.render(this.data);
+
   }
 
   seriesHandler(seriesData) {
