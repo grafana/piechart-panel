@@ -15,7 +15,7 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
     }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}],
     execute: function () {
 
-      angular.module('grafana.directives').directive('piechartLegend', function () {
+      angular.module('grafana.directives').directive('piechartLegend', function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
             var $container = $('<section class="graph-legend"></section>');
@@ -68,6 +68,34 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
               render();
             }
 
+            function openColorSelector(e) {
+              // if we clicked inside poup container ignore click
+              if ($(e.target).parents('.popover').length) {
+                return;
+              }
+
+              var el = $(e.currentTarget).find('.fa-minus');
+              var index = getSeriesIndexForElement(el);
+              var series = seriesList[index];
+
+              $timeout(function () {
+                popoverSrv.show({
+                  element: el[0],
+                  position: 'bottom center',
+                  template: '<gf-color-picker></gf-color-picker>',
+                  model: {
+                    series: series,
+                    toggleAxis: function toggleAxis() {
+                      ctrl.toggleAxis(series);
+                    },
+                    colorSelected: function colorSelected(color) {
+                      ctrl.changeSeriesColor(series, color);
+                    }
+                  }
+                });
+              });
+            }
+
             function getTableHeaderHtml(statName) {
               if (!panel.legend[statName]) {
                 return "";
@@ -90,6 +118,7 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
 
               if (firstRender) {
                 elem.append($container);
+                $container.on('click', '.graph-legend-icon', openColorSelector);
                 $container.on('click', '.graph-legend-alias', toggleSeries);
                 $container.on('click', 'th', sortLegend);
                 firstRender = false;

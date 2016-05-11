@@ -5,7 +5,7 @@ import $ from  'jquery';
 import 'jquery.flot';
 import 'jquery.flot.time';
 
-angular.module('grafana.directives').directive('piechartLegend', function() {
+angular.module('grafana.directives').directive('piechartLegend', function(popoverSrv, $timeout) {
   return {
     link: function(scope, elem) {
       var $container = $('<section class="graph-legend"></section>');
@@ -56,6 +56,34 @@ angular.module('grafana.directives').directive('piechartLegend', function() {
         render();
       }
 
+      function openColorSelector(e) {
+          // if we clicked inside poup container ignore click
+          if ($(e.target).parents('.popover').length) {
+            return;
+          }
+
+          var el = $(e.currentTarget).find('.fa-minus');
+          var index = getSeriesIndexForElement(el);
+          var series = seriesList[index];
+
+          $timeout(function() {
+            popoverSrv.show({
+              element: el[0],
+              position: 'bottom center',
+              template: '<gf-color-picker></gf-color-picker>',
+              model: {
+                series: series,
+                toggleAxis: function() {
+                  ctrl.toggleAxis(series);
+                },
+                colorSelected: function(color) {
+                  ctrl.changeSeriesColor(series, color);
+                }
+              },
+            });
+          });
+        }
+
       function getTableHeaderHtml(statName) {
         if (!panel.legend[statName]) { return ""; }
         var html = '<th class="pointer" data-stat="' + statName + '">' + statName;
@@ -76,6 +104,7 @@ angular.module('grafana.directives').directive('piechartLegend', function() {
 
         if (firstRender) {
           elem.append($container);
+          $container.on('click', '.graph-legend-icon', openColorSelector);
           $container.on('click', '.graph-legend-alias', toggleSeries);
           $container.on('click', 'th', sortLegend);
           firstRender = false;

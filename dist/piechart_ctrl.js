@@ -86,6 +86,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         nullText: null,
         nullPointMode: 'connected',
         legendType: 'rightSide',
+        aliasColors: {},
         format: 'short'
       };
 
@@ -102,6 +103,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           _.defaults(_this.panel, panelDefaults);
           _.defaults(_this.panel.legend, panelDefaults.legend);
 
+          _this.events.on('render', _this.onRender.bind(_this));
           _this.events.on('data-received', _this.onDataReceived.bind(_this));
           _this.events.on('data-error', _this.onDataError.bind(_this));
           _this.events.on('data-snapshot-load', _this.onDataReceived.bind(_this));
@@ -128,15 +130,41 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             this.render();
           }
         }, {
+          key: 'changeSeriesColor',
+          value: function changeSeriesColor(series, color) {
+            series.color = color;
+            this.panel.aliasColors[series.alias] = series.color;
+            this.render();
+          }
+        }, {
+          key: 'onRender',
+          value: function onRender() {
+            this.data = this.parseSeries(this.series);
+          }
+        }, {
+          key: 'parseSeries',
+          value: function parseSeries(series) {
+            if (!series) {
+              return;
+            }
+
+            var data = [];
+            for (var i = 0; i < this.series.length; i++) {
+              var alias = this.series[i].alias;
+              var color = this.panel.aliasColors[alias] || this.$rootScope.colors[i];
+              data.push({
+                label: alias,
+                data: this.series[i].stats.current,
+                color: color });
+            }
+
+            return data;
+          }
+        }, {
           key: 'onDataReceived',
           value: function onDataReceived(dataList) {
             this.series = dataList.map(this.seriesHandler.bind(this));
-
-            this.data = [];
-            for (var i = 0; i < this.series.length; i++) {
-              this.data.push({ label: this.series[i].alias, data: this.series[i].stats.current, color: this.$rootScope.colors[i] });
-            }
-
+            this.data = this.parseSeries(this.series);
             this.render(this.data);
           }
         }, {
