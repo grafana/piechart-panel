@@ -70,12 +70,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         pieType: 'pie',
         legend: {
           show: true, // disable/enable legend
-          values: false, // disable/enable legend values
-          min: false,
-          max: false,
-          current: false,
-          total: false,
-          avg: false
+          values: false // disable/enable legend values
         },
         links: [],
         datasource: null,
@@ -83,7 +78,6 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         interval: null,
         targets: [{}],
         cacheTimeout: null,
-        nullText: null,
         nullPointMode: 'connected',
         legendType: 'rightSide',
         aliasColors: {},
@@ -224,13 +218,6 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
               return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
             }
             return value;
-          }
-        }, {
-          key: 'legendValuesOptionChanged',
-          value: function legendValuesOptionChanged() {
-            var legend = this.panel.legend;
-            legend.values = legend.min || legend.max || legend.avg || legend.current || legend.total;
-            this.render();
           }
         }, {
           key: 'link',

@@ -9,12 +9,7 @@ var panelDefaults = {
   pieType: 'pie',
   legend: {
     show: true, // disable/enable legend
-    values: false, // disable/enable legend values
-    min: false,
-    max: false,
-    current: false,
-    total: false,
-    avg: false
+    values: false // disable/enable legend values
   },
   links: [],
   datasource: null,
@@ -22,7 +17,6 @@ var panelDefaults = {
   interval: null,
   targets: [{}],
   cacheTimeout: null,
-  nullText: null,
   nullPointMode: 'connected',
   legendType: 'rightSide',
   aliasColors: {},
@@ -143,12 +137,6 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
     }
     return value;
-  }
-
-  legendValuesOptionChanged() {
-    var legend = this.panel.legend;
-    legend.values = legend.min || legend.max || legend.avg || legend.current || legend.total;
-    this.render();
   }
 
   link(scope, elem, attrs, ctrl) {

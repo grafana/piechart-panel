@@ -31,18 +31,8 @@
 		<div class="gf-form">
 			<span class="gf-form-label width-8">Position</span>
 			<div class="gf-form-select-wrapper">
-				<select class="gf-form-input" ng-model="ctrl.panel.legendType" ng-options="t for t in ['On graph', 'Under graph', 'Table', 'Right side']" ng-change="ctrl.render()"></select>
+				<select class="gf-form-input" ng-model="ctrl.panel.legendType" ng-options="t for t in ['On graph', 'Under graph', 'Right side']" ng-change="ctrl.render()"></select>
 			</div>
-		</div>
-	</div>
-
-	<div class="section gf-form-group">
-		<h5 class="section-heading">Legend values</h5>
-		<div class="gf-form">
-			<gf-form-switch class="gf-form" label="Min" label-class="width-5" checked="ctrl.panel.legend.min" on-change="ctrl.legendValuesOptionChanged()"></gf-form-switch>
-			<gf-form-switch class="gf-form" label="Max" label-class="width-5" checked="ctrl.panel.legend.max" on-change="ctrl.legendValuesOptionChanged()"></gf-form-switch>
-			<gf-form-switch class="gf-form" label="Avg" label-class="width-5" checked="ctrl.panel.legend.avg" on-change="ctrl.legendValuesOptionChanged()"></gf-form-switch>
-			<gf-form-switch class="gf-form" label="Current" label-class="width-5" checked="ctrl.panel.legend.current" on-change="ctrl.legendValuesOptionChanged()"></gf-form-switch>
 		</div>
 	</div>
 </div>

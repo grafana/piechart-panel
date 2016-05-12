@@ -57,43 +57,29 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
       }
 
       function openColorSelector(e) {
-          // if we clicked inside poup container ignore click
-          if ($(e.target).parents('.popover').length) {
-            return;
-          }
+        // if we clicked inside poup container ignore click
+        if ($(e.target).parents('.popover').length) {
+          return;
+        }
 
-          var el = $(e.currentTarget).find('.fa-minus');
-          var index = getSeriesIndexForElement(el);
-          var series = seriesList[index];
+        var el = $(e.currentTarget).find('.fa-minus');
+        var index = getSeriesIndexForElement(el);
+        var series = seriesList[index];
 
-          $timeout(function() {
-            popoverSrv.show({
-              element: el[0],
-              position: 'bottom center',
-              template: '<gf-color-picker></gf-color-picker>',
-              model: {
-                series: series,
-                toggleAxis: function() {
-                  ctrl.toggleAxis(series);
-                },
-                colorSelected: function(color) {
-                  ctrl.changeSeriesColor(series, color);
-                }
-              },
-            });
+        $timeout(function() {
+          popoverSrv.show({
+            element: el[0],
+            position: 'bottom center',
+            template: '<gf-color-picker></gf-color-picker>',
+            model: {
+              series: series,
+              toggleAxis: function() {},
+              colorSelected: function(color) {
+                ctrl.changeSeriesColor(series, color);
+              }
+            },
           });
-        }
-
-      function getTableHeaderHtml(statName) {
-        if (!panel.legend[statName]) { return ""; }
-        var html = '<th class="pointer" data-stat="' + statName + '">' + statName;
-
-        if (panel.legend.sort === statName) {
-          var cssClass = panel.legend.sortDesc ? 'fa fa-caret-down' : 'fa fa-caret-up' ;
-          html += ' <span class="' + cssClass + '"></span>';
-        }
-
-        return html + '</th>';
+        });
       }
 
       function render() {
@@ -113,21 +99,6 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
         seriesList = data;
 
         $container.empty();
-
-        $container.toggleClass('graph-legend-table', panel.legendType === 'Table');
-
-        if (panel.legend.legendType === 'Table') {
-          var header = '<tr>';
-          header += '<th colspan="2" style="text-align:left"></th>';
-          if (panel.legend.values) {
-            header += getTableHeaderHtml('min');
-            header += getTableHeaderHtml('max');
-            header += getTableHeaderHtml('avg');
-            header += getTableHeaderHtml('current');
-          }
-          header += '</tr>';
-          $container.append($(header));
-        }
 
         if (panel.legend.sort) {
           seriesList = _.sortBy(seriesList, function(series) {
@@ -159,18 +130,6 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           html += '<span class="graph-legend-alias" style="float:none;">';
           html += '<a>' + series.label + '</a>';
           html += '</span>';
-
-          if (panel.legend.values && panel.legendType === 'Table') {
-            var avg = series.formatValue(series.stats.avg);
-            var current = series.formatValue(series.stats.current);
-            var min = series.formatValue(series.stats.min);
-            var max = series.formatValue(series.stats.max);
-
-            if (panel.legend.min) { html += '<div class="graph-legend-value min">' + min + '</div>'; }
-            if (panel.legend.max) { html += '<div class="graph-legend-value max">' + max + '</div>'; }
-            if (panel.legend.avg) { html += '<div class="graph-legend-value avg">' + avg + '</div>'; }
-            if (panel.legend.current) { html += '<div class="graph-legend-value current">' + current + '</div>'; }
-          }
 
           html += '</div>';
           $container.append($(html));

@@ -85,29 +85,13 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
                   template: '<gf-color-picker></gf-color-picker>',
                   model: {
                     series: series,
-                    toggleAxis: function toggleAxis() {
-                      ctrl.toggleAxis(series);
-                    },
+                    toggleAxis: function toggleAxis() {},
                     colorSelected: function colorSelected(color) {
                       ctrl.changeSeriesColor(series, color);
                     }
                   }
                 });
               });
-            }
-
-            function getTableHeaderHtml(statName) {
-              if (!panel.legend[statName]) {
-                return "";
-              }
-              var html = '<th class="pointer" data-stat="' + statName + '">' + statName;
-
-              if (panel.legend.sort === statName) {
-                var cssClass = panel.legend.sortDesc ? 'fa fa-caret-down' : 'fa fa-caret-up';
-                html += ' <span class="' + cssClass + '"></span>';
-              }
-
-              return html + '</th>';
             }
 
             function render() {
@@ -127,21 +111,6 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
               seriesList = data;
 
               $container.empty();
-
-              $container.toggleClass('graph-legend-table', panel.legendType === 'Table');
-
-              if (panel.legend.legendType === 'Table') {
-                var header = '<tr>';
-                header += '<th colspan="2" style="text-align:left"></th>';
-                if (panel.legend.values) {
-                  header += getTableHeaderHtml('min');
-                  header += getTableHeaderHtml('max');
-                  header += getTableHeaderHtml('avg');
-                  header += getTableHeaderHtml('current');
-                }
-                header += '</tr>';
-                $container.append($(header));
-              }
 
               if (panel.legend.sort) {
                 seriesList = _.sortBy(seriesList, function (series) {
@@ -173,26 +142,6 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
                 html += '<span class="graph-legend-alias" style="float:none;">';
                 html += '<a>' + series.label + '</a>';
                 html += '</span>';
-
-                if (panel.legend.values && panel.legendType === 'Table') {
-                  var avg = series.formatValue(series.stats.avg);
-                  var current = series.formatValue(series.stats.current);
-                  var min = series.formatValue(series.stats.min);
-                  var max = series.formatValue(series.stats.max);
-
-                  if (panel.legend.min) {
-                    html += '<div class="graph-legend-value min">' + min + '</div>';
-                  }
-                  if (panel.legend.max) {
-                    html += '<div class="graph-legend-value max">' + max + '</div>';
-                  }
-                  if (panel.legend.avg) {
-                    html += '<div class="graph-legend-value avg">' + avg + '</div>';
-                  }
-                  if (panel.legend.current) {
-                    html += '<div class="graph-legend-value current">' + current + '</div>';
-                  }
-                }
 
                 html += '</div>';
                 $container.append($(html));
