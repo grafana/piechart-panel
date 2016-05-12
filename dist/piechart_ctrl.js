@@ -78,7 +78,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         targets: [{}],
         cacheTimeout: null,
         nullPointMode: 'connected',
-        legendType: 'rightSide',
+        legendType: 'Under graph',
         aliasColors: {},
         format: 'short',
         valueName: 'current',

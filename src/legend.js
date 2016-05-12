@@ -91,7 +91,7 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
         if (firstRender) {
           elem.append($container);
           $container.on('click', '.graph-legend-icon', openColorSelector);
-          $container.on('click', '.graph-legend-alias', toggleSeries);
+          //$container.on('click', '.graph-legend-alias', toggleSeries);
           $container.on('click', 'th', sortLegend);
           firstRender = false;
         }

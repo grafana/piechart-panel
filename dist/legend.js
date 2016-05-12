@@ -103,7 +103,7 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
               if (firstRender) {
                 elem.append($container);
                 $container.on('click', '.graph-legend-icon', openColorSelector);
-                $container.on('click', '.graph-legend-alias', toggleSeries);
+                //$container.on('click', '.graph-legend-alias', toggleSeries);
                 $container.on('click', 'th', sortLegend);
                 firstRender = false;
               }

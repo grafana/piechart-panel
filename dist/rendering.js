@@ -6,7 +6,6 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
   function link(scope, elem, attrs, ctrl) {
     var data, panel;
     elem = elem.find('.piechart-panel');
-
     var $tooltip = $('<div id="tooltip">');
 
     ctrl.events.on('render', function () {
@@ -44,12 +43,12 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       var size = Math.min(width, height);
 
       var plotCanvas = $('<div></div>');
-      var plotCss = {};
-
-      plotCss.top = '10px';
-      plotCss.margin = 'auto';
-      plotCss.position = 'relative';
-      plotCss.height = size - 20 + 'px';
+      var plotCss = {
+        top: '10px',
+        margin: 'auto',
+        position: 'relative',
+        height: size - 20 + 'px'
+      };
 
       plotCanvas.css(plotCss);
 
@@ -74,7 +73,8 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
           }
         },
         grid: {
-          hoverable: true
+          hoverable: true,
+          clickable: false
         }
       };
 

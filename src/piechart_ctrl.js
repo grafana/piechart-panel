@@ -17,7 +17,7 @@ var panelDefaults = {
   targets: [{}],
   cacheTimeout: null,
   nullPointMode: 'connected',
-  legendType: 'rightSide',
+  legendType: 'Under graph',
   aliasColors: {},
   format: 'short',
   valueName: 'current',

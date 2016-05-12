@@ -6,7 +6,6 @@ import 'jquery.flot.pie';
 export default function link(scope, elem, attrs, ctrl) {
   var data, panel;
   elem = elem.find('.piechart-panel');
-
   var $tooltip = $('<div id="tooltip">');
 
   ctrl.events.on('render', function() {
@@ -43,12 +42,12 @@ export default function link(scope, elem, attrs, ctrl) {
     var size = Math.min(width, height);
 
     var plotCanvas = $('<div></div>');
-    var plotCss = {};
-
-    plotCss.top = '10px';
-    plotCss.margin = 'auto';
-    plotCss.position = 'relative';
-    plotCss.height = (size - 20) + 'px';
+    var plotCss = {
+      top: '10px',
+      margin: 'auto',
+      position: 'relative',
+      height: (size - 20) + 'px'
+    };
 
     plotCanvas.css(plotCss);
 
@@ -73,7 +72,8 @@ export default function link(scope, elem, attrs, ctrl) {
         }
       },
       grid: {
-        hoverable: true
+        hoverable: true,
+        clickable: false
       }
     };
 
