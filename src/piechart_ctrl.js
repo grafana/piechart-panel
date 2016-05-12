@@ -5,30 +5,32 @@ import TimeSeries from 'app/core/time_series';
 import rendering from './rendering';
 import legend from './legend';
 
-var panelDefaults = {
-  pieType: 'pie',
-  legend: {
-    show: true, // disable/enable legend
-  },
-  links: [],
-  datasource: null,
-  maxDataPoints: 3,
-  interval: null,
-  targets: [{}],
-  cacheTimeout: null,
-  nullPointMode: 'connected',
-  legendType: 'Under graph',
-  aliasColors: {},
-  format: 'short',
-  valueName: 'current',
-  strokeWidth: 1
-};
-
 export class PieChartCtrl extends MetricsPanelCtrl {
 
   constructor($scope, $injector, $rootScope) {
     super($scope, $injector);
     this.$rootScope = $rootScope;
+
+    var panelDefaults = {
+      pieType: 'pie',
+      legend: {
+        show: true, // disable/enable legend
+        values: true
+      },
+      links: [],
+      datasource: null,
+      maxDataPoints: 3,
+      interval: null,
+      targets: [{}],
+      cacheTimeout: null,
+      nullPointMode: 'connected',
+      legendType: 'Under graph',
+      aliasColors: {},
+      format: 'short',
+      valueName: 'current',
+      strokeWidth: 1,
+      fontSize: '80%'
+    };
 
     _.defaults(this.panel, panelDefaults);
     _.defaults(this.panel.legend, panelDefaults.legend);

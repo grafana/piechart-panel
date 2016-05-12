@@ -100,6 +100,19 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
 
         $container.empty();
 
+        var tableLayout = (panel.legendType === 'Under graph' || panel.legendType === 'Right side') && panel.legend.values;
+
+        $container.toggleClass('graph-legend-table', tableLayout);
+
+        if (tableLayout) {
+          var header = '<tr><th colspan="2" style="text-align:left"></th>';
+          if (panel.legend.values) {
+            header += '<th class="pointer"></th>';
+          }
+          header += '</tr>';
+          $container.append($(header));
+        }
+
         if (panel.legend.sort) {
           seriesList = _.sortBy(seriesList, function(series) {
             return series.stats[panel.legend.sort];
@@ -130,6 +143,10 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           html += '<span class="graph-legend-alias" style="float:none;">';
           html += '<a>' + series.label + '</a>';
           html += '</span>';
+
+          if (panel.legend.values && tableLayout) {
+            html += '<div class="graph-legend-value">' + series.formatValue(series.stats[ctrl.panel.valueName]) + '</div>';
+          }
 
           html += '</div>';
           $container.append($(html));

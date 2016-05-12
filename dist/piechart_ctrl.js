@@ -1,7 +1,7 @@
 'use strict';
 
 System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/time_series', './rendering', './legend'], function (_export, _context) {
-  var MetricsPanelCtrl, _, kbn, TimeSeries, rendering, legend, _createClass, panelDefaults, PieChartCtrl;
+  var MetricsPanelCtrl, _, kbn, TimeSeries, rendering, legend, _createClass, PieChartCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -66,25 +66,6 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         };
       }();
 
-      panelDefaults = {
-        pieType: 'pie',
-        legend: {
-          show: true },
-        // disable/enable legend
-        links: [],
-        datasource: null,
-        maxDataPoints: 3,
-        interval: null,
-        targets: [{}],
-        cacheTimeout: null,
-        nullPointMode: 'connected',
-        legendType: 'Under graph',
-        aliasColors: {},
-        format: 'short',
-        valueName: 'current',
-        strokeWidth: 1
-      };
-
       _export('PieChartCtrl', PieChartCtrl = function (_MetricsPanelCtrl) {
         _inherits(PieChartCtrl, _MetricsPanelCtrl);
 
@@ -94,6 +75,27 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PieChartCtrl).call(this, $scope, $injector));
 
           _this.$rootScope = $rootScope;
+
+          var panelDefaults = {
+            pieType: 'pie',
+            legend: {
+              show: true, // disable/enable legend
+              values: true
+            },
+            links: [],
+            datasource: null,
+            maxDataPoints: 3,
+            interval: null,
+            targets: [{}],
+            cacheTimeout: null,
+            nullPointMode: 'connected',
+            legendType: 'Under graph',
+            aliasColors: {},
+            format: 'short',
+            valueName: 'current',
+            strokeWidth: 1,
+            fontSize: '80%'
+          };
 
           _.defaults(_this.panel, panelDefaults);
           _.defaults(_this.panel.legend, panelDefaults.legend);
