@@ -109,6 +109,3 @@ export default function link(scope, elem, attrs, ctrl) {
   }
 }
 
-//export {
-//  panelLink as link
-//};

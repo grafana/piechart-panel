@@ -15,6 +15,12 @@
 				 dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem)">
 			</div>
 		</div>
+		<div class="gf-form">
+			<span class="gf-form-label width-4">Value</span>
+			<div class="gf-form-select-wrapper max-width-10">
+				<select class="gf-form-input" ng-model="ctrl.panel.valueName" ng-options="v for v in ['min','max','avg', 'current', 'total']" ng-change="ctrl.render()"></select>
+			</div>
+		</div>
 	</div>
 
 	<div class="section gf-form-group">

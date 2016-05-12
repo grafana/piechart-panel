@@ -87,7 +87,8 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         nullPointMode: 'connected',
         legendType: 'rightSide',
         aliasColors: {},
-        format: 'short'
+        format: 'short',
+        valueName: 'current'
       };
 
       _export('PieChartCtrl', PieChartCtrl = function (_MetricsPanelCtrl) {
@@ -144,21 +145,15 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         }, {
           key: 'parseSeries',
           value: function parseSeries(series) {
-            if (!series) {
-              return;
-            }
+            var _this2 = this;
 
-            var data = [];
-            for (var i = 0; i < this.series.length; i++) {
-              var alias = this.series[i].alias;
-              var color = this.panel.aliasColors[alias] || this.$rootScope.colors[i];
-              data.push({
-                label: alias,
-                data: this.series[i].stats.current,
-                color: color });
-            }
-
-            return data;
+            return _.map(this.series, function (serie, i) {
+              return {
+                label: serie.alias,
+                data: serie.stats[_this2.panel.valueName],
+                color: _this2.panel.aliasColors[serie.alias] || _this2.$rootScope.colors[i]
+              };
+            });
           }
         }, {
           key: 'onDataReceived',
@@ -221,33 +216,6 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             return result;
           }
         }, {
-          key: 'setValues',
-          value: function setValues(data) {
-            data.flotpairs = [];
-
-            if (this.series && this.series.length > 0) {
-              var lastPoint = _.last(this.series[0].datapoints);
-              var lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
-
-              if (_.isString(lastValue)) {
-                data.value = 0;
-                data.valueFormated = lastValue;
-                data.valueRounded = 0;
-              } else {
-                data.value = this.series[0].stats[this.panel.valueName];
-                data.flotpairs = this.series[0].flotpairs;
-
-                var decimalInfo = this.getDecimalsForValue(data.value);
-                data.valueFormated = formatValue(data.value);
-                data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
-              }
-            }
-
-            if (data.value === null || data.value === void 0) {
-              data.valueFormated = "no value";
-            }
-          }
-        }, {
           key: 'formatValue',
           value: function formatValue(value) {
             var decimalInfo = this.getDecimalsForValue(value);
@@ -256,18 +224,6 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
               return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
             }
             return value;
-          }
-        }, {
-          key: 'removeValueMap',
-          value: function removeValueMap(map) {
-            var index = _.indexOf(this.panel.valueMaps, map);
-            this.panel.valueMaps.splice(index, 1);
-            this.render();
-          }
-        }, {
-          key: 'addValueMap',
-          value: function addValueMap() {
-            this.panel.valueMaps.push({ value: '', op: '=', text: '' });
           }
         }, {
           key: 'legendValuesOptionChanged',

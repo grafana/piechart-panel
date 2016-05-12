@@ -26,7 +26,8 @@ var panelDefaults = {
   nullPointMode: 'connected',
   legendType: 'rightSide',
   aliasColors: {},
-  format: 'short'
+  format: 'short',
+  valueName: 'current'
 };
 
 export class PieChartCtrl extends MetricsPanelCtrl {
@@ -71,28 +72,19 @@ export class PieChartCtrl extends MetricsPanelCtrl {
   }
 
   parseSeries(series) {
-    if (!series) {
-      return;
-    }
-
-    var data = [];
-    for (var i=0; i < this.series.length; i++) {
-      var alias = this.series[i].alias;
-      var color = this.panel.aliasColors[alias] || this.$rootScope.colors[i];
-      data.push({
-        label: alias,
-        data: this.series[i].stats.current,
-        color: color});
-    }
-
-    return data;
+    return _.map(this.series, (serie, i) => {
+      return {
+        label: serie.alias,
+        data: serie.stats[this.panel.valueName],
+        color: this.panel.aliasColors[serie.alias] || this.$rootScope.colors[i]
+      };
+    });
   }
 
   onDataReceived(dataList) {
     this.series = dataList.map(this.seriesHandler.bind(this));
     this.data = this.parseSeries(this.series);
     this.render(this.data);
-
   }
 
   seriesHandler(seriesData) {
@@ -144,32 +136,6 @@ export class PieChartCtrl extends MetricsPanelCtrl {
     return result;
   }
 
-  setValues(data) {
-    data.flotpairs = [];
-
-    if (this.series && this.series.length > 0) {
-      var lastPoint = _.last(this.series[0].datapoints);
-      var lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
-
-      if (_.isString(lastValue)) {
-        data.value = 0;
-        data.valueFormated = lastValue;
-        data.valueRounded = 0;
-      } else {
-        data.value = this.series[0].stats[this.panel.valueName];
-        data.flotpairs = this.series[0].flotpairs;
-
-        var decimalInfo = this.getDecimalsForValue(data.value);
-        data.valueFormated = formatValue(data.value);
-        data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
-      }
-    }
-
-    if (data.value === null || data.value === void 0) {
-      data.valueFormated = "no value";
-    }
-  }
-
   formatValue(value) {
     var decimalInfo = this.getDecimalsForValue(value);
     var formatFunc = kbn.valueFormats[this.panel.format];
@@ -177,16 +143,6 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
     }
     return value;
-  }
-
-  removeValueMap(map) {
-    var index = _.indexOf(this.panel.valueMaps, map);
-    this.panel.valueMaps.splice(index, 1);
-    this.render();
-  }
-
-  addValueMap() {
-    this.panel.valueMaps.push({value: '', op: '=', text: '' });
   }
 
   legendValuesOptionChanged() {
