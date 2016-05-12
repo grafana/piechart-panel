@@ -34,3 +34,13 @@ path = /home/your/clone/dir/piechart-panel
 Note that if you clone it into the grafana plugins directory you do not need to add the above config option. That is only
 if you want to place the plugin in a directory outside the standard plugins directory. Be aware that grafana-server
 needs read access to the directory.
+
+# Changelog
+
+## 1.0.2
+
+* Add piechart piece divider setting
+* Remove Unused code
+* Adds fontsize option for labels on graph
+* Only show the displaied piechart value in legend
+* Add possibility to pick stat to use for piechart

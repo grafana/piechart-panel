@@ -26,7 +26,7 @@
       {"name": "Legend underneath", "path": "src/img/piechart-legend-under.png"},
       {"name": "Piechart options", "path": "src/img/piechart-options.png"}
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "updated": "2015-02-10"
   },
 
