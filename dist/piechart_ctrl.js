@@ -69,9 +69,8 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
       panelDefaults = {
         pieType: 'pie',
         legend: {
-          show: true, // disable/enable legend
-          values: false // disable/enable legend values
-        },
+          show: true },
+        // disable/enable legend
         links: [],
         datasource: null,
         maxDataPoints: 3,
@@ -82,7 +81,8 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         legendType: 'rightSide',
         aliasColors: {},
         format: 'short',
-        valueName: 'current'
+        valueName: 'current',
+        strokeWidth: 1
       };
 
       _export('PieChartCtrl', PieChartCtrl = function (_MetricsPanelCtrl) {

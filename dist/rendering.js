@@ -33,6 +33,10 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       }
     }
 
+    function formatter(label, slice) {
+      return "<div style='font-size:x-small;text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>" + Math.round(slice.percent) + "%</div>";
+    }
+
     function addPieChart() {
       var width = elem.width();
       var height = elem.height();
@@ -50,7 +54,8 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       plotCanvas.css(plotCss);
 
       var $panelContainer = elem.parents('.panel-container');
-      var strokecolor = $panelContainer.css('background-color');
+      var backgroundColor = $panelContainer.css('background-color');
+
       var options = {
         legend: {
           show: false
@@ -59,11 +64,12 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
           pie: {
             show: true,
             stroke: {
-              color: strokecolor,
-              width: 0.3
+              color: backgroundColor,
+              width: parseFloat(ctrl.panel.strokeWidth).toFixed(1)
             },
             label: {
-              show: ctrl.panel.legend.show && ctrl.panel.legendType === 'On graph'
+              show: ctrl.panel.legend.show && ctrl.panel.legendType === 'On graph',
+              formatter: formatter
             }
           }
         },

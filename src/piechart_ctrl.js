@@ -9,7 +9,6 @@ var panelDefaults = {
   pieType: 'pie',
   legend: {
     show: true, // disable/enable legend
-    values: false // disable/enable legend values
   },
   links: [],
   datasource: null,
@@ -21,7 +20,8 @@ var panelDefaults = {
   legendType: 'rightSide',
   aliasColors: {},
   format: 'short',
-  valueName: 'current'
+  valueName: 'current',
+  strokeWidth: 1
 };
 
 export class PieChartCtrl extends MetricsPanelCtrl {
