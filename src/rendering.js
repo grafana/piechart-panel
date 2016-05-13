@@ -68,6 +68,9 @@ export default function link(scope, elem, attrs, ctrl) {
           label: {
             show: ctrl.panel.legend.show && ctrl.panel.legendType === 'On graph',
             formatter: formatter
+          },
+          highlight: {
+            opacity: 0.0
           }
         }
       },

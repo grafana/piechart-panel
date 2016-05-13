@@ -69,6 +69,9 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
             label: {
               show: ctrl.panel.legend.show && ctrl.panel.legendType === 'On graph',
               formatter: formatter
+            },
+            highlight: {
+              opacity: 0.0
             }
           }
         },
