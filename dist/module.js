@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', './piechart_ctrl'], function (_export, _context) {
+  "use strict";
+
   var _, PieChartCtrl;
 
   return {
