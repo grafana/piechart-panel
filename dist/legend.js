@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time'], function (_export, _context) {
+  "use strict";
+
   var angular, _, kbn, $;
 
   return {

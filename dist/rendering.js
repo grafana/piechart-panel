@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
@@ -72,6 +74,10 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
             },
             highlight: {
               opacity: 0.0
+            },
+            combine: {
+              threshold: ctrl.panel.combine.threshold,
+              label: ctrl.panel.combine.label
             }
           }
         },

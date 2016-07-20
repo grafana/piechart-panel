@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/time_series', './rendering', './legend'], function (_export, _context) {
+  "use strict";
+
   var MetricsPanelCtrl, _, kbn, TimeSeries, rendering, legend, _createClass, PieChartCtrl;
 
   function _classCallCheck(instance, Constructor) {
@@ -94,7 +96,11 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             format: 'short',
             valueName: 'current',
             strokeWidth: 1,
-            fontSize: '80%'
+            fontSize: '80%',
+            combine: {
+              threshold: 0.0,
+              label: 'Others'
+            }
           };
 
           _.defaults(_this.panel, panelDefaults);
