@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
@@ -53,7 +55,6 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       plotCanvas.css(plotCss);
 
       var $panelContainer = elem.parents('.panel-container');
-      var backgroundColor = $panelContainer.css('background-color');
 
       var options = {
         legend: {
@@ -61,9 +62,11 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
         },
         series: {
           pie: {
+            innerRadius: 0.5,
             show: true,
             stroke: {
-              color: backgroundColor,
+              // stroke color does not support rgba colors
+              color: 'rgb(255,255,255)',
               width: parseFloat(ctrl.panel.strokeWidth).toFixed(1)
             },
             label: {
@@ -77,22 +80,36 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
         },
         grid: {
           hoverable: true,
-          clickable: false
+          clickable: ctrl.panel.clickable
         }
       };
 
       if (panel.pieType === 'donut') {
         options.series.pie.innerRadius = 0.5;
+      } else {
+        options.series.pie.innerRadius = 0;
       }
 
       elem.html(plotCanvas);
 
-      $.plot(plotCanvas, ctrl.data, options);
+      var plot = $.plot(plotCanvas, ctrl.data, options);
       plotCanvas.bind("plothover", function (event, pos, item) {
+        var $panelContainer = $(event.target).parents(".panel-container");
         if (!item) {
+          _.each($panelContainer.find(".graph-legend-series"), function (legend) {
+            $(legend).css("opacity", "1.0");
+          });
           $tooltip.detach();
           return;
         }
+
+        _.each($panelContainer.find(".graph-legend-series"), function (legend) {
+          if ($(legend).attr("data-series-key") !== item.series.label) {
+            $(legend).css("opacity", "0.5");
+          } else {
+            $(legend).css("opacity", "1");
+          }
+        });
 
         var body;
         var percent = parseFloat(item.series.percent).toFixed(2);
@@ -105,6 +122,12 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
         $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
       });
+
+      if (ctrl.panel.clickable) {
+        plotCanvas.bind("plotclick", function (evt, pos, item) {
+          ctrl.handle_click_event(this, evt, item.series.label.trim());
+        });
+      }
     }
 
     function render() {
@@ -115,9 +138,11 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       data = ctrl.data;
       panel = ctrl.panel;
 
-      if (setElementHeight()) {
-        addPieChart();
-      }
+      setTimeout(function () {
+        if (setElementHeight()) {
+          addPieChart();
+        }
+      }, 1000);
     }
   }
 

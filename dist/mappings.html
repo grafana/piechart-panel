@@ -1,0 +1,145 @@
+<div class="editor-row">
+  <h5 class="page-heading">Global Settings</h5>
+  <div class="gf-form-group">
+    <div class="gf-form">
+        <span class="gf-form-label width-6">
+          Type
+        </span>
+        <div class="gf-form-select-wrapper">
+          <select class="gf-form-input" ng-model="ctrl.panel.mappingType" ng-options="f.value as f.name for f in ctrl.panel.mappingTypes" ng-change="ctrl.render()"></select>
+        </div>
+        <span class="gf-form-label width-6">
+          Data Type
+        </span>
+        <div class="gf-form-select-wrapper">
+          <select class="gf-form-input" ng-model="ctrl.panel.mappingDataType" ng-options="f.value as f.name for f in ctrl.panel.mappingDataTypes" ng-change="ctrl.render()"></select>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="editor-row" ng-if="ctrl.panel.mappingType==1">
+  <h5 class="page-heading">Set value mappings <i id="import-loading" class="fa fa-spinner fa-spin fa-fw" style="display: none;"></i></h5>
+  <div class="gf-form-group">
+    <div class="gf-form" ng-repeat="map in ctrl.panel.valueMaps | startFrom:ctrl.currentValuePage*ctrl.pageSize | limitTo:ctrl.pageSize">
+      <span class="gf-form-label width-4">
+        <i class="fa fa-remove pointer" ng-click="ctrl.removeMap(map, false)"></i>
+      </span>
+      <input type="text" ng-model="map.value" placeholder="value" class="gf-form-input width-14" ng-blur="ctrl.render()">
+      <span class="gf-form-label width-4">
+        <i class="fa fa-arrow-right"></i>
+      </span>
+      <input type="text" placeholder="text" ng-model="map.text" class="gf-form-input width-14" ng-blur="ctrl.render()">
+    </div>
+
+    <div ng-show="ctrl.numberOfPages(false) > 1">
+      <button class="btn" ng-disabled="ctrl.currentValuePage <= 0" ng-click="ctrl.currentValuePage=ctrl.currentValuePage-1">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      Page {{ctrl.currentValuePage+1}} of {{ctrl.numberOfPages(false)}} 
+      <button class="btn" ng-disabled="ctrl.currentValuePage >= ctrl.numberOfPages(false)" ng-click="ctrl.currentValuePage=ctrl.currentValuePage+1">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="gf-form gf-form-button-row">
+      <button class="btn btn-inverse" ng-click="ctrl.addMap(false)">
+        <i class="fa fa-plus"></i>
+        Add a single value mapping
+      </button>
+      <button id="import-button" class="btn btn-inverse" ng-click="ctrl.importMapList(false)">
+        <i class="fa fa-file-text-o"></i>
+        Import value mapping list form CSV
+      </button>
+      <button id="cancel-import-button" class="btn btn-inverse" ng-click="ctrl.cancelImportMapList(false)" style="display: none;">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        Cancel import
+      </button>
+      <button class="btn btn-inverse" ng-click="ctrl.cleanMapList(false)">
+        <i class="fa fa-trash"></i>
+        Clean value mappings
+      </button>
+    </div>
+
+    <div class="gf-form gf-form-button-row">
+      <span class="gf-form-label">
+        <i class="fa fa-info-circle"></i>
+      </span>
+      <span class="gf-form-label width-23">
+        <a ng-click="ctrl.toggleMappingHelp(1);" bs-tooltip="'click to show helpful info'" data-placement="bottom">
+          CSV Mapping File Pattern
+        </a>
+      </span>
+    </div>
+
+  </div>
+</div>
+<div class="editor-row" ng-if="ctrl.panel.mappingType==2">
+  <h5 class="page-heading">Set range mappings <i id="import-loading" class="fa fa-spinner fa-spin fa-fw" style="display: none;"></i></h5>
+  <div class="gf-form-group">
+    <div class="gf-form" ng-repeat="rangeMap in ctrl.panel.rangeMaps | startFrom:ctrl.currentRangePage*ctrl.pageSize | limitTo:ctrl.pageSize">
+        <span class="gf-form-label">
+          <i class="fa fa-remove pointer" ng-click="ctrl.removeMap(rangeMap, true)"></i>
+        </span>
+        <span class="gf-form-label width-7">From</span>
+        <input type="text" placeholder="value_from" ng-model="rangeMap.from" class="gf-form-input width-14" ng-blur="ctrl.render()">
+        <span class="gf-form-label width-7">To</span>
+        <input type="text" placeholder="value_to" ng-model="rangeMap.to" class="gf-form-input width-14" ng-blur="ctrl.render()">
+        <span class="gf-form-label width-7">Text<tip>{{value}} means your value to map</tip></span>
+        <input type="text" placeholder="text" ng-model="rangeMap.text" class="gf-form-input width-14" ng-blur="ctrl.render()">
+    </div>
+    
+    <div ng-show="ctrl.numberOfPages(true) > 1">
+      <button class="btn" ng-disabled="ctrl.currentRangePage <= 0" ng-click="ctrl.currentRangePage=ctrl.currentRangePage-1">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      Page {{ctrl.currentRangePage+1}} of {{ctrl.numberOfPages(true)}} 
+      <button class="btn" ng-disabled="ctrl.currentRangePage >= ctrl.numberOfPages(true)" ng-click="ctrl.currentRangePage=ctrl.currentRangePage+1">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="gf-form-button-row">
+      <button class="btn btn-inverse" ng-click="ctrl.addMap(true)">
+        <i class="fa fa-plus"></i>
+        Add a single range mapping
+      </button>
+      <button id="import-button" class="btn btn-inverse" ng-click="ctrl.importMapList(true)">
+        <i class="fa fa-file-text-o"></i>
+        Import range mapping list form CSV
+      </button>
+      <button id="cancel-import-button" class="btn btn-inverse" ng-click="ctrl.cancelImportMapList(true)" style="display: none;">
+        <i class="fa fa-times" aria-hidden="true"></i>
+        Cancel import
+      </button>
+      <button class="btn btn-inverse" ng-click="ctrl.cleanMapList(true)">
+        <i class="fa fa-trash"></i>
+        Clean value mappings
+      </button>
+    </div>
+    
+    <div class="gf-form gf-form-button-row">
+      <span class="gf-form-label">
+        <i class="fa fa-info-circle"></i>
+      </span>
+      <span class="gf-form-label width-23">
+        <a ng-click="ctrl.toggleMappingHelp(1);" bs-tooltip="'click to show helpful info'" data-placement="bottom">
+          CSV Mapping File Pattern
+        </a>
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<div class="pull-left">
+  <div class="grafana-info-box" style="border: 0;"  ng-if="ctrl.panel.mappingHelpIndex === 1">
+    <h5>CSV Mapping File Pattern</h5>
+      <ul ng-non-bindable>
+        <li> Your field separator must be <strong>;</strong> (mandatory) </li>
+        <li> The first field must be the metric value to map </li>
+        <li> The second field must be the mapping value </li>
+        <li style="text-decoration:underline;"> Example: </li>
+	<li style="list-style: none; padding-left: 10px;"> 80;HTTP </li>
+      </ul>
+  </div>
+</div>
