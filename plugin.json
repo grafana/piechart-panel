@@ -6,8 +6,8 @@
   "info": {
     "description": "Pie chart panel for grafana",
     "author": {
-      "name": "Raintank Inc.",
-      "url": "http://raintank.io"
+      "name": "Naudit HPCN S.L.",
+      "url": "http://www.naudit.es"
     },
     "keywords": ["piechart", "panel"],
     "logos": {
