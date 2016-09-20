@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {

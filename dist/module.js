@@ -1,12 +1,11 @@
 'use strict';
 
-System.register(['lodash', './piechart_ctrl'], function (_export, _context) {
-  var _, PieChartCtrl;
+System.register(['./piechart_ctrl'], function (_export, _context) {
+  "use strict";
 
+  var PieChartCtrl;
   return {
-    setters: [function (_lodash) {
-      _ = _lodash.default;
-    }, function (_piechart_ctrl) {
+    setters: [function (_piechart_ctrl) {
       PieChartCtrl = _piechart_ctrl.PieChartCtrl;
     }],
     execute: function () {

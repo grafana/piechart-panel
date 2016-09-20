@@ -1,20 +1,19 @@
 'use strict';
 
-System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time'], function (_export, _context) {
-  var angular, _, kbn, $;
+System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time'], function (_export, _context) {
+  "use strict";
 
+  var angular, kbn, $;
   return {
     setters: [function (_angular) {
       angular = _angular.default;
-    }, function (_lodash) {
-      _ = _lodash.default;
     }, function (_appCoreUtilsKbn) {
       kbn = _appCoreUtilsKbn.default;
     }, function (_jquery) {
       $ = _jquery.default;
     }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}],
     execute: function () {
-
+      //import _ from  'lodash';
       angular.module('grafana.directives').directive('piechartLegend', function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
@@ -103,7 +102,6 @@ System.register(['angular', 'lodash', 'app/core/utils/kbn', 'jquery', 'jquery.fl
               if (firstRender) {
                 elem.append($container);
                 $container.on('click', '.graph-legend-icon', openColorSelector);
-                //$container.on('click', '.graph-legend-alias', toggleSeries);
                 $container.on('click', 'th', sortLegend);
                 firstRender = false;
               }
