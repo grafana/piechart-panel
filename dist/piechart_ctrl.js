@@ -96,7 +96,11 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             format: 'short',
             valueName: 'current',
             strokeWidth: 1,
-            fontSize: '80%'
+            fontSize: '80%',
+            combine: {
+              threshold: 0.0,
+              label: 'Others'
+            }
           };
 
           _.defaults(_this.panel, panelDefaults);

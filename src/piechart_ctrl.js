@@ -29,7 +29,11 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       format: 'short',
       valueName: 'current',
       strokeWidth: 1,
-      fontSize: '80%'
+      fontSize: '80%',
+	  combine: {
+	    threshold: 0.0,
+	    label: 'Others'
+	  }
     };
 
     _.defaults(this.panel, panelDefaults);

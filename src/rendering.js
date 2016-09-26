@@ -71,7 +71,11 @@ export default function link(scope, elem, attrs, ctrl) {
           },
           highlight: {
             opacity: 0.0
-          }
+          },
+		  combine: {
+		    threshold: ctrl.panel.combine.threshold,
+			label: ctrl.panel.combine.label
+		  }
         }
       },
       grid: {
