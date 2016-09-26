@@ -110,14 +110,18 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
 
               $container.empty();
 
-              var tableLayout = (panel.legendType === 'Under graph' || panel.legendType === 'Right side') && panel.legend.values;
+              var showValues = panel.legend.values || panel.legend.percentage;
+              var tableLayout = (panel.legendType === 'Under graph' || panel.legendType === 'Right side') && showValues;
 
               $container.toggleClass('graph-legend-table', tableLayout);
 
               if (tableLayout) {
                 var header = '<tr><th colspan="2" style="text-align:left"></th>';
                 if (panel.legend.values) {
-                  header += '<th class="pointer"></th>';
+                  header += '<th class="pointer">values</th>';
+                }
+                if (panel.legend.percentage) {
+                  header += '<th class="pointer">percentage</th>';
                 }
                 header += '</tr>';
                 $container.append($(header));
@@ -161,12 +165,15 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 html += '<a>' + series.label + '</a>';
                 html += '</span>';
 
-                if (panel.legend.values && tableLayout) {
+                if (showValues && tableLayout) {
                   var value = series.formatValue(series.stats[ctrl.panel.valueName]);
-                  if (total) {
-                    value = (value / total * 100).toFixed(2) + '%';
+                  if (panel.legend.values) {
+                    html += '<div class="graph-legend-value">' + value + '</div>';
                   }
-                  html += '<div class="graph-legend-value">' + value + '</div>';
+                  if (total) {
+                    var pvalue = (value / total * 100).toFixed(2) + '%';
+                    html += '<div class="graph-legend-value">' + pvalue + '</div>';
+                  }
                 }
 
                 html += '</div>';
