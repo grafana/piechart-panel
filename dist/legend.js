@@ -132,6 +132,13 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 }
               }
 
+              if (panel.legend.percentage) {
+                var total = 0;
+                for (i = 0; i < seriesList.length; i++) {
+                  total += seriesList[i].stats[ctrl.panel.valueName];
+                }
+              }
+
               for (i = 0; i < seriesList.length; i++) {
                 var series = seriesList[i];
 
@@ -155,7 +162,11 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 html += '</span>';
 
                 if (panel.legend.values && tableLayout) {
-                  html += '<div class="graph-legend-value">' + series.formatValue(series.stats[ctrl.panel.valueName]) + '</div>';
+                  var value = series.formatValue(series.stats[ctrl.panel.valueName]);
+                  if (total) {
+                    value = (value / total * 100).toFixed(2) + '%';
+                  }
+                  html += '<div class="graph-legend-value">' + value + '</div>';
                 }
 
                 html += '</div>';
