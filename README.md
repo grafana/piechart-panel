@@ -37,6 +37,10 @@ needs read access to the directory.
 
 # Changelog
 
+## 1.1.4
+* Add support for combining small slices (https://github.com/grafana/piechart-panel/pull/43)
+* Add option to show percentage in legend https://github.com/grafana/piechart-panel/pull/41
+
 ## 1.0.2
 
 * Add piechart piece divider setting
@@ -44,3 +48,6 @@ needs read access to the directory.
 * Adds fontsize option for labels on graph
 * Only show the displaied piechart value in legend
 * Add possibility to pick stat to use for piechart
+
+## 1.1.4
+* Add support
