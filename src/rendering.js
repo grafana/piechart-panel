@@ -89,7 +89,36 @@ export default function link(scope, elem, attrs, ctrl) {
     if (panel.pieType === 'donut') {
       options.series.pie.innerRadius = 0.5;
     }
-
+    else if (panel.pieType === 'bar') {
+      // Convert data to something compatible with
+      // rendering as a barchart (tick labels and proper series)
+      // Percentage values must be manually generated too.
+      var tickLabels = [];
+      var totalValue = 0;
+      for (var i =0;i<ctrl.data.length;i++){
+        tickLabels.push([i,ctrl.data[i].label]);
+      
+        var value = ctrl.data[i].data;
+        totalValue += value;
+        ctrl.data[i].data = [[i, value]];
+        ctrl.data[i].percent = 0;
+      }
+      if (totalValue > 0){
+        for (var i =0;i<ctrl.data.length;i++){
+          ctrl.data[i].percent = (ctrl.data[i].data[0][1] / totalValue) * 100;
+        }  
+      }
+    
+      // Adjust the options for bar charts
+      delete options.series.pie;
+      options.series.bars = {
+        show: true,
+        align: "center",
+        barWidth: 0.8
+      };
+      options.xaxis = {ticks: tickLabels};
+    }  
+  
     elem.html(plotCanvas);
 
     $.plot(plotCanvas, ctrl.data, options);
