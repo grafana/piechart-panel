@@ -40,12 +40,14 @@ export default function link(scope, elem, attrs, ctrl) {
     var height = elem.height();
 
     var size = Math.min(width, height);
-
+    size = Math.max(21, size);
+  
     var plotCanvas = $('<div></div>');
     var plotCss = {
       top: '10px',
       margin: 'auto',
       position: 'relative',
+      width: '100%',
       height: (size - 20) + 'px'
     };
 
