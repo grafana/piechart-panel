@@ -11,8 +11,8 @@
     },
     "keywords": ["piechart", "panel"],
     "logos": {
-      "small": "src/img/piechart_logo_small.png",
-      "large": "src/img/piechart_logo_large.png"
+      "small": "src/img/piechart_logo.svg",
+      "large": "src/img/piechart_logo.svg"
     },
     "links": [
       {"name": "Project site", "url": "https://github.com/grafana/piechart-panel"},
