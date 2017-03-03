@@ -150,11 +150,15 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             var _this2 = this;
 
             return _.map(this.series, function (serie, i) {
-              return {
+              var flotItem = {
                 label: serie.alias,
                 data: serie.stats[_this2.panel.valueName],
                 color: _this2.panel.aliasColors[serie.alias] || _this2.$rootScope.colors[i]
               };
+
+              serie.flotItem = flotItem;
+
+              return flotItem;
             });
           }
         }, {
@@ -162,6 +166,24 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           value: function onDataReceived(dataList) {
             this.series = dataList.map(this.seriesHandler.bind(this));
             this.data = this.parseSeries(this.series);
+
+            // sort items
+            if (this.panel.sort === 'Name') {
+              this.data = _.sortBy(this.data, function (o) {
+                return o.label;
+              });
+              this.series = _.sortBy(this.series, function (o) {
+                return o.flotItem.label;
+              });
+            } else if (this.panel.sort === 'Value') {
+              this.data = _.sortBy(this.data, function (o) {
+                return -o.data;
+              });
+              this.series = _.sortBy(this.series, function (o) {
+                return -o.flotItem.data;
+              });
+            }
+
             this.render(this.data);
           }
         }, {
