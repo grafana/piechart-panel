@@ -73,17 +73,31 @@ export class PieChartCtrl extends MetricsPanelCtrl {
 
   parseSeries(series) {
     return _.map(this.series, (serie, i) => {
-      return {
+      var flotItem = {
         label: serie.alias,
         data: serie.stats[this.panel.valueName],
         color: this.panel.aliasColors[serie.alias] || this.$rootScope.colors[i]
       };
+
+      serie.flotItem = flotItem
+
+      return flotItem;
     });
   }
 
   onDataReceived(dataList) {
     this.series = dataList.map(this.seriesHandler.bind(this));
     this.data = this.parseSeries(this.series);
+
+    // sort items
+    if (this.panel.sort === 'Name') {
+      this.data = _.sortBy(this.data, function (o) { return o.label });
+      this.series = _.sortBy(this.series, function (o) { return o.flotItem.label });
+    } else if (this.panel.sort === 'Value') {
+      this.data = _.sortBy(this.data, function (o) { return -o.data });
+      this.series = _.sortBy(this.series, function (o) { return -o.flotItem.data });
+    }
+
     this.render(this.data);
   }
 

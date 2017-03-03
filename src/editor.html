@@ -43,6 +43,12 @@
 			</div>
 		</div>
 		<gf-form-switch class="gf-form" label="Legend Values" label-class="width-10" checked="ctrl.panel.legend.values" on-change="ctrl.refresh()"></gf-form-switch>
+		<div class="gf-form">
+			<span class="gf-form-label width-8">Sort</span>
+			<div class="gf-form-select-wrapper">
+				<select class="gf-form-input" ng-model="ctrl.panel.sort" ng-options="t for t in ['None', 'Name', 'Value']" ng-change="ctrl.render()"></select>
+			</div>
+		</div>
 		<gf-form-switch class="gf-form" label="Show Percentage" label-class="width-10" checked="ctrl.panel.legend.percentage" on-change="ctrl.refresh()"></gf-form-switch>
 	</div>
 
