@@ -168,7 +168,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 if (showValues && tableLayout) {
                   var value = series.formatValue(series.stats[ctrl.panel.valueName]);
                   if (panel.legend.values) {
-                    html += '<div class="graph-legend-value">' + value + '</div>';
+                    html += '<div class="graph-legend-value">' + ctrl.formatValue(value) + '</div>';
                   }
                   if (total) {
                     var pvalue = (value / total * 100).toFixed(2) + '%';
