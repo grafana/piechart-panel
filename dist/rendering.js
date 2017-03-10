@@ -11,8 +11,12 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
     var $tooltip = $('<div id="tooltip">');
 
     ctrl.events.on('render', function () {
-      render();
-      ctrl.renderingCompleted();
+      render(false);
+      if (panel.legendType === 'Right side') {
+        setTimeout(function () {
+          render(true);
+        }, 50);
+      }
     });
 
     function setElementHeight() {
@@ -113,7 +117,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       });
     }
 
-    function render() {
+    function render(incrementRenderCounter) {
       if (!ctrl.data) {
         return;
       }
@@ -123,6 +127,9 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
       if (setElementHeight()) {
         addPieChart();
+      }
+      if (incrementRenderCounter) {
+        ctrl.renderingCompleted();
       }
     }
   }
