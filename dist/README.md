@@ -49,5 +49,3 @@ needs read access to the directory.
 * Only show the displaied piechart value in legend
 * Add possibility to pick stat to use for piechart
 
-## 1.1.4
-* Add support
