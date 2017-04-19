@@ -9,8 +9,10 @@ export default function link(scope, elem, attrs, ctrl) {
   var $tooltip = $('<div id="tooltip">');
 
   ctrl.events.on('render', function() {
-    render();
-    ctrl.renderingCompleted();
+    render(false);
+    if(panel.legendType === 'Right side') {
+      setTimeout(function() { render(true); }, 50);
+    }
   });
 
   function setElementHeight() {
@@ -110,7 +112,7 @@ export default function link(scope, elem, attrs, ctrl) {
     });
   }
 
-  function render() {
+  function render(incrementRenderCounter) {
     if (!ctrl.data) { return; }
 
     data = ctrl.data;
@@ -118,6 +120,9 @@ export default function link(scope, elem, attrs, ctrl) {
 
     if (setElementHeight()) {
       addPieChart();
+    }
+    if (incrementRenderCounter) {
+      ctrl.renderingCompleted();
     }
   }
 }
