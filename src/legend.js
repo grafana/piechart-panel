@@ -155,8 +155,17 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           html += '</span>';
 
           html += '<span class="graph-legend-alias" style="float:none;">';
-          html += '<a>' + series.label + '</a>';
-          html += '</span>';
+
+          html += '<a title="'+ series.label + '">';
+
+          if (panel.legend.maxSize>0 && series.label.length>0 && panel.legend.maxSize < series.label.length) {
+              var size = panel.legend.maxSize/2;
+              html += `${series.label.substr(0,size)}...${series.label.substr(series.label.length-size)}`;
+          }else{
+             html += series.label;
+          }
+
+          html += '</a></span>';
 
           if (showValues && tableLayout) {
             var value = series.formatValue(series.stats[ctrl.panel.valueName]);
