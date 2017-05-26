@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/module.js"],"names":[],"mappings":";;;;;;AAAQ;;;2BAGN","file":"module.js","sourcesContent":["import {PieChartCtrl} from './piechart_ctrl';\n\nexport {\n  PieChartCtrl as PanelCtrl\n};\n\n"]}
+{"version":3,"sources":["../src/module.js"],"names":["PieChartCtrl"],"mappings":";;;;;;;;AAAQA,kB,kBAAAA,Y;;;2BAGNA,Y","file":"module.js","sourcesContent":["import {PieChartCtrl} from './piechart_ctrl';\r\n\r\nexport {\r\n  PieChartCtrl as PanelCtrl\r\n};\r\n\r\n"]}
