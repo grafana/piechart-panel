@@ -84,7 +84,7 @@ export default function link(scope, elem, attrs, ctrl) {
             },
             grid: {
                 hoverable: true,
-                clickable: ctrl.panel.sectors.drilldown
+                clickable: ctrl.panel.sectors.drilldown?true:false
             }
         };
 

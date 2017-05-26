@@ -87,7 +87,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
                 },
                 grid: {
                     hoverable: true,
-                    clickable: ctrl.panel.sectors.drilldown
+                    clickable: ctrl.panel.sectors.drilldown ? true : false
                 }
             };
 
