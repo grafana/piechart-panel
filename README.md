@@ -37,6 +37,12 @@ needs read access to the directory.
 
 # Changelog
 
+## 1.1.5
+
+* Fix for color picker in legend
+* Fix for - [Values in legend are displayed raw, not with the correct unit](https://github.com/grafana/piechart-panel/issues/51). Thanks, [@conet](https://github.com/conet)
+* Fix for - [Legend overlaps with graphs](https://github.com/grafana/piechart-panel/issues/34). Thanks, [@smalik03](https://github.com/smalik03)
+
 ## 1.1.4
 * Add support for combining small slices (https://github.com/grafana/piechart-panel/pull/43)
 * Add option to show percentage in legend https://github.com/grafana/piechart-panel/pull/41
