@@ -71,7 +71,9 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
             element: el[0],
             position: 'bottom center',
             template: '<gf-color-picker></gf-color-picker>',
+            openOn: 'hover',
             model: {
+              autoClose: true,
               series: series,
               toggleAxis: function() {},
               colorSelected: function(color) {

@@ -82,7 +82,9 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   element: el[0],
                   position: 'bottom center',
                   template: '<gf-color-picker></gf-color-picker>',
+                  openOn: 'hover',
                   model: {
+                    autoClose: true,
                     series: series,
                     toggleAxis: function toggleAxis() {},
                     colorSelected: function colorSelected(color) {
