@@ -21,7 +21,6 @@ git clone https://github.com/grafana/piechart-panel.git
 sudo service grafana-server restart
 ```
 
-
 ## Clone into a directory of your choice
 
 If the plugin is cloned to a directory that is not the default plugins directory then you need to edit your grafana.ini config file (Default location is at /etc/grafana/grafana.ini) and add this:
