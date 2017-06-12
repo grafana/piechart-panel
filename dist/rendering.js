@@ -38,6 +38,14 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
             }
         }
 
+        function isDrilldown() {
+            if (ctrl.panel.drilldowns && ctrl.panel.drilldowns.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         function formatter(label, slice) {
             return "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>" + Math.round(slice.percent) + "%</div>";
         }
@@ -87,7 +95,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
                 },
                 grid: {
                     hoverable: true,
-                    clickable: ctrl.panel.sectors.drilldown ? true : false
+                    clickable: isDrilldown
                 }
             };
 
@@ -100,33 +108,43 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
             $.plot(plotCanvas, ctrl.data, options);
 
             plotCanvas.bind("plotclick", function (event, pos, item) {
-                if (!item || !ctrl.panel.sectors.drilldown) {
+                var panel = ctrl.panel;
+                if (!item || !panel.drilldowns || panel.drilldowns.length == 0) {
                     return;
                 }
-                var url = ctrl.panel.sectors.url.template.replace("$label", item.series.label);
 
                 var linkSrv = ctrl.$injector.get('linkSrv');
-                var timeSrv = ctrl.$injector.get('timeSrv');
-                var templateSrv = ctrl.$injector.get('templateSrv');
 
-                var scopedVars = {};
+                for (var y = 0; y < panel.drilldowns.length; y++) {
 
-                if (ctrl.panel.sectors.url.keepTime) {
-                    var range = timeSrv.timeRangeForUrl();
-                    scopedVars['from'] = range.from;
-                    scopedVars['to'] = range.to;
-                }
+                    var drilldown = panel.drilldowns[y];
 
-                if (ctrl.panel.sectors.url.includeVars) {
-                    templateSrv.fillVariableValuesForUrl(scopedVars);
-                }
+                    var regexp = new RegExp(drilldown.alias);
+                    var alias = item.series.label;
+                    if (regexp.test(alias)) {
+                        var scopedVars = {};
+                        scopedVars["alias"] = { "value": alias };
 
-                url = linkSrv.addParamsToUrl(url, scopedVars);
+                        if (drilldown.separator && drilldown.separator.trim().length > 0) {
+                            var values = alias.split(drilldown.separator);
+                            for (var i = 0; i < values.length; i++) {
+                                scopedVars["alias" + i] = { "value": values[i] };
+                            }
+                        }
 
-                if (ctrl.panel.sectors.url.targetBlank) {
-                    window.open(url, '_blank');
-                } else {
-                    window.open(url, '_self');
+                        //add panel.scopedVars for repeat var
+                        if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
+                            scopedVars[panel.repeat] = { "value": panel.scopedVars[panel.repeat].value };
+                        }
+
+                        var link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
+
+                        if (drilldown.targetBlank) {
+                            window.open(link.href, '_blank');
+                        } else {
+                            window.open(link.href, '_self');
+                        }
+                    }
                 }
             });
             plotCanvas.bind("plothover", function (event, pos, item) {
@@ -135,7 +153,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
                     return;
                 }
 
-                if (ctrl.panel.sectors.drilldown) {
+                if (isDrilldown()) {
                     plotCanvas.css('cursor', 'pointer');
                 }
 
