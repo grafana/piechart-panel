@@ -45,6 +45,7 @@ export class PieChartCtrl extends MetricsPanelCtrl {
     this.events.on('data-error', this.onDataError.bind(this));
     this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
+    this.events.on('init-panel-actions', this.onInitPanelActions.bind(this));
   }
 
   onInitEditMode() {
@@ -157,6 +158,15 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       this.hiddenSeries[serie.label] = true;
     }
     this.render();
+  }
+
+  onInitPanelActions(actions) {
+    actions.push({text: 'Toggle legend', click: 'ctrl.toggleLegend()'});
+  }
+
+  toggleLegend() {
+    this.panel.legend.show = !this.panel.legend.show;
+    this.refresh();
   }
 }
 
