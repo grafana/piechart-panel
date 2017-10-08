@@ -17,6 +17,11 @@ export class PieChartCtrl extends MetricsPanelCtrl {
         show: true, // disable/enable legend
         values: true
       },
+      tooltip: {
+        show: true,
+        showValue: true,
+        showPercentage: false
+      },
       links: [],
       datasource: null,
       maxDataPoints: 3,
