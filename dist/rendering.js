@@ -99,11 +99,11 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
       if (panel.lastQueryIsTotal) {
         var last = ctrl.data.length - 1;
-        var total = 0;
+        var tillLast = 0;
         for (var i = 0; i < last; i++) {
-          total += ctrl.data[i].data;
+          tillLast += ctrl.data[i].data;
         }
-        ctrl.data[last].data -= total;
+        ctrl.data[last].data -= tillLast;
       }
 
       $.plot(plotCanvas, ctrl.data, options);
