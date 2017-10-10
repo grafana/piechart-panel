@@ -97,7 +97,20 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           firstRender = false;
         }
 
-        seriesList = data;
+        if(panel.lastQueryIsTotal)
+        {
+          //Make a copy of it since sorting after rendering breaks data
+          seriesList = angular.copy(data);
+
+          var last = seriesList.length-1;
+          var tillLast = 0;
+          for (var i = 0; i < last; i++) {
+            tillLast += seriesList[i].stats[ctrl.panel.valueName];
+          }
+          seriesList[i].stats[ctrl.panel.valueName] -= tillLast;   
+        }
+        else
+          seriesList = data;
 
         $container.empty();
 

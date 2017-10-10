@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
@@ -94,6 +96,15 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       }
 
       elem.html(plotCanvas);
+
+      if (panel.lastQueryIsTotal) {
+        var last = ctrl.data.length - 1;
+        var tillLast = 0;
+        for (var i = 0; i < last; i++) {
+          tillLast += ctrl.data[i].data;
+        }
+        ctrl.data[last].data -= tillLast;
+      }
 
       $.plot(plotCanvas, ctrl.data, options);
       plotCanvas.bind("plothover", function (event, pos, item) {

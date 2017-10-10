@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time'], function (_export, _context) {
+  "use strict";
+
   var angular, kbn, $;
   return {
     setters: [function (_angular) {
@@ -12,8 +14,6 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
     }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}],
     execute: function () {
       //import _ from  'lodash';
-
-
       angular.module('grafana.directives').directive('piechartLegend', function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
@@ -108,7 +108,17 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 firstRender = false;
               }
 
-              seriesList = data;
+              if (panel.lastQueryIsTotal) {
+                //Make a copy of it since sorting after rendering breaks data
+                seriesList = angular.copy(data);
+
+                var last = seriesList.length - 1;
+                var tillLast = 0;
+                for (var i = 0; i < last; i++) {
+                  tillLast += seriesList[i].stats[ctrl.panel.valueName];
+                }
+                seriesList[i].stats[ctrl.panel.valueName] -= tillLast;
+              } else seriesList = data;
 
               $container.empty();
 
