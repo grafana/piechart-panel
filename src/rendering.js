@@ -92,6 +92,16 @@ export default function link(scope, elem, attrs, ctrl) {
 
     elem.html(plotCanvas);
 
+    if(panel.lastQueryIsTotal)
+    {
+      var last = ctrl.data.length-1;
+      var total = 0;
+      for (var i = 0; i < last; i++) {
+        total += ctrl.data[i].data;
+      }
+      ctrl.data[last].data -= total;   
+    }
+    
     $.plot(plotCanvas, ctrl.data, options);
     plotCanvas.bind("plothover", function (event, pos, item) {
       if (!item) {
