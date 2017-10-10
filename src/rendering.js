@@ -37,6 +37,13 @@ export default function link(scope, elem, attrs, ctrl) {
     return "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>" + Math.round(slice.percent) + "%</div>";
   }
 
+  function noDataPoints() {
+
+    var html = '<div class="datapoints-warning"><span class="small">No data points</span></div>';
+
+    elem.html(html);
+  }
+
   function addPieChart() {
     var width = elem.width();
     var height = elem.height();
@@ -119,7 +126,11 @@ export default function link(scope, elem, attrs, ctrl) {
     panel = ctrl.panel;
 
     if (setElementHeight()) {
-      addPieChart();
+      if (0 == ctrl.data.length) {
+        noDataPoints();
+      } else {
+        addPieChart();
+      }
     }
     if (incrementRenderCounter) {
       ctrl.renderingCompleted();
