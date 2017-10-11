@@ -62,6 +62,9 @@ export default function link(scope, elem, attrs, ctrl) {
 
     var $panelContainer = elem.parents('.panel-container');
     var backgroundColor = $panelContainer.css('background-color');
+    if (backgroundColor == 'rgba(0, 0, 0, 0)') {
+      backgroundColor = $('body').css('background-color');
+    }
 
     var options = {
       legend: {
