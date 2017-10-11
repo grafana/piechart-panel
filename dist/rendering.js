@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
@@ -38,6 +40,13 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
     function formatter(label, slice) {
       return "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>" + Math.round(slice.percent) + "%</div>";
+    }
+
+    function noDataPoints() {
+
+      var html = '<div class="datapoints-warning"><span class="small">No data points</span></div>';
+
+      elem.html(html);
     }
 
     function addPieChart() {
@@ -124,7 +133,11 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       panel = ctrl.panel;
 
       if (setElementHeight()) {
-        addPieChart();
+        if (0 == ctrl.data.length) {
+          noDataPoints();
+        } else {
+          addPieChart();
+        }
       }
       if (incrementRenderCounter) {
         ctrl.renderingCompleted();

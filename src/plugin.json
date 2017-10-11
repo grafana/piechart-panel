@@ -26,12 +26,12 @@
       {"name": "Legend underneath", "path": "src/img/piechart-legend-under.png"},
       {"name": "Piechart options", "path": "src/img/piechart-options.png"}
     ],
-    "version": "1.1.5",
-    "updated": "2017-06-05"
+    "version": "1.1.6",
+    "updated": "2017-10-11"
   },
 
   "dependencies": {
-    "grafanaVersion": "3.x 4.x",
+    "grafanaVersion": "4.6",
     "plugins": [ ]
   }
 }
