@@ -32,7 +32,7 @@
 		<gf-form-switch class="gf-form" label="Show Legend" label-class="width-10" checked="ctrl.panel.legend.show" on-change="ctrl.refresh()"></gf-form-switch>
 		<div class="gf-form">
 			<span class="gf-form-label width-10">Position</span>
-			<div class="gf-form-select-wrapper">
+			<div class="gf-form-select-wrapper width-8">
 				<select class="gf-form-input" ng-model="ctrl.panel.legendType" ng-options="t for t in ['On graph', 'Under graph', 'Right side']" ng-change="ctrl.render()"></select>
 			</div>
 		</div>
@@ -44,6 +44,10 @@
 		</div>
 		<gf-form-switch class="gf-form" label="Legend Values" label-class="width-10" checked="ctrl.panel.legend.values" on-change="ctrl.refresh()"></gf-form-switch>
 		<gf-form-switch class="gf-form" label="Show Percentage" label-class="width-10" checked="ctrl.panel.legend.percentage" on-change="ctrl.refresh()"></gf-form-switch>
+		<div class="gf-form" ng-show="ctrl.panel.legend.values">
+			<span class="gf-form-label width-10">Header</span>
+			<input type="text" class="gf-form-input width-8" ng-model="ctrl.panel.legend.header" ng-change="editor.render()" ng-model-onblur placeholder="override">
+		</div>
 	</div>
 
 	<div class="section gf-form-group">
