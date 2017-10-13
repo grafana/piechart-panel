@@ -66,4 +66,15 @@
 			<info-popover mode="right-absolute">Label text for the combined slice.</info-popover>
 		</div>
 	</div>
+	
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Update Variable</h5>
+		<gf-form-switch class="gf-form" label="Update upon click" label-class="width-10" checked="ctrl.panel.variable.update" on-change="ctrl.refresh()"></gf-form-switch>
+		<div class="gf-form" ng-if="ctrl.panel.variable.update === true">
+			<span class="gf-form-label width-10">Variable to update</span>
+			<div class="gf-form-select-wrapper">
+				<select class="gf-form-input" ng-model="ctrl.panel.variable.name" ng-options="k for k in ctrl.variables" ng-change="ctrl.render()"></select>
+			</div>
+		</div>
+	</div>
 </div>

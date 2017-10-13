@@ -7,9 +7,11 @@ import legend from './legend';
 
 export class PieChartCtrl extends MetricsPanelCtrl {
 
-  constructor($scope, $injector, $rootScope) {
+  constructor($scope, $injector, $rootScope, variableSrv) {
     super($scope, $injector);
     this.$rootScope = $rootScope;
+    this.variableSrv = variableSrv;
+    this.variables = Object.keys(variableSrv.templateSrv._index);
 
     var panelDefaults = {
       pieType: 'pie',
@@ -35,6 +37,9 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       valueName: 'current',
       strokeWidth: 1,
       fontSize: '80%',
+      variable: {
+        update: true
+      },
 	  combine: {
 	    threshold: 0.0,
 	    label: 'Others'

@@ -82,7 +82,7 @@ export default function link(scope, elem, attrs, ctrl) {
       },
       grid: {
         hoverable: true,
-        clickable: false
+        clickable: true
       }
     };
 
@@ -95,28 +95,46 @@ export default function link(scope, elem, attrs, ctrl) {
     $.plot(plotCanvas, ctrl.data, options);
 
     if (ctrl.panel.tooltip.show === true) {
-      plotCanvas.bind("plothover", function (event, pos, item) {
-        if (!item) {
-          $tooltip.detach();
-          return;
-        }
+      plotCanvas.bind("plotclick plothover", function (event, pos, item) {
+        if (event.type == "plotclick") {
+          const label = item.series.label;
 
-        var body;
-        var percent = parseFloat(item.series.percent).toFixed(2);
-        var formatted = ctrl.formatValue(item.series.data[0][1]);
+          const variableName = ctrl.panel.variable.name;
+          if (variableName) {
+            const variable = _.find(ctrl.variableSrv.variables, {"name": variableName});
+            variable.current.text = label;
+            variable.current.value = label;
 
-        body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
-        body += '<div class="graph-tooltip-value">' + item.series.label;
-        if (ctrl.panel.tooltip.showValue === true) {
-          body += ': ' + formatted;
-        }
-        if (ctrl.panel.tooltip.showPercentage === true) {
-          body += " (" + percent + "%)";
-        }
-        body += "</div>";
-        body += "</div></div>";
+            ctrl.variableSrv.updateOptions(variable).then(() => {
+              ctrl.variableSrv.variableUpdated(variable).then(() => {
+                scope.$emit('template-variable-value-updated');
+                scope.$root.$broadcast('refresh');
+              });
+            });
+          }
+        } else if (event.type == "plothover") {
+          if (!item) {
+            $tooltip.detach();
+            return;
+          }
 
-        $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
+          var body;
+          var percent = parseFloat(item.series.percent).toFixed(2);
+          var formatted = ctrl.formatValue(item.series.data[0][1]);
+
+          body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
+          body += '<div class="graph-tooltip-value">' + item.series.label;
+          if (ctrl.panel.tooltip.showValue === true) {
+            body += ': ' + formatted;
+          }
+          if (ctrl.panel.tooltip.showPercentage === true) {
+            body += " (" + percent + "%)";
+          }
+          body += "</div>";
+          body += "</div></div>";
+
+          $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
+        }
       });
     } else {
       $tooltip.detach();
