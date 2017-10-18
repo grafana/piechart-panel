@@ -60,8 +60,7 @@ export default function link(scope, elem, attrs, ctrl) {
 
     plotCanvas.css(plotCss);
 
-    var $dashboardContainer = elem.parents('body');
-    var backgroundColor = $dashboardContainer.css('background-color');
+    var backgroundColor = $('body').css('background-color')
 
     var options = {
       legend: {

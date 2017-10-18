@@ -65,8 +65,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
       plotCanvas.css(plotCss);
 
-      var $dashboardContainer = elem.parents('body');
-      var backgroundColor = $dashboardContainer.css('background-color');
+      var backgroundColor = $('body').css('background-color');
 
       var options = {
         legend: {
