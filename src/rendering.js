@@ -60,8 +60,7 @@ export default function link(scope, elem, attrs, ctrl) {
 
     plotCanvas.css(plotCss);
 
-    var $panelContainer = elem.parents('.panel-container');
-    var backgroundColor = $panelContainer.css('background-color');
+    var backgroundColor = $('body').css('background-color')
 
     var options = {
       legend: {
