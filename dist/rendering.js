@@ -101,6 +101,18 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
         options.series.pie.innerRadius = 0.5;
       }
 
+      data = ctrl.data;
+
+      for (var i = 0; i < data.length; i++) {
+        var series = data[i];
+
+        // if hidden remove points and disable stack
+        if (ctrl.hiddenSeries[series.label]) {
+          series.data = {};
+          series.stack = false;
+        }
+      }
+
       elem.html(plotCanvas);
 
       $.plot(plotCanvas, ctrl.data, options);

@@ -77,6 +77,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           var _this = _possibleConstructorReturn(this, (PieChartCtrl.__proto__ || Object.getPrototypeOf(PieChartCtrl)).call(this, $scope, $injector));
 
           _this.$rootScope = $rootScope;
+          _this.hiddenSeries = {};
 
           var panelDefaults = {
             pieType: 'pie',
@@ -231,6 +232,16 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           key: 'link',
           value: function link(scope, elem, attrs, ctrl) {
             rendering(scope, elem, attrs, ctrl);
+          }
+        }, {
+          key: 'toggleSeries',
+          value: function toggleSeries(serie) {
+            if (this.hiddenSeries[serie.label]) {
+              delete this.hiddenSeries[serie.alias];
+            } else {
+              this.hiddenSeries[serie.label] = true;
+            }
+            this.render();
           }
         }]);
 

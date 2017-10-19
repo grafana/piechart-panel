@@ -96,6 +96,18 @@ export default function link(scope, elem, attrs, ctrl) {
       options.series.pie.innerRadius = 0.5;
     }
 
+    data = ctrl.data;
+
+    for (let i = 0; i < data.length; i++) {
+      let series = data[i];
+
+      // if hidden remove points and disable stack
+      if (ctrl.hiddenSeries[series.label]) {
+        series.data = {};
+        series.stack = false;
+      }
+    }
+
     elem.html(plotCanvas);
 
     $.plot(plotCanvas, ctrl.data, options);
