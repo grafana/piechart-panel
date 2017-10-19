@@ -100,7 +100,6 @@ export default function link(scope, elem, attrs, ctrl) {
 
     for (let i = 0; i < data.length; i++) {
       let series = data[i];
-      console.log(series);
 
       // if hidden remove points and disable stack
       if (ctrl.hiddenSeries[series.label]) {

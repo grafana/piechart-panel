@@ -105,7 +105,6 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
       for (var i = 0; i < data.length; i++) {
         var series = data[i];
-        console.log(series);
 
         // if hidden remove points and disable stack
         if (ctrl.hiddenSeries[series.label]) {
