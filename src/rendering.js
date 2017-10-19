@@ -107,7 +107,6 @@ export default function link(scope, elem, attrs, ctrl) {
         series.data = {};
         series.stack = false;
       }
-
     }
 
     elem.html(plotCanvas);
