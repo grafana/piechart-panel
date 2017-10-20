@@ -224,7 +224,6 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             var decimalInfo = this.getDecimalsForValue(value);
             var formatFunc = kbn.valueFormats[this.panel.format];
             if (formatFunc) {
-
               return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
             }
             return value;

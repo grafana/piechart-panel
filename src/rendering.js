@@ -42,7 +42,6 @@ export default function link(scope, elem, attrs, ctrl) {
     if(ctrl.panel.legend.percentageDecimals) {
       decimal = ctrl.panel.legend.percentageDecimals;
     }
-
     if (ctrl.panel.legend.values && ctrl.panel.legend.percentage) {
       return start + ctrl.formatValue(slice_data) + "<br/>" + slice.percent.toFixed(decimal) +"%</div>";
     } else if (ctrl.panel.legend.values) {
@@ -52,7 +51,6 @@ export default function link(scope, elem, attrs, ctrl) {
     } else {
       return start + '</div>';
     }
-
   }
 
   function noDataPoints() {
