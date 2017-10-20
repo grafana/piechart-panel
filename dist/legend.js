@@ -187,6 +187,11 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   continue;
                 }
 
+                var decimal = 2;
+                if (ctrl.panel.legend.percentageDecimals) {
+                  decimal = ctrl.panel.legend.percentageDecimals;
+                }
+
                 var html = '<div class="graph-legend-series';
                 if (ctrl.hiddenSeries[series.alias]) {
                   html += ' graph-legend-series-hidden';
@@ -204,7 +209,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                     html += '<div class="graph-legend-value">' + ctrl.formatValue(value) + '</div>';
                   }
                   if (total) {
-                    var pvalue = (value / total * 100).toFixed(2) + '%';
+                    var pvalue = (value / total * 100).toFixed(decimal) + '%';
                     html += '<div class="graph-legend-value">' + pvalue + '</div>';
                   }
                 }
