@@ -29,25 +29,34 @@
 
 	<div class="section gf-form-group">
 		<h5 class="section-heading">Legend</h5>
-		<gf-form-switch class="gf-form" label="Show Legend" label-class="width-10" checked="ctrl.panel.legend.show" on-change="ctrl.refresh()"></gf-form-switch>
+		<gf-form-switch class="gf-form" label="Show Legend" label-class="width-11" checked="ctrl.panel.legend.show" on-change="ctrl.refresh()"></gf-form-switch>
 		<div class="gf-form">
-			<span class="gf-form-label width-10">Position</span>
-			<div class="gf-form-select-wrapper width-8">
+			<span class="gf-form-label width-11">Position</span>
+			<div class="gf-form-select-wrapper width-9">
 				<select class="gf-form-input" ng-model="ctrl.panel.legendType" ng-options="t for t in ['On graph', 'Under graph', 'Right side']" ng-change="ctrl.render()"></select>
 			</div>
 		</div>
 		<div class="gf-form" ng-if="ctrl.panel.legendType === 'On graph'">
-			<span class="gf-form-label width-10">Font size</span>
-			<div class="gf-form-select-wrapper">
+			<span class="gf-form-label width-11">Font size</span>
+			<div class="gf-form-select-wrapper width-9">
 				<select class="gf-form-input" ng-model="ctrl.panel.fontSize" ng-options="s for s in ['50%', '60%', '70%', '80%', '100%', '110%', '120%', '150%', '175%']" ng-change="ctrl.render()"></select>
 			</div>
 		</div>
-		<gf-form-switch class="gf-form" label="Legend Values" label-class="width-10" checked="ctrl.panel.legend.values" on-change="ctrl.refresh()"></gf-form-switch>
-		<gf-form-switch class="gf-form" label="Show Percentage" label-class="width-10" checked="ctrl.panel.legend.percentage" on-change="ctrl.refresh()"></gf-form-switch>
+		<gf-form-switch class="gf-form" label="Legend Values" label-class="width-11" checked="ctrl.panel.legend.values" on-change="ctrl.refresh()"></gf-form-switch>
 		<div class="gf-form" ng-show="ctrl.panel.legend.values">
-			<span class="gf-form-label width-10">Header</span>
-			<input type="text" class="gf-form-input width-8" ng-model="ctrl.panel.legend.header" ng-change="editor.render()" ng-model-onblur placeholder="override">
+			<span class="gf-form-label width-11">Values Header</span>
+			<input type="text" class="gf-form-input width-9" ng-model="ctrl.panel.legend.header" ng-change="editor.render()" ng-model-onblur placeholder="override">
 		</div>
+		<div class="gf-form" ng-show="ctrl.panel.legend.values">
+			<span class="gf-form-label width-11">Values Decimals</span>
+			<input type="number" class="gf-form-input width-9" ng-model="ctrl.panel.decimals" ng-change="editor.render()" ng-model-onblur placeholder="auto">
+		</div>
+		<gf-form-switch class="gf-form" label="Show Percentage" label-class="width-11" checked="ctrl.panel.legend.percentage" on-change="ctrl.refresh()"></gf-form-switch>
+		<div class="gf-form" ng-show="ctrl.panel.legend.percentage">
+			<span class="gf-form-label width-11">Percentage Decimals</span>
+			<input type="number" class="gf-form-input width-9" ng-model="ctrl.panel.legend.percentageDecimals" ng-change="editor.render()" ng-model-onblur placeholder="2">
+		</div>
+
 	</div>
 
 	<div class="section gf-form-group">

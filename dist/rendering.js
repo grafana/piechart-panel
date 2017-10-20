@@ -39,7 +39,24 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
     }
 
     function formatter(label, slice) {
-      return "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>" + Math.round(slice.percent) + "%</div>";
+
+      var slice_data = slice.data[0][slice.data[0].length - 1];
+      var decimal = 2;
+      var start = "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>";
+
+      if (ctrl.panel.legend.percentageDecimals) {
+        decimal = ctrl.panel.legend.percentageDecimals;
+      }
+
+      if (ctrl.panel.legend.values && ctrl.panel.legend.percentage) {
+        return start + ctrl.formatValue(slice_data) + "<br/>" + slice.percent.toFixed(decimal) + "%</div>";
+      } else if (ctrl.panel.legend.values) {
+        return start + ctrl.formatValue(slice_data) + "</div>";
+      } else if (ctrl.panel.legend.percentage) {
+        return start + slice.percent.toFixed(decimal) + "%</div>";
+      } else {
+        return start + '</div>';
+      }
     }
 
     function noDataPoints() {
