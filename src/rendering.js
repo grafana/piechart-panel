@@ -34,7 +34,6 @@ export default function link(scope, elem, attrs, ctrl) {
   }
 
   function formatter(label, slice) {
-
     var slice_data = slice.data[0][slice.data[0].length - 1];
     var decimal = 2;
     var start = "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>";
@@ -96,10 +95,10 @@ export default function link(scope, elem, attrs, ctrl) {
           highlight: {
             opacity: 0.0
           },
-		      combine: {
-		        threshold: ctrl.panel.combine.threshold,
-			      label: ctrl.panel.combine.label
-		      }
+          combine: {
+          threshold: ctrl.panel.combine.threshold,
+          label: ctrl.panel.combine.label
+        }
         }
       },
       grid: {

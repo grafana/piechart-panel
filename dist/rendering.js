@@ -39,7 +39,6 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
     }
 
     function formatter(label, slice) {
-
       var slice_data = slice.data[0][slice.data[0].length - 1];
       var decimal = 2;
       var start = "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>";
