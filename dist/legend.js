@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time'], function (_export, _context) {
+  "use strict";
+
   var angular, kbn, $;
   return {
     setters: [function (_angular) {
@@ -12,8 +14,6 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
     }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}],
     execute: function () {
       //import _ from  'lodash';
-
-
       angular.module('grafana.directives').directive('piechartLegend', function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
@@ -44,8 +44,14 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
               var index = getSeriesIndexForElement(el);
               var seriesInfo = seriesList[index];
               var scrollPosition = $($container.children('tbody')).scrollTop();
+
               ctrl.toggleSeries(seriesInfo);
               $($container.children('tbody')).scrollTop(scrollPosition);
+              if (ctrl.panel.clickAction === 'Update variable') {
+                ctrl.updateVariable();
+              } else {
+                ctrl.render();
+              }
             }
 
             function sortLegend(e) {
@@ -200,7 +206,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 }
 
                 var html = '<div class="graph-legend-series';
-                if (ctrl.hiddenSeries[series.alias]) {
+                if (!ctrl.selectedSeries[series.alias]) {
                   html += ' graph-legend-series-hidden';
                 }
                 html += '" data-series-index="' + i + '">';

@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/time_series', './rendering', './legend'], function (_export, _context) {
+  "use strict";
+
   var MetricsPanelCtrl, _, kbn, TimeSeries, rendering, legend, _createClass, PieChartCtrl;
 
   function _classCallCheck(instance, Constructor) {
@@ -69,13 +71,15 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
       _export('PieChartCtrl', PieChartCtrl = function (_MetricsPanelCtrl) {
         _inherits(PieChartCtrl, _MetricsPanelCtrl);
 
-        function PieChartCtrl($scope, $injector, $rootScope) {
+        function PieChartCtrl($scope, $injector, $rootScope, variableSrv) {
           _classCallCheck(this, PieChartCtrl);
 
-          var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PieChartCtrl).call(this, $scope, $injector));
+          var _this = _possibleConstructorReturn(this, (PieChartCtrl.__proto__ || Object.getPrototypeOf(PieChartCtrl)).call(this, $scope, $injector));
 
           _this.$rootScope = $rootScope;
-          _this.hiddenSeries = {};
+          _this.variableSrv = variableSrv;
+          _this.variableNames = _.map(variableSrv.variables, 'name');
+          _this.selectedSeries = {};
 
           var panelDefaults = {
             pieType: 'pie',
@@ -142,6 +146,20 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           key: 'onRender',
           value: function onRender() {
             this.data = this.parseSeries(this.series);
+
+            this.selectedSeries = {};
+
+            var variable = _.find(this.variableSrv.variables, { 'name': this.panel.variableToUpdate });
+            var selected = _.map(_.filter(variable.options, { 'selected': true }), 'value');
+            if (selected.constructor === Array) {
+              if (selected[0] === '$__all') {
+                // do nothing
+              } else {
+                for (var i = 0; i < selected.length; i++) {
+                  this.selectedSeries[selected[i]] = true;
+                }
+              }
+            }
           }
         }, {
           key: 'parseSeries',
@@ -234,12 +252,33 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         }, {
           key: 'toggleSeries',
           value: function toggleSeries(serie) {
-            if (this.hiddenSeries[serie.label]) {
-              delete this.hiddenSeries[serie.alias];
+            if (this.selectedSeries[serie.label]) {
+              delete this.selectedSeries[serie.alias];
             } else {
-              this.hiddenSeries[serie.label] = true;
+              this.selectedSeries[serie.label] = true;
             }
-            this.render();
+          }
+        }, {
+          key: 'updateVariable',
+          value: function updateVariable() {
+            var _this3 = this;
+
+            if (this.panel.clickAction === 'Update variable') {
+              if (this.panel.variableToUpdate) {
+                var selectedSeries = _.keys(this.selectedSeries);
+
+                var variable = _.find(this.variableSrv.variables, { "name": this.panel.variableToUpdate });
+                variable.current.text = selectedSeries.join(' + ');
+                variable.current.value = selectedSeries;
+
+                this.variableSrv.updateOptions(variable).then(function () {
+                  _this3.variableSrv.variableUpdated(variable).then(function () {
+                    _this3.$scope.$emit('template-variable-value-updated');
+                    _this3.$scope.$root.$broadcast('refresh');
+                  });
+                });
+              }
+            }
           }
         }]);
 
