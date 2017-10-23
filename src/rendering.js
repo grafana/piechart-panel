@@ -15,20 +15,32 @@ export default function link(scope, elem, attrs, ctrl) {
     }
   });
 
+  function getLegendHeight(panelHeight) {
+    if (ctrl.panel.legendType === 'On graph') {
+      $('.graph-legend').css('padding-top', 0);
+    } else {
+      $('.graph-legend').css('padding-top', 6);
+    }
+    if (!ctrl.panel.legend.show || ctrl.panel.legendType === 'Right side' || ctrl.panel.legendType === 'On graph') {
+      return 0;
+    }
+
+    if (ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
+      var total = 25 + (21 * data.length);
+      return  Math.min(total, Math.floor(panelHeight/2));
+    }
+
+    return 27;
+  }
+
   function setElementHeight() {
     try {
-      var height = ctrl.height || panel.height || ctrl.row.height;
-      if (_.isString(height)) {
-        height = parseInt(height.replace('px', ''), 10);
-      }
-
-      height -= 5; // padding
-      height -= panel.title ? 24 : 9; // subtract panel title bar
-
+      var height = ctrl.height - getLegendHeight(ctrl.height);
       elem.css('height', height + 'px');
 
       return true;
-    } catch(e) { // IE throws errors sometimes
+    } catch (e) { // IE throws errors sometimes
+      console.log(e);
       return false;
     }
   }
@@ -53,9 +65,7 @@ export default function link(scope, elem, attrs, ctrl) {
   }
 
   function noDataPoints() {
-
     var html = '<div class="datapoints-warning"><span class="small">No data points</span></div>';
-
     elem.html(html);
   }
 

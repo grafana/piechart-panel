@@ -43,7 +43,9 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
               var el = $(e.currentTarget);
               var index = getSeriesIndexForElement(el);
               var seriesInfo = seriesList[index];
+              var scrollPosition = $($container.children('tbody')).scrollTop();
               ctrl.toggleSeries(seriesInfo);
+              $($container.children('tbody')).scrollTop(scrollPosition);
             }
 
             function sortLegend(e) {
@@ -147,6 +149,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
 
               $container.toggleClass('graph-legend-table', tableLayout);
 
+              var legendHeader;
               if (tableLayout) {
                 var header = '<tr><th colspan="2" style="text-align:left"></th>';
                 if (panel.legend.values) {
@@ -156,7 +159,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   header += getLegendPercentageHtml(ctrl.panel.valueName);
                 }
                 header += '</tr>';
-                $container.append($(header));
+                legendHeader = $(header);
               }
 
               if (panel.legend.sort) {
@@ -174,6 +177,9 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   total += seriesList[i].stats[ctrl.panel.valueName];
                 }
               }
+
+              var seriesShown = 0;
+              var seriesElements = [];
 
               for (i = 0; i < seriesList.length; i++) {
                 var series = seriesList[i];
@@ -215,7 +221,26 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 }
 
                 html += '</div>';
-                $container.append($(html));
+
+                seriesElements.push($(html));
+                seriesShown++;
+              }
+
+              if (tableLayout) {
+                var maxHeight = ctrl.height;
+
+                if (panel.legendType === 'Under graph') {
+                  maxHeight = maxHeight / 2;
+                }
+
+                var topPadding = 6;
+                var tbodyElem = $('<tbody></tbody>');
+                tbodyElem.css("max-height", maxHeight - topPadding);
+                tbodyElem.append(legendHeader);
+                tbodyElem.append(seriesElements);
+                $container.append(tbodyElem);
+              } else {
+                $container.append(seriesElements);
               }
             }
           }
