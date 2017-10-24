@@ -156,7 +156,18 @@ export class PieChartCtrl extends MetricsPanelCtrl {
     } else {
       this.hiddenSeries[serie.label] = true;
     }
-    this.render();
+  }
+
+  toggleCombinedSeries(combined) {
+    for (var i = 0; i < combined.length; i++) {
+      this.toggleSeries(combined[i]);
+    }
+
+    if (this.hiddenSeries[this.panel.combine.label]) {
+      delete this.hiddenSeries[this.panel.combine.label];
+    } else {
+      this.hiddenSeries[this.panel.combine.label] = true;
+    }
   }
 }
 

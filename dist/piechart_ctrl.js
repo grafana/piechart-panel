@@ -241,7 +241,19 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             } else {
               this.hiddenSeries[serie.label] = true;
             }
-            this.render();
+          }
+        }, {
+          key: 'toggleCombinedSeries',
+          value: function toggleCombinedSeries(combined) {
+            for (var i = 0; i < combined.length; i++) {
+              this.toggleSeries(combined[i]);
+            }
+
+            if (this.hiddenSeries[this.panel.combine.label]) {
+              delete this.hiddenSeries[this.panel.combine.label];
+            } else {
+              this.hiddenSeries[this.panel.combine.label] = true;
+            }
           }
         }]);
 
