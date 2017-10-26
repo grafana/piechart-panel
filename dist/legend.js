@@ -249,38 +249,36 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   return _.includes(labelsInOthers, series.label) || series.label in ctrl.hiddenSeries;
                 }).color;
 
-                if (combined.length > 0) {
-                  var color = combinedSliceColor;
-                  var value = _.sumBy(combined, function (series) {
-                    return series.stats[ctrl.panel.valueName];
-                  });
-                  var label = ctrl.panel.combine.label;
+                var color = combinedSliceColor;
+                var value = _.sumBy(combined, function (series) {
+                  return series.stats[ctrl.panel.valueName];
+                });
+                var label = ctrl.panel.combine.label;
 
-                  var html = '<div class="graph-legend-series';
-                  if (ctrl.hiddenSeries[label]) {
-                    html += ' graph-legend-series-hidden';
-                  }
-                  html += '" data-series-index="-1">'; // -1 : the combined pie
-                  html += '<span class="graph-legend-icon" style="float:none;">';
-                  html += '<i class="fa fa-minus pointer" style="color:' + color + '"></i>';
-                  html += '</span>';
-
-                  html += '<a class="graph-legend-alias" style="float:none;">' + label + '</a>';
-
-                  if (showValues && tableLayout) {
-                    if (panel.legend.values) {
-                      html += '<div class="graph-legend-value">' + ctrl.formatValue(value) + '</div>';
-                    }
-                    if (total) {
-                      var pvalue = (value / total * 100).toFixed(decimal) + '%';
-                      html += '<div class="graph-legend-value">' + pvalue + '</div>';
-                    }
-                  }
-
-                  html += '</div>';
-
-                  seriesElements.push($(html));
+                var html = '<div class="graph-legend-series';
+                if (ctrl.hiddenSeries[label]) {
+                  html += ' graph-legend-series-hidden';
                 }
+                html += '" data-series-index="-1">'; // -1 : the combined pie
+                html += '<span class="graph-legend-icon" style="float:none;">';
+                html += '<i class="fa fa-minus pointer" style="color:' + color + '"></i>';
+                html += '</span>';
+
+                html += '<a class="graph-legend-alias" style="float:none;">' + label + '</a>';
+
+                if (showValues && tableLayout) {
+                  if (panel.legend.values) {
+                    html += '<div class="graph-legend-value">' + ctrl.formatValue(value) + '</div>';
+                  }
+                  if (total) {
+                    var pvalue = (value / total * 100).toFixed(decimal) + '%';
+                    html += '<div class="graph-legend-value">' + pvalue + '</div>';
+                  }
+                }
+
+                html += '</div>';
+
+                seriesElements.push($(html));
               }
 
               if (tableLayout) {
