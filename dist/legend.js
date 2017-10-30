@@ -1,6 +1,6 @@
 'use strict';
 
-System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time'], function (_export, _context) {
+System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time', './color-picker'], function (_export, _context) {
   "use strict";
 
   var angular, kbn, $;
@@ -11,9 +11,9 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
       kbn = _appCoreUtilsKbn.default;
     }, function (_jquery) {
       $ = _jquery.default;
-    }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}],
+    }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}, function (_colorPicker) {}],
     execute: function () {
-      //import _ from  'lodash';
+
       angular.module('grafana.directives').directive('piechartLegend', function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
@@ -112,12 +112,11 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 popoverSrv.show({
                   element: el[0],
                   position: 'bottom center',
-                  template: '<series-color-picker series="series" onToggleAxis="toggleAxis" onColorChange="colorSelected">' + '</series-color-picker>',
+                  template: '<gf-color-picker></gf-color-picker>',
                   openOn: 'hover',
                   model: {
                     autoClose: true,
                     series: series,
-                    toggleAxis: function toggleAxis() {},
                     colorSelected: function colorSelected(color) {
                       ctrl.changeSeriesColor(series, color);
                     }
@@ -246,6 +245,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
           }
         };
       });
+      //import _ from  'lodash';
     }
   };
 });

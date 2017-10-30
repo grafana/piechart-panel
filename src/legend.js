@@ -4,6 +4,7 @@ import kbn from 'app/core/utils/kbn';
 import $ from  'jquery';
 import 'jquery.flot';
 import 'jquery.flot.time';
+import './color-picker';
 
 angular.module('grafana.directives').directive('piechartLegend', function(popoverSrv, $timeout) {
   return {
@@ -101,13 +102,12 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           popoverSrv.show({
             element: el[0],
             position: 'bottom center',
-            template: '<series-color-picker series="series" onToggleAxis="toggleAxis" onColorChange="colorSelected">' +
-            '</series-color-picker>',
+            template:
+            '<gf-color-picker></gf-color-picker>',
             openOn: 'hover',
             model: {
               autoClose: true,
               series: series,
-              toggleAxis: function() {},
               colorSelected: function(color) {
                 ctrl.changeSeriesColor(series, color);
               }
