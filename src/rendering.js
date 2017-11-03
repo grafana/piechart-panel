@@ -133,9 +133,21 @@ export default function link(scope, elem, attrs, ctrl) {
       }
     }
 
+    if (panel.legend.sort) {
+      if (panel.legend.sortDesc === true) {
+        data.sort(function(a, b) {
+          return b.data - a.data;
+        });
+      } else {
+        data.sort(function(a, b){
+          return a.data - b.data;
+        });
+      }
+    }
+
     elem.html(plotCanvas);
 
-    $.plot(plotCanvas, ctrl.data, options);
+    $.plot(plotCanvas, data, options);
     plotCanvas.bind("plothover", function (event, pos, item) {
       if (!item) {
         $tooltip.detach();

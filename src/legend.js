@@ -49,13 +49,13 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
         if (panel.legend.sortDesc === false) {
           panel.legend.sort = null;
           panel.legend.sortDesc = null;
-          render();
+          ctrl.render();
           return;
         }
 
         panel.legend.sortDesc = !panel.legend.sortDesc;
         panel.legend.sort = stat;
-        render();
+        ctrl.render();
       }
 
       function getLegendHeaderHtml(statName) {
@@ -176,6 +176,7 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
 
         for (i = 0; i < seriesList.length; i++) {
           var series = seriesList[i];
+          var seriesData = ctrl.data[i];
 
           // ignore empty series
           if (panel.legend.hideEmpty && series.allIsNull) {
@@ -195,10 +196,10 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           if (ctrl.hiddenSeries[series.alias]) { html += ' graph-legend-series-hidden'; }
           html += '" data-series-index="' + i + '">';
           html += '<span class="graph-legend-icon" style="float:none;">';
-          html += '<i class="fa fa-minus pointer" style="color:' + series.color + '"></i>';
+          html += '<i class="fa fa-minus pointer" style="color:' + seriesData.color + '"></i>';
           html += '</span>';
 
-          html += '<a class="graph-legend-alias" style="float:none;">' + series.label + '</a>';
+          html += '<a class="graph-legend-alias" style="float:none;">' + seriesData.label + '</a>';
 
           if (showValues && tableLayout) {
             var value = series.stats[ctrl.panel.valueName];
