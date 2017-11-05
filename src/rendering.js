@@ -148,23 +148,33 @@ export default function link(scope, elem, attrs, ctrl) {
     elem.html(plotCanvas);
 
     $.plot(plotCanvas, data, options);
-    plotCanvas.bind("plothover", function (event, pos, item) {
-      if (!item) {
-        $tooltip.detach();
-        return;
-      }
+    if (ctrl.panel.tooltip.show === true) {
+      plotCanvas.bind("plothover", function (event, pos, item) {
+        if (!item) {
+          $tooltip.detach();
+          return;
+        }
 
-      var body;
-      var percent = parseFloat(item.series.percent).toFixed(2);
-      var formatted = ctrl.formatValue(item.series.data[0][1]);
+        var body;
+        var percent = parseFloat(item.series.percent).toFixed(2);
+        var formatted = ctrl.formatValue(item.series.data[0][1]);
 
-      body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
-      body += '<div class="graph-tooltip-value">' + item.series.label + ': ' + formatted;
-      body += " (" + percent + "%)" + '</div>';
-      body += "</div></div>";
+        body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
+        body += '<div class="graph-tooltip-value">' + item.series.label;
+        if (ctrl.panel.tooltip.showValue === true) {
+          body += ': ' + formatted;
+        }
+        if (ctrl.panel.tooltip.showPercentage === true) {
+          body += " (" + percent + "%)";
+        }
+        body += "</div>";
+        body += "</div></div>";
 
-      $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
-    });
+        $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
+      });
+    } else {
+      $tooltip.detach();
+    }
   }
 
   function render(incrementRenderCounter) {

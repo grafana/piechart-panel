@@ -57,6 +57,13 @@
       <input type="number" class="gf-form-input width-9" ng-model="ctrl.panel.legend.percentageDecimals" ng-change="editor.render()" ng-model-onblur placeholder="2">
     </div>
   </div>
+	
+	<div class="section gf-form-group">
+		<h5 class="section-heading">Tooltip</h5>
+		<gf-form-switch class="gf-form" label="Show Tooltip" label-class="width-10" checked="ctrl.panel.tooltip.show" on-change="ctrl.refresh()"></gf-form-switch>
+		<gf-form-switch class="gf-form" ng-if="ctrl.panel.tooltip.show === true" label="Show Value" label-class="width-10" checked="ctrl.panel.tooltip.showValue" on-change="ctrl.refresh()"></gf-form-switch>
+		<gf-form-switch class="gf-form" ng-if="ctrl.panel.tooltip.show === true" label="Show Percentage" label-class="width-10" checked="ctrl.panel.tooltip.showPercentage" on-change="ctrl.refresh()"></gf-form-switch>
+	</div>
 
   <div class="section gf-form-group">
     <h5 class="section-heading">Combine</h5>
