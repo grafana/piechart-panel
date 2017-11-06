@@ -4,6 +4,7 @@ import kbn from 'app/core/utils/kbn';
 import TimeSeries from 'app/core/time_series';
 import rendering from './rendering';
 import legend from './legend';
+import * as fileExport from 'app/core/utils/file_export';
 
 export class PieChartCtrl extends MetricsPanelCtrl {
 
@@ -45,6 +46,7 @@ export class PieChartCtrl extends MetricsPanelCtrl {
     this.events.on('data-error', this.onDataError.bind(this));
     this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
+    this.events.on('init-panel-actions', this.onInitPanelActions.bind(this));
   }
 
   onInitEditMode() {
@@ -157,6 +159,40 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       this.hiddenSeries[serie.label] = true;
     }
     this.render();
+  }
+
+  onInitPanelActions(actions) {
+    actions.push({text: 'Export CSV', click: 'ctrl.exportCsv()'});
+    actions.push({text: 'Toggle legend', click: 'ctrl.toggleLegend()'});
+  }
+
+  toggleLegend() {
+    this.panel.legend.show = !this.panel.legend.show;
+    this.refresh();
+  }
+
+  exportCsv() {
+    var seriesList = this.series;
+
+    var text = 'sep=;\n';
+    text += 'Series;Values;Percentage\n';
+
+    var total = 0;
+    for (var i = 0; i < seriesList.length; i++) {
+      total += seriesList[i].stats[this.panel.valueName];
+    }
+
+    for (i = 0; i < seriesList.length; i++) {
+      var series = seriesList[i]
+      var value = series.formatValue(series.stats[this.panel.valueName]);
+      var pvalue = ((value / total) * 100).toFixed(2) + '%';
+
+      text += series.label + ';';
+      text += value + ';';
+      text += pvalue + '\n';
+    }
+
+    fileExport.saveSaveBlob(text, 'grafana_data_export.csv');
   }
 }
 
