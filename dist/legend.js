@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jquery.flot.time'], function (_export, _context) {
+  "use strict";
+
   var angular, kbn, $;
   return {
     setters: [function (_angular) {
@@ -12,8 +14,6 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
     }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}],
     execute: function () {
       //import _ from  'lodash';
-
-
       angular.module('grafana.directives').directive('piechartLegend', function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
@@ -194,7 +194,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   continue;
                 }
 
-                var decimal = 2;
+                var decimal = 0;
                 if (ctrl.panel.legend.percentageDecimals) {
                   decimal = ctrl.panel.legend.percentageDecimals;
                 }

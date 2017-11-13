@@ -187,7 +187,7 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
             continue;
           }
 
-          var decimal = 2;
+          var decimal = 0;
           if (ctrl.panel.legend.percentageDecimals) {
             decimal = ctrl.panel.legend.percentageDecimals;
           }
