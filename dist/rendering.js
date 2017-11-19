@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
@@ -116,7 +118,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
         },
         grid: {
           hoverable: true,
-          clickable: false
+          clickable: true
         }
       };
 
@@ -126,13 +128,15 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
       data = ctrl.data;
 
-      for (var i = 0; i < data.length; i++) {
-        var series = data[i];
+      if (ctrl.panel.clickAction === 'Hide slice') {
+        for (var i = 0; i < data.length; i++) {
+          var series = data[i];
 
-        // if hidden remove points and disable stack
-        if (ctrl.hiddenSeries[series.label]) {
-          series.data = {};
-          series.stack = false;
+          // if hidden remove points and disable stack
+          if (ctrl.selectedSeries[series.label]) {
+            series.data = {};
+            series.stack = false;
+          }
         }
       }
 
@@ -151,7 +155,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       elem.html(plotCanvas);
 
       $.plot(plotCanvas, data, options);
-      plotCanvas.bind("plothover", function (event, pos, item) {
+      plotCanvas.on("plothover", function (event, pos, item) {
         if (!item) {
           $tooltip.detach();
           return;
@@ -168,6 +172,18 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
         $tooltip.html(body).place_tt(pos.pageX + 20, pos.pageY);
       });
+
+      if (ctrl.panel.clickAction) {
+        plotCanvas.on('plotclick', function (event, pos, item) {
+          var series = _.find(ctrl.series, { "label": item.series.label });
+          ctrl.toggleSeries(series);
+          if (ctrl.panel.clickAction === 'Update variable') {
+            ctrl.updateVariable();
+          } else {
+            ctrl.render();
+          }
+        });
+      }
     }
 
     function render(incrementRenderCounter) {

@@ -7,10 +7,12 @@ import legend from './legend';
 
 export class PieChartCtrl extends MetricsPanelCtrl {
 
-  constructor($scope, $injector, $rootScope) {
+  constructor($scope, $injector, $rootScope, variableSrv) {
     super($scope, $injector);
     this.$rootScope = $rootScope;
-    this.hiddenSeries = {};
+    this.variableSrv = variableSrv;
+    this.variableNames = _.map(variableSrv.variables, 'name');
+    this.selectedSeries = {};
 
     var panelDefaults = {
       pieType: 'pie',
@@ -70,6 +72,20 @@ export class PieChartCtrl extends MetricsPanelCtrl {
 
   onRender() {
     this.data = this.parseSeries(this.series);
+
+    this.selectedSeries = {};
+
+    const variable = _.find(this.variableSrv.variables, {'name': this.panel.variableToUpdate});
+    const selected = _.map(_.filter(variable.options, {'selected': true}), 'value');
+    if (selected.constructor === Array) {
+      if (selected[0] === '$__all') {
+        // do nothing
+      } else {
+        for (let i = 0; i < selected.length; i++) {
+          this.selectedSeries[selected[i]] = true;
+        }
+      }
+    }
   }
 
   parseSeries(series) {
@@ -151,12 +167,30 @@ export class PieChartCtrl extends MetricsPanelCtrl {
   }
 
   toggleSeries(serie) {
-    if (this.hiddenSeries[serie.label]) {
-      delete this.hiddenSeries[serie.alias];
+    if (this.selectedSeries[serie.label]) {
+      delete this.selectedSeries[serie.alias];
     } else {
-      this.hiddenSeries[serie.label] = true;
+      this.selectedSeries[serie.label] = true;
     }
-    this.render();
+  }
+
+  updateVariable() {
+    if (this.panel.clickAction === 'Update variable') {
+      if (this.panel.variableToUpdate) {
+        var selectedSeries = _.keys(this.selectedSeries);
+
+        const variable = _.find(this.variableSrv.variables, {"name": this.panel.variableToUpdate});
+        variable.current.text = selectedSeries.join(' + ');
+        variable.current.value = selectedSeries;
+
+        this.variableSrv.updateOptions(variable).then(() => {
+          this.variableSrv.variableUpdated(variable).then(() => {
+            this.$scope.$emit('template-variable-value-updated');
+            this.$scope.$root.$broadcast('refresh');
+          });
+        });
+      }
+    }
   }
 }
 

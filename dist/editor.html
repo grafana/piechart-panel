@@ -25,6 +25,18 @@
       <span class="gf-form-label width-8">Divider width</span>
       <input type="text" class="gf-form-input max-width-10" ng-model="ctrl.panel.strokeWidth" ng-change="ctrl.render()">
     </div>
+    <div class="gf-form">
+      <span class="gf-form-label width-11">Click on pies/entries</span>
+      <div class="gf-form-select-wrapper width-10">
+        <select class="gf-form-input" ng-model="ctrl.panel.clickAction" ng-options="t for t in ['Hide slice', 'Update variable']" ng-change="ctrl.render()"></select>
+      </div>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.clickAction === 'Update variable'">
+      <span class="gf-form-label width-11">Variable to update</span>
+      <div class="gf-form-select-wrapper width-10">
+        <select class="gf-form-input" ng-model="ctrl.panel.variableToUpdate" ng-options="k for k in ctrl.variableNames" ng-change="ctrl.render()"></select>
+      </div>
+    </div>
   </div>
 
   <div class="section gf-form-group">
