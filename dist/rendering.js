@@ -1,11 +1,13 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
     var data, panel;
-    elem = elem.find('.piechart-panel');
+    elem = elem.find('.graph-panel__chart');
     var $tooltip = $('<div id="tooltip">');
 
     ctrl.events.on('render', function () {
@@ -18,21 +20,14 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
     });
 
     function getLegendHeight(panelHeight) {
-      if (ctrl.panel.legendType === 'On graph') {
-        $('.graph-legend').css('padding-top', 0);
-      } else {
-        $('.graph-legend').css('padding-top', 6);
-      }
       if (!ctrl.panel.legend.show || ctrl.panel.legendType === 'Right side' || ctrl.panel.legendType === 'On graph') {
         return 0;
       }
 
-      if (ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
-        var total = 25 + 21 * data.length;
+      if (ctrl.panel.legendType == 'Under graph' && ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
+        var total = 21 * data.length;
         return Math.min(total, Math.floor(panelHeight / 2));
       }
-
-      return 27;
     }
 
     function setElementHeight() {

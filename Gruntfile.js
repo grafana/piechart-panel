@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       src_to_dist: {
         cwd: 'src',
         expand: true,
-        src: ['**/*', '!**/*.js', '!**/*.scss'],
+        src: ['**/*', '**/*.js', '!**/*.scss'],
         dest: 'dist'
       },
       img_to_dist: {
