@@ -10,7 +10,7 @@ angular
   .directive("piechartLegend", function(popoverSrv, $timeout) {
     return {
       link: function(scope, elem) {
-        var $container = $('<section class="graph-legend"></section>');
+        var $container = $('<section class="piechart-legend"></section>');
         var firstRender = true;
         var ctrl = scope.ctrl;
         var panel = ctrl.panel;
@@ -135,16 +135,16 @@ angular
         function render() {
           if (panel.legendType === "On graph") {
             $container.empty();
-            $(".graph-legend").css("padding-top", 0);
+            $(".piechart-legend").css("padding-top", 0);
             return;
           } else {
-            $(".graph-legend").css("padding-top", 6);
+            $(".piechart-legend").css("padding-top", 6);
           }
 
           if (firstRender) {
             elem.append($container);
-            $container.on("click", ".graph-legend-icon", openColorSelector);
-            $container.on("click", ".graph-legend-alias", toggleSeries);
+            $container.on("click", ".piechart-legend-icon", openColorSelector);
+            $container.on("click", ".piechart-legend-alias", toggleSeries);
             $container.on("click", "th", sortLegend);
             firstRender = false;
           }
@@ -165,7 +165,7 @@ angular
               panel.legendType === "Right side") &&
             showValues;
 
-          $container.toggleClass("graph-legend-table", tableLayout);
+          $container.toggleClass("piechart-legend-table", tableLayout);
 
           var legendHeader;
           if (tableLayout) {
@@ -217,12 +217,12 @@ angular
               decimal = ctrl.panel.legend.percentageDecimals;
             }
 
-            var html = '<div class="graph-legend-series';
+            var html = '<div class="piechart-legend-series';
             if (ctrl.hiddenSeries[series.alias]) {
-              html += " graph-legend-series-hidden";
+              html += " piechart-legend-series-hidden";
             }
             html += '" data-series-index="' + i + '">';
-            html += '<span class="graph-legend-icon" style="float:none;">';
+            html += '<span class="piechart-legend-icon" style="float:none;">';
             html +=
               '<i class="fa fa-minus pointer" style="color:' +
               seriesData.color +
@@ -230,7 +230,7 @@ angular
             html += "</span>";
 
             html +=
-              '<a class="graph-legend-alias" style="float:none;">' +
+              '<a class="piechart-legend-alias" style="float:none;">' +
               seriesData.label +
               "</a>";
 
@@ -238,13 +238,13 @@ angular
               var value = series.stats[ctrl.panel.valueName];
               if (panel.legend.values) {
                 html +=
-                  '<div class="graph-legend-value">' +
+                  '<div class="piechart-legend-value">' +
                   ctrl.formatValue(value) +
                   "</div>";
               }
               if (total) {
                 var pvalue = (value / total * 100).toFixed(decimal) + "%";
-                html += '<div class="graph-legend-value">' + pvalue + "</div>";
+                html += '<div class="piechart-legend-value">' + pvalue + "</div>";
               }
             }
 
@@ -264,13 +264,14 @@ angular
             $container.append(seriesElements);
           }
 
-          if (panel.legendType == "Under graph") {
+          if (panel.legendType === "Under graph") {
             addScrollbar();
           } else {
             destroyScrollbar();
           }
         }
         function addScrollbar() {
+
           const scrollbarOptions = {
             // Number of pixels the content height can surpass the container height without enabling the scroll bar.
             scrollYMarginOffset: 2,
@@ -279,7 +280,7 @@ angular
 
           if (!legendScrollbar) {
             legendScrollbar = new PerfectScrollbar(
-              ".graph-legend",
+              ".piechart-legend",
               scrollbarOptions
             );
           } else {

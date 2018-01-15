@@ -5,7 +5,7 @@ import 'jquery.flot.pie';
 
 export default function link(scope, elem, attrs, ctrl) {
   var data, panel;
-  elem = elem.find('.graph-panel__chart');
+  elem = elem.find('.piechart-panel__chart');
   var $tooltip = $('<div id="tooltip">');
 
   ctrl.events.on('render', function() {
@@ -151,8 +151,8 @@ export default function link(scope, elem, attrs, ctrl) {
       var percent = parseFloat(item.series.percent).toFixed(2);
       var formatted = ctrl.formatValue(item.series.data[0][1]);
 
-      body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
-      body += '<div class="graph-tooltip-value">' + item.series.label + ': ' + formatted;
+      body = '<div class="piechart-tooltip-small"><div class="piechart-tooltip-time">';
+      body += '<div class="piechart-tooltip-value">' + item.series.label + ': ' + formatted;
       body += " (" + percent + "%)" + '</div>';
       body += "</div></div>";
 
