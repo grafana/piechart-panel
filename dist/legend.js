@@ -24,6 +24,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
             var data;
             var seriesList;
             var i;
+            var linkSrv = ctrl.$injector.get('linkSrv');
 
             ctrl.events.on('render', function () {
               data = ctrl.series;
@@ -145,6 +146,8 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
 
               for (i = 0; i < seriesList.length; i++) {
                 var series = seriesList[i];
+                var link = "#";
+                var currentHrefTarget = "_self";
 
                 // ignore empty series
                 if (panel.legend.hideEmpty && series.allIsNull) {
@@ -155,6 +158,37 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   continue;
                 }
 
+                // ######## START JIRA RL-607 ##################
+                for (var y = 0; y < panel.drilldowns.length; y++) {
+                  var drilldown = panel.drilldowns[y];
+                  var regexp = new RegExp(drilldown.alias);
+                  var alias = series.label;
+                  if (regexp.test(alias)) {
+                    var scopedVars = {};
+                    scopedVars["alias"] = { "value": alias };
+
+                    if (drilldown.separator && drilldown.separator.trim().length > 0) {
+                      var values = alias.split(drilldown.separator);
+                      for (var j = 0; j < values.length; j++) {
+                        scopedVars["alias" + j] = { "value": values[j] };
+                      }
+                    }
+
+                    //add panel.scopedVars for repeat var
+                    if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
+                      scopedVars[panel.repeat] = { "value": panel.scopedVars[panel.repeat].value };
+                    }
+
+                    link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
+                    if (drilldown.targetBlank) {
+                      currentHrefTarget = "_blank";
+                    } else {
+                      currentHrefTarget = "_self";
+                    }
+                  }
+                }
+                // ######## END JIRA RL-607 ##################
+
                 var html = '<div class="graph-legend-series';
                 html += '" data-series-index="' + i + '">';
                 html += '<span class="graph-legend-icon" style="float:none;">';
@@ -163,7 +197,8 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
 
                 html += '<span class="graph-legend-alias" style="float:none;">';
 
-                html += '<a title="' + series.label + '">';
+                // add href + target attributes based on the drilldown information
+                html += '<a href="' + link.href + '" target="' + currentHrefTarget + '" title="' + series.label + '">';
 
                 if (panel.legend.maxSize > 0 && series.label.length > 0 && panel.legend.maxSize < series.label.length) {
                   var size = panel.legend.maxSize / 2;
