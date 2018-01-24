@@ -15,7 +15,7 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
       var data;
       var seriesList;
       var i;
-	    var linkSrv = ctrl.$injector.get('linkSrv');
+      var linkSrv = ctrl.$injector.get('linkSrv');
 
       ctrl.events.on('render', function() {
         data = ctrl.series;
@@ -157,30 +157,30 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
             var regexp = new RegExp(drilldown.alias);
             var alias = series.label;
             if (regexp.test(alias)) {
-            var scopedVars = {};
-            scopedVars["alias"] = {"value": alias};
+		    var scopedVars = {};
+		    scopedVars["alias"] = {"value": alias};
 
-            if (drilldown.separator && drilldown.separator.trim().length > 0) {
-              var values = alias.split(drilldown.separator);
-              for (var j = 0; j < values.length; j++) {
-                scopedVars["alias" + j] = {"value": values[j]};
+		    if (drilldown.separator && drilldown.separator.trim().length > 0) {
+		      var values = alias.split(drilldown.separator);
+		      for (var j = 0; j < values.length; j++) {
+			scopedVars["alias" + j] = {"value": values[j]};
+		      }
+		    }
+
+		    //add panel.scopedVars for repeat var
+		    if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
+		      scopedVars[panel.repeat] = {"value": panel.scopedVars[panel.repeat].value};
+		    }
+
+		    link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
+		    if (drilldown.targetBlank) {
+		      currentHrefTarget = "_blank";
+		    } else {
+		      currentHrefTarget = "_self";
+		    }
               }
-            }
-
-            //add panel.scopedVars for repeat var
-            if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
-              scopedVars[panel.repeat] = {"value": panel.scopedVars[panel.repeat].value};
-            }
-
-            link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
-            if (drilldown.targetBlank) {
-              currentHrefTarget = "_blank";
-            } else {
-              currentHrefTarget = "_self";
-            }
-			    }
-		   }
-		   // ######## END JIRA RL-607 ##################
+          }
+          // ######## END JIRA RL-607 ##################
 				  
           var html = '<div class="graph-legend-series';
           html += '" data-series-index="' + i + '">';
@@ -190,7 +190,7 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
 
           html += '<span class="graph-legend-alias" style="float:none;">';
 
-		      // add href + target attributes based on the drilldown information
+          // add href + target attributes based on the drilldown information
           html += '<a href="'+ link.href +'" target="'+ currentHrefTarget +'" title="'+ series.label + '">';
 
           if (panel.legend.maxSize>0 && series.label.length>0 && panel.legend.maxSize < series.label.length) {
