@@ -151,7 +151,8 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
              continue;
           }
 
-          // ######## START JIRA RL-607 ##################
+          // ######## START add drill down to legend  ##################
+          if(panel.drilldowns && panel.drilldowns.length >0){
           for (var y = 0; y < panel.drilldowns.length; y++) {
             var drilldown = panel.drilldowns[y];
             var regexp = new RegExp(drilldown.alias);
@@ -180,7 +181,8 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
 		    }
               }
           }
-          // ######## END JIRA RL-607 ##################
+          }
+          // ######## END add drill down to legend ##################
 				  
           var html = '<div class="graph-legend-series';
           html += '" data-series-index="' + i + '">';
