@@ -158,36 +158,38 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   continue;
                 }
 
-                // ######## START JIRA RL-607 ##################
-                for (var y = 0; y < panel.drilldowns.length; y++) {
-                  var drilldown = panel.drilldowns[y];
-                  var regexp = new RegExp(drilldown.alias);
-                  var alias = series.label;
-                  if (regexp.test(alias)) {
-                    var scopedVars = {};
-                    scopedVars["alias"] = { "value": alias };
+                // ######## START add drill down to legend  ##################
+                if (panel.drilldowns && panel.drilldowns.length > 0) {
+                  for (var y = 0; y < panel.drilldowns.length; y++) {
+                    var drilldown = panel.drilldowns[y];
+                    var regexp = new RegExp(drilldown.alias);
+                    var alias = series.label;
+                    if (regexp.test(alias)) {
+                      var scopedVars = {};
+                      scopedVars["alias"] = { "value": alias };
 
-                    if (drilldown.separator && drilldown.separator.trim().length > 0) {
-                      var values = alias.split(drilldown.separator);
-                      for (var j = 0; j < values.length; j++) {
-                        scopedVars["alias" + j] = { "value": values[j] };
+                      if (drilldown.separator && drilldown.separator.trim().length > 0) {
+                        var values = alias.split(drilldown.separator);
+                        for (var j = 0; j < values.length; j++) {
+                          scopedVars["alias" + j] = { "value": values[j] };
+                        }
                       }
-                    }
 
-                    //add panel.scopedVars for repeat var
-                    if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
-                      scopedVars[panel.repeat] = { "value": panel.scopedVars[panel.repeat].value };
-                    }
+                      //add panel.scopedVars for repeat var
+                      if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
+                        scopedVars[panel.repeat] = { "value": panel.scopedVars[panel.repeat].value };
+                      }
 
-                    link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
-                    if (drilldown.targetBlank) {
-                      currentHrefTarget = "_blank";
-                    } else {
-                      currentHrefTarget = "_self";
+                      link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
+                      if (drilldown.targetBlank) {
+                        currentHrefTarget = "_blank";
+                      } else {
+                        currentHrefTarget = "_self";
+                      }
                     }
                   }
                 }
-                // ######## END JIRA RL-607 ##################
+                // ######## END add drill down to legend ##################
 
                 var html = '<div class="graph-legend-series';
                 html += '" data-series-index="' + i + '">';
