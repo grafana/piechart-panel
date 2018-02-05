@@ -5,7 +5,7 @@ import 'jquery.flot.pie';
 
 export default function link(scope, elem, attrs, ctrl) {
   var data, panel;
-  elem = elem.find('.piechart-panel');
+  elem = elem.find('.piechart-panel__chart');
   var $tooltip = $('<div id="tooltip">');
 
   ctrl.events.on('render', function() {
@@ -16,21 +16,14 @@ export default function link(scope, elem, attrs, ctrl) {
   });
 
   function getLegendHeight(panelHeight) {
-    if (ctrl.panel.legendType === 'On graph') {
-      $('.graph-legend').css('padding-top', 0);
-    } else {
-      $('.graph-legend').css('padding-top', 6);
-    }
     if (!ctrl.panel.legend.show || ctrl.panel.legendType === 'Right side' || ctrl.panel.legendType === 'On graph') {
       return 0;
     }
 
-    if (ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
-      var total = 25 + (21 * data.length);
+    if (ctrl.panel.legendType == 'Under graph' && ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
+      var total = 21 * data.length;
       return  Math.min(total, Math.floor(panelHeight/2));
     }
-
-    return 27;
   }
 
   function setElementHeight() {
@@ -158,8 +151,8 @@ export default function link(scope, elem, attrs, ctrl) {
       var percent = parseFloat(item.series.percent).toFixed(2);
       var formatted = ctrl.formatValue(item.series.data[0][1]);
 
-      body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
-      body += '<div class="graph-tooltip-value">' + item.series.label + ': ' + formatted;
+      body = '<div class="piechart-tooltip-small"><div class="piechart-tooltip-time">';
+      body += '<div class="piechart-tooltip-value">' + item.series.label + ': ' + formatted;
       body += " (" + percent + "%)" + '</div>';
       body += "</div></div>";
 
@@ -179,7 +172,7 @@ export default function link(scope, elem, attrs, ctrl) {
       } else {
         addPieChart();
       }
-    }
+     }
     if (incrementRenderCounter) {
       ctrl.renderingCompleted();
     }
