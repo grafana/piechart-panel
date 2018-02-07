@@ -4,7 +4,6 @@ System.register(['./piechart_ctrl', 'app/plugins/sdk'], function (_export, _cont
   "use strict";
 
   var PieChartCtrl, loadPluginCss;
-
   return {
     setters: [function (_piechart_ctrl) {
       PieChartCtrl = _piechart_ctrl.PieChartCtrl;

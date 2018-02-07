@@ -1,11 +1,9 @@
 "use strict";
 
-
 System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jquery.flot.time", "./lib/perfect-scrollbar.min"], function (_export, _context) {
   "use strict";
 
   var angular, kbn, $, PerfectScrollbar;
-
   return {
     setters: [function (_angular) {
       angular = _angular.default;
@@ -17,8 +15,8 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
       PerfectScrollbar = _libPerfectScrollbarMin.default;
     }],
     execute: function () {
-      angular.module("grafana.directives").directive("piechartLegend", function (popoverSrv, $timeout) {
 
+      angular.module("grafana.directives").directive("piechartLegend", function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
             var $container = $('<section class="piechart-legend"></section>');
