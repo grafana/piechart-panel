@@ -139,8 +139,8 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
 
         for (i = 0; i < seriesList.length; i++) {
           var series = seriesList[i];
-		  var currentLink = "#";
-		  var currentHrefTarget = "_self";
+		      var currentLink = "#";
+		      var currentHrefTarget = "_self";
 
           // ignore empty series
           if (panel.legend.hideEmpty && series.allIsNull) {
@@ -151,44 +151,44 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
              continue;
           }
 
-		  // ######## START JIRA RL-607 ##################
-		  if(panel.drilldowns && panel.drilldowns.length >0){
-			  for (var y = 0; y < panel.drilldowns.length; y++) {
-				  
-				  var drilldown = panel.drilldowns[y];
-				  var regexp = new RegExp(drilldown.alias);
-				  var alias = series.label;
-				  if (regexp.test(alias)) {
-					var scopedVars = {};
-					scopedVars["alias"] = {"value": alias};
+          // ######## START JIRA RL-607 ##################
+          if(panel.drilldowns && panel.drilldowns.length >0) {
+            for (var y = 0; y < panel.drilldowns.length; y++) {
 
-					if (drilldown.separator && drilldown.separator.trim().length > 0) {
-						var values = alias.split(drilldown.separator);
-						for (var j = 0; j < values.length; j++) {
-							scopedVars["alias" + j] = {"value": values[j]};
-						}
-					}
+              var drilldown = panel.drilldowns[y];
+              var regexp = new RegExp(drilldown.alias);
+              var alias = series.label;
+              if (regexp.test(alias)) {
+                 var scopedVars = {};
+                 scopedVars["alias"] = {"value": alias};
 
-					//add panel.scopedVars for repeat var
-					if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
-						scopedVars[panel.repeat] = {"value": panel.scopedVars[panel.repeat].value};
-					}
+                 if (drilldown.separator && drilldown.separator.trim().length > 0) {
+                   var values = alias.split(drilldown.separator);
+                   for (var j = 0; j < values.length; j++) {
+                     scopedVars["alias" + j] = {"value": values[j]};
+                   }
+                 }
 
-					var link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
-					if (link.href != undefined) { 
-						currentLink = link.href;
-					}
-					
-					if (drilldown.targetBlank) {
-						currentHrefTarget = "_blank";
-					} else {
-						currentHrefTarget = "_self";
-					}
-				  }
-			  }
-		  }
-		  // ######## END JIRA RL-607 ##################
-				  
+                 //add panel.scopedVars for repeat var
+                 if (panel.repeat && panel.scopedVars[panel.repeat] && panel.scopedVars[panel.repeat].value) {
+                   scopedVars[panel.repeat] = {"value": panel.scopedVars[panel.repeat].value};
+                 }
+
+                 var link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
+                 if (link.href != undefined) { 
+                   currentLink = link.href;
+                 }
+
+                 if (drilldown.targetBlank) {
+                   currentHrefTarget = "_blank";
+                 } else {
+                   currentHrefTarget = "_self";
+                 }
+              }
+           }
+         }
+          // ######## END JIRA RL-607 ##################
+
           var html = '<div class="graph-legend-series';
           html += '" data-series-index="' + i + '">';
           html += '<span class="graph-legend-icon" style="float:none;">';
@@ -196,15 +196,15 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           html += '</span>';
           html += '<span class="graph-legend-alias" style="float:none;">';
 
-		  html += '<a ';
-		  
-		  if (currentLink != "#") {
-			// add href + target attributes based on the drilldown information
-			html += ' href="'+ currentLink +'" target="'+ currentHrefTarget + '" ';
-		  } 
-			
-		  html += 'title="'+ series.label + '">';		  
-		  
+          html += '<a ';
+
+          if (currentLink != "#") {
+            // add href + target attributes based on the drilldown information
+            html += ' href="'+ currentLink +'" target="'+ currentHrefTarget + '" ';
+          } 
+
+          html += 'title="'+ series.label + '">';		  
+
           if (panel.legend.maxSize>0 && series.label.length>0 && panel.legend.maxSize < series.label.length) {
               var size = panel.legend.maxSize/2;
               html += `${series.label.substr(0,size)}...${series.label.substr(series.label.length-size)}`;
@@ -228,7 +228,7 @@ angular.module('grafana.directives').directive('piechartLegend', function(popove
           html += '</div>';
           $container.append($(html));
         }
-      }
-    }
+       }
+     }
   };
 });
