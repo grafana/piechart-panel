@@ -146,7 +146,7 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
 
               for (i = 0; i < seriesList.length; i++) {
                 var series = seriesList[i];
-                var link = "#";
+                var currentLink = "#";
                 var currentHrefTarget = "_self";
 
                 // ignore empty series
@@ -158,9 +158,10 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                   continue;
                 }
 
-                // ######## START add drill down to legend  ##################
+                // ######## START JIRA RL-607 ##################
                 if (panel.drilldowns && panel.drilldowns.length > 0) {
                   for (var y = 0; y < panel.drilldowns.length; y++) {
+
                     var drilldown = panel.drilldowns[y];
                     var regexp = new RegExp(drilldown.alias);
                     var alias = series.label;
@@ -180,7 +181,11 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                         scopedVars[panel.repeat] = { "value": panel.scopedVars[panel.repeat].value };
                       }
 
-                      link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
+                      var link = linkSrv.getPanelLinkAnchorInfo(drilldown, scopedVars);
+                      if (link.href != undefined) {
+                        currentLink = link.href;
+                      }
+
                       if (drilldown.targetBlank) {
                         currentHrefTarget = "_blank";
                       } else {
@@ -189,18 +194,23 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                     }
                   }
                 }
-                // ######## END add drill down to legend ##################
+                // ######## END JIRA RL-607 ##################
 
                 var html = '<div class="graph-legend-series';
                 html += '" data-series-index="' + i + '">';
                 html += '<span class="graph-legend-icon" style="float:none;">';
                 html += '<i class="fa fa-minus pointer" style="color:' + series.color + '"></i>';
                 html += '</span>';
-
                 html += '<span class="graph-legend-alias" style="float:none;">';
 
-                // add href + target attributes based on the drilldown information
-                html += '<a href="' + link.href + '" target="' + currentHrefTarget + '" title="' + series.label + '">';
+                html += '<a ';
+
+                if (currentLink != "#") {
+                  // add href + target attributes based on the drilldown information
+                  html += ' href="' + currentLink + '" target="' + currentHrefTarget + '" ';
+                }
+
+                html += 'title="' + series.label + '">';
 
                 if (panel.legend.maxSize > 0 && series.label.length > 0 && panel.legend.maxSize < series.label.length) {
                   var size = panel.legend.maxSize / 2;
