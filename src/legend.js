@@ -213,7 +213,7 @@ angular
             }
 
             var decimal = 2;
-            if (ctrl.panel.legend.percentageDecimals) {
+            if (ctrl.panel.legend.percentageDecimals || ctrl.panel.legend.percentageDecimals === 0) {
               decimal = ctrl.panel.legend.percentageDecimals;
             }
 
