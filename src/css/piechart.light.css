@@ -69,6 +69,7 @@
   white-space: nowrap;
   font-size: 85%;
   text-align: left;
+  color: 52545c;
 }
 
 .piechart-legend-icon.current::before {
@@ -244,8 +245,8 @@
 }
 
 .piechart-legend-series-hidden .piechart-legend-value,
-.piechart-legend-alias {
-  color: lighten(#52545c, 30%);
+.piechart-legend-series-hidden .piechart-legend-alias {
+  color: #acb6bf;
 }
 
 .piechart-tooltip {
