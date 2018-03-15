@@ -25,6 +25,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
             var panel = ctrl.panel;
             var data;
             var seriesList;
+            var dataList;
             var i;
             var legendScrollbar;
 
@@ -51,7 +52,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
             function toggleSeries(e) {
               var el = $(e.currentTarget);
               var index = getSeriesIndexForElement(el);
-              var seriesInfo = seriesList[index];
+              var seriesInfo = dataList[index];
               var scrollPosition = $($container.children("tbody")).scrollTop();
               ctrl.toggleSeries(seriesInfo);
               $($container.children("tbody")).scrollTop(scrollPosition);
@@ -153,6 +154,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
               }
 
               seriesList = data;
+              dataList = ctrl.data;
 
               $container.empty();
 
@@ -177,15 +179,6 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
                 legendHeader = $(header);
               }
 
-              if (panel.legend.sort) {
-                seriesList = _.sortBy(seriesList, function (series) {
-                  return series.stats[panel.legend.sort];
-                });
-                if (panel.legend.sortDesc) {
-                  seriesList = seriesList.reverse();
-                }
-              }
-
               if (panel.legend.percentage) {
                 var total = 0;
                 for (i = 0; i < seriesList.length; i++) {
@@ -198,7 +191,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
 
               for (i = 0; i < seriesList.length; i++) {
                 var series = seriesList[i];
-                var seriesData = ctrl.data[i];
+                var seriesData = dataList[i];
 
                 // ignore empty series
                 if (panel.legend.hideEmpty && series.allIsNull) {
@@ -215,7 +208,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
                 }
 
                 var html = '<div class="piechart-legend-series';
-                if (ctrl.hiddenSeries[series.alias]) {
+                if (ctrl.hiddenSeries[seriesData.label]) {
                   html += " piechart-legend-series-hidden";
                 }
                 html += '" data-series-index="' + i + '">';
@@ -226,7 +219,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
                 html += '<a class="piechart-legend-alias" style="float:none;">' + seriesData.label + "</a>";
 
                 if (showValues && tableLayout) {
-                  var value = series.stats[ctrl.panel.valueName];
+                  var value = seriesData.legendData;
                   if (panel.legend.values) {
                     html += '<div class="piechart-legend-value">' + ctrl.formatValue(value) + "</div>";
                   }

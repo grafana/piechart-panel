@@ -119,21 +119,24 @@ export default function link(scope, elem, attrs, ctrl) {
     for (let i = 0; i < data.length; i++) {
       let series = data[i];
 
-      // if hidden remove points and disable stack
+      // if hidden remove points
       if (ctrl.hiddenSeries[series.label]) {
         series.data = {};
-        series.stack = false;
       }
     }
 
+
     if (panel.legend.sort) {
+      if (ctrl.panel.valueName !== panel.legend.sort) {
+        panel.legend.sort = ctrl.panel.valueName;
+      }
       if (panel.legend.sortDesc === true) {
         data.sort(function(a, b) {
-          return b.data - a.data;
+          return b.legendData - a.legendData;
         });
       } else {
         data.sort(function(a, b){
-          return a.data - b.data;
+          return a.legendData - b.legendData;
         });
       }
     }

@@ -13,6 +13,10 @@
   max-height: 100%;
 }
 
+_:-ms-fullscreen, :root .piechart-panel--legend-right .piechart-legend {
+  flex: 0 1 200px;
+}
+
 .piechart-panel--legend-right .piechart-legend-series {
   display: block;
   padding-left: 0px;

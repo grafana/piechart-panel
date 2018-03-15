@@ -77,7 +77,8 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       return {
         label: serie.alias,
         data: serie.stats[this.panel.valueName],
-        color: this.panel.aliasColors[serie.alias] || this.$rootScope.colors[i]
+        color: this.panel.aliasColors[serie.alias] || this.$rootScope.colors[i],
+        legendData: serie.stats[this.panel.valueName],
       };
     });
   }
@@ -152,7 +153,7 @@ export class PieChartCtrl extends MetricsPanelCtrl {
 
   toggleSeries(serie) {
     if (this.hiddenSeries[serie.label]) {
-      delete this.hiddenSeries[serie.alias];
+      delete this.hiddenSeries[serie.label];
     } else {
       this.hiddenSeries[serie.label] = true;
     }

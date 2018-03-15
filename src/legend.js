@@ -16,6 +16,7 @@ angular
         var panel = ctrl.panel;
         var data;
         var seriesList;
+        var dataList;
         var i;
         var legendScrollbar;
 
@@ -28,9 +29,9 @@ angular
         ctrl.events.on("render", function() {
           data = ctrl.series;
           if (data) {
-            for (var i in data) {
-              data[i].color = ctrl.data[i].color;
-            }
+              for (var i in data) {
+                data[i].color = ctrl.data[i].color;
+              }
             render();
           }
         });
@@ -42,7 +43,7 @@ angular
         function toggleSeries(e) {
           var el = $(e.currentTarget);
           var index = getSeriesIndexForElement(el);
-          var seriesInfo = seriesList[index];
+          var seriesInfo = dataList[index];
           var scrollPosition = $($container.children("tbody")).scrollTop();
           ctrl.toggleSeries(seriesInfo);
           $($container.children("tbody")).scrollTop(scrollPosition);
@@ -150,6 +151,7 @@ angular
           }
 
           seriesList = data;
+          dataList = ctrl.data;
 
           $container.empty();
 
@@ -180,15 +182,6 @@ angular
             legendHeader = $(header);
           }
 
-          if (panel.legend.sort) {
-            seriesList = _.sortBy(seriesList, function(series) {
-              return series.stats[panel.legend.sort];
-            });
-            if (panel.legend.sortDesc) {
-              seriesList = seriesList.reverse();
-            }
-          }
-
           if (panel.legend.percentage) {
             var total = 0;
             for (i = 0; i < seriesList.length; i++) {
@@ -201,7 +194,7 @@ angular
 
           for (i = 0; i < seriesList.length; i++) {
             var series = seriesList[i];
-            var seriesData = ctrl.data[i];
+            var seriesData = dataList[i];
 
             // ignore empty series
             if (panel.legend.hideEmpty && series.allIsNull) {
@@ -218,7 +211,7 @@ angular
             }
 
             var html = '<div class="piechart-legend-series';
-            if (ctrl.hiddenSeries[series.alias]) {
+            if (ctrl.hiddenSeries[seriesData.label]) {
               html += " piechart-legend-series-hidden";
             }
             html += '" data-series-index="' + i + '">';
@@ -235,7 +228,7 @@ angular
               "</a>";
 
             if (showValues && tableLayout) {
-              var value = series.stats[ctrl.panel.valueName];
+              var value = seriesData.legendData;
               if (panel.legend.values) {
                 html +=
                   '<div class="piechart-legend-value">' +
