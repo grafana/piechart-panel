@@ -25,21 +25,9 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       }
 
       if (ctrl.panel.legendType == 'Under graph' && ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
-        var total = 21 * data.length;
-        return Math.min(total, Math.floor(panelHeight / 2));
-      }
-    }
-
-    function setElementHeight() {
-      try {
-        var height = ctrl.height - getLegendHeight(ctrl.height);
-        elem.css('height', height + 'px');
-
-        return true;
-      } catch (e) {
-        // IE throws errors sometimes
-        console.log(e);
-        return false;
+        var breakPoint = parseInt(ctrl.panel.breakPoint) / 100;
+        var total = 23 + 20 * data.length;
+        return Math.min(total, Math.floor(panelHeight * breakPoint));
       }
     }
 
@@ -69,16 +57,16 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
     function addPieChart() {
       var width = elem.width();
-      var height = elem.height();
+      var height = ctrl.height - getLegendHeight(ctrl.height);
 
       var size = Math.min(width, height);
 
       var plotCanvas = $('<div></div>');
       var plotCss = {
-        top: '10px',
         margin: 'auto',
         position: 'relative',
-        height: size - 20 + 'px'
+        paddingBottom: 20 + 'px',
+        height: size + 'px'
       };
 
       plotCanvas.css(plotCss);
@@ -173,13 +161,12 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       data = ctrl.data;
       panel = ctrl.panel;
 
-      if (setElementHeight()) {
-        if (0 == ctrl.data.length) {
-          noDataPoints();
-        } else {
-          addPieChart();
-        }
+      if (0 == ctrl.data.length) {
+        noDataPoints();
+      } else {
+        addPieChart();
       }
+
       if (incrementRenderCounter) {
         ctrl.renderingCompleted();
       }

@@ -8,10 +8,10 @@ export default function link(scope, elem, attrs, ctrl) {
   elem = elem.find('.piechart-panel__chart');
   var $tooltip = $('<div id="tooltip">');
 
-  ctrl.events.on('render', function() {
+  ctrl.events.on('render', function () {
     render(false);
-    if(panel.legendType === 'Right side') {
-      setTimeout(function() { render(true); }, 50);
+    if (panel.legendType === 'Right side') {
+      setTimeout(function () { render(true); }, 50);
     }
   });
 
@@ -21,20 +21,9 @@ export default function link(scope, elem, attrs, ctrl) {
     }
 
     if (ctrl.panel.legendType == 'Under graph' && ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
-      var total = 21 * data.length;
-      return  Math.min(total, Math.floor(panelHeight/2));
-    }
-  }
-
-  function setElementHeight() {
-    try {
-      var height = ctrl.height - getLegendHeight(ctrl.height);
-      elem.css('height', height + 'px');
-
-      return true;
-    } catch (e) { // IE throws errors sometimes
-      console.log(e);
-      return false;
+      let breakPoint = parseInt(ctrl.panel.breakPoint)/100;
+      var total = 23 + 20 * data.length;
+      return Math.min(total, Math.floor(panelHeight * breakPoint));
     }
   }
 
@@ -47,7 +36,7 @@ export default function link(scope, elem, attrs, ctrl) {
       decimal = ctrl.panel.legend.percentageDecimals;
     }
     if (ctrl.panel.legend.values && ctrl.panel.legend.percentage) {
-      return start + ctrl.formatValue(slice_data) + "<br/>" + slice.percent.toFixed(decimal) +"%</div>";
+      return start + ctrl.formatValue(slice_data) + "<br/>" + slice.percent.toFixed(decimal) + "%</div>";
     } else if (ctrl.panel.legend.values) {
       return start + ctrl.formatValue(slice_data) + "</div>";
     } else if (ctrl.panel.legend.percentage) {
@@ -64,16 +53,16 @@ export default function link(scope, elem, attrs, ctrl) {
 
   function addPieChart() {
     var width = elem.width();
-    var height = elem.height();
+    var height = ctrl.height - getLegendHeight(ctrl.height);
 
     var size = Math.min(width, height);
 
     var plotCanvas = $('<div></div>');
     var plotCss = {
-      top: '10px',
       margin: 'auto',
       position: 'relative',
-      height: (size - 20) + 'px'
+      paddingBottom: 20 + 'px',
+      height: size + 'px'
     };
 
     plotCanvas.css(plotCss);
@@ -99,9 +88,9 @@ export default function link(scope, elem, attrs, ctrl) {
             opacity: 0.0
           },
           combine: {
-          threshold: ctrl.panel.combine.threshold,
-          label: ctrl.panel.combine.label
-        }
+            threshold: ctrl.panel.combine.threshold,
+            label: ctrl.panel.combine.label
+          }
         }
       },
       grid: {
@@ -128,11 +117,11 @@ export default function link(scope, elem, attrs, ctrl) {
 
     if (panel.legend.sort) {
       if (panel.legend.sortDesc === true) {
-        data.sort(function(a, b) {
+        data.sort(function (a, b) {
           return b.data - a.data;
         });
       } else {
-        data.sort(function(a, b){
+        data.sort(function (a, b) {
           return a.data - b.data;
         });
       }
@@ -166,13 +155,16 @@ export default function link(scope, elem, attrs, ctrl) {
     data = ctrl.data;
     panel = ctrl.panel;
 
-    if (setElementHeight()) {
+
+
       if (0 == ctrl.data.length) {
         noDataPoints();
       } else {
         addPieChart();
       }
-     }
+
+
+
     if (incrementRenderCounter) {
       ctrl.renderingCompleted();
     }
