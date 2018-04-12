@@ -93,6 +93,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             cacheTimeout: null,
             nullPointMode: 'connected',
             legendType: 'Under graph',
+            breakPoint: '50%',
             aliasColors: {},
             format: 'short',
             valueName: 'current',

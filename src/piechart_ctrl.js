@@ -26,6 +26,7 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       cacheTimeout: null,
       nullPointMode: 'connected',
       legendType: 'Under graph',
+      breakPoint: '50%',
       aliasColors: {},
       format: 'short',
       valueName: 'current',

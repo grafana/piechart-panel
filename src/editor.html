@@ -40,6 +40,13 @@
       <input type="number" class="gf-form-input max-width-5" placeholder="250" bs-tooltip="'Set a min-width for the legend side table/block'"
         data-placement="right" ng-model="ctrl.panel.legend.sideWidth" ng-change="ctrl.render()" ng-model-onblur>
     </div>
+    <div ng-if="ctrl.panel.legendType == 'Under graph'" class="gf-form">
+      <span class="gf-form-label width-11">Legend Breakpoint</span>
+      <div class="gf-form-select-wrapper width-9">
+        <select class="gf-form-input" ng-model="ctrl.panel.breakPoint" ng-options="t for t in ['25%', '50%', '75%', '100%']"
+          ng-change="ctrl.render()"></select>
+      </div>
+    </div>
     <div class="gf-form" ng-if="ctrl.panel.legendType === 'On graph'">
       <span class="gf-form-label width-11">Font size</span>
       <div class="gf-form-select-wrapper width-9">

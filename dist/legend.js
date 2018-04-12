@@ -19,7 +19,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
       angular.module("grafana.directives").directive("piechartLegend", function (popoverSrv, $timeout) {
         return {
           link: function link(scope, elem) {
-            var $container = $('<section class="piechart-legend"></section>');
+            var $container = $('<div class="piechart-legend__container"></div>');
             var firstRender = true;
             var ctrl = scope.ctrl;
             var panel = ctrl.panel;
@@ -259,7 +259,6 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
               }
             }
             function addScrollbar() {
-
               var scrollbarOptions = {
                 // Number of pixels the content height can surpass the container height without enabling the scroll bar.
                 scrollYMarginOffset: 2,
