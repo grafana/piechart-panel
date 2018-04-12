@@ -10,7 +10,7 @@
 
 .piechart-panel--legend-right .piechart-legend {
   flex: 0 1 10px;
-  max-height: 100%;
+  height: 100%;
 }
 
 _:-ms-fullscreen, :root .piechart-panel--legend-right .piechart-legend {
@@ -26,10 +26,15 @@ _:-ms-fullscreen, :root .piechart-panel--legend-right .piechart-legend {
   display: table-row;
 }
 
+.piechart-legend__container {
+  height: 100%;
+}
+
 .piechart-panel__chart {
   position: relative;
   cursor: crosshair;
   flex-grow: 1;
+  top: 10px;
 }
 
 .datapoints-warning {
@@ -48,7 +53,6 @@ _:-ms-fullscreen, :root .piechart-panel--legend-right .piechart-legend {
 
 .piechart-legend {
   flex: 0 1 auto;
-  max-height: 30%;
   margin: 0 1rem;
   text-align: center;
   padding-top: 6px;

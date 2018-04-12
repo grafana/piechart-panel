@@ -10,7 +10,7 @@ angular
   .directive("piechartLegend", function(popoverSrv, $timeout) {
     return {
       link: function(scope, elem) {
-        var $container = $('<section class="piechart-legend"></section>');
+        var $container = $('<div class="piechart-legend__container"></div>');
         var firstRender = true;
         var ctrl = scope.ctrl;
         var panel = ctrl.panel;
@@ -264,7 +264,6 @@ angular
           }
         }
         function addScrollbar() {
-
           const scrollbarOptions = {
             // Number of pixels the content height can surpass the container height without enabling the scroll bar.
             scrollYMarginOffset: 2,
