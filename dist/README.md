@@ -37,6 +37,11 @@ needs read access to the directory.
 
 # Changelog
 
+## 1.3.0
+
+* Fixes for legend and piechart rendering and sorting: [#138](https://github.com/grafana/piechart-panel/pull/138), [#136](https://github.com/grafana/piechart-panel/pull/136)
+* Fix for decimal field for percentages [#108](https://github.com/grafana/piechart-panel/pull/108)
+
 ## 1.1.5
 
 * Fix for color picker in legend
