@@ -91,6 +91,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             cacheTimeout: null,
             nullPointMode: 'connected',
             legendType: 'Under graph',
+            breakPoint: '50%',
             aliasColors: {},
             format: 'short',
             valueName: 'current',
@@ -152,7 +153,8 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
               return {
                 label: serie.alias,
                 data: serie.stats[_this2.panel.valueName],
-                color: _this2.panel.aliasColors[serie.alias] || _this2.$rootScope.colors[i]
+                color: _this2.panel.aliasColors[serie.alias] || _this2.$rootScope.colors[i],
+                legendData: serie.stats[_this2.panel.valueName]
               };
             });
           }
@@ -235,7 +237,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           key: 'toggleSeries',
           value: function toggleSeries(serie) {
             if (this.hiddenSeries[serie.label]) {
-              delete this.hiddenSeries[serie.alias];
+              delete this.hiddenSeries[serie.label];
             } else {
               this.hiddenSeries[serie.label] = true;
             }

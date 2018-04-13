@@ -5,43 +5,25 @@ import 'jquery.flot.pie';
 
 export default function link(scope, elem, attrs, ctrl) {
   var data, panel;
-  elem = elem.find('.piechart-panel');
+  elem = elem.find('.piechart-panel__chart');
   var $tooltip = $('<div id="tooltip">');
 
-  ctrl.events.on('render', function() {
+  ctrl.events.on('render', function () {
     render(false);
-    if(panel.legendType === 'Right side') {
-      setTimeout(function() { render(true); }, 50);
+    if (panel.legendType === 'Right side') {
+      setTimeout(function () { render(true); }, 50);
     }
   });
 
   function getLegendHeight(panelHeight) {
-    if (ctrl.panel.legendType === 'On graph') {
-      $('.graph-legend').css('padding-top', 0);
-    } else {
-      $('.graph-legend').css('padding-top', 6);
-    }
     if (!ctrl.panel.legend.show || ctrl.panel.legendType === 'Right side' || ctrl.panel.legendType === 'On graph') {
       return 0;
     }
 
-    if (ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
-      var total = 25 + (21 * data.length);
-      return  Math.min(total, Math.floor(panelHeight/2));
-    }
-
-    return 27;
-  }
-
-  function setElementHeight() {
-    try {
-      var height = ctrl.height - getLegendHeight(ctrl.height);
-      elem.css('height', height + 'px');
-
-      return true;
-    } catch (e) { // IE throws errors sometimes
-      console.log(e);
-      return false;
+    if (ctrl.panel.legendType == 'Under graph' && ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
+      let breakPoint = parseInt(ctrl.panel.breakPoint)/100;
+      var total = 23 + 20 * data.length;
+      return Math.min(total, Math.floor(panelHeight * breakPoint));
     }
   }
 
@@ -54,7 +36,7 @@ export default function link(scope, elem, attrs, ctrl) {
       decimal = ctrl.panel.legend.percentageDecimals;
     }
     if (ctrl.panel.legend.values && ctrl.panel.legend.percentage) {
-      return start + ctrl.formatValue(slice_data) + "<br/>" + slice.percent.toFixed(decimal) +"%</div>";
+      return start + ctrl.formatValue(slice_data) + "<br/>" + slice.percent.toFixed(decimal) + "%</div>";
     } else if (ctrl.panel.legend.values) {
       return start + ctrl.formatValue(slice_data) + "</div>";
     } else if (ctrl.panel.legend.percentage) {
@@ -71,16 +53,16 @@ export default function link(scope, elem, attrs, ctrl) {
 
   function addPieChart() {
     var width = elem.width();
-    var height = elem.height();
+    var height = ctrl.height - getLegendHeight(ctrl.height);
 
     var size = Math.min(width, height);
 
     var plotCanvas = $('<div></div>');
     var plotCss = {
-      top: '10px',
       margin: 'auto',
       position: 'relative',
-      height: (size - 20) + 'px'
+      paddingBottom: 20 + 'px',
+      height: size + 'px'
     };
 
     plotCanvas.css(plotCss);
@@ -106,9 +88,9 @@ export default function link(scope, elem, attrs, ctrl) {
             opacity: 0.0
           },
           combine: {
-          threshold: ctrl.panel.combine.threshold,
-          label: ctrl.panel.combine.label
-        }
+            threshold: ctrl.panel.combine.threshold,
+            label: ctrl.panel.combine.label
+          }
         }
       },
       grid: {
@@ -126,21 +108,24 @@ export default function link(scope, elem, attrs, ctrl) {
     for (let i = 0; i < data.length; i++) {
       let series = data[i];
 
-      // if hidden remove points and disable stack
+      // if hidden remove points
       if (ctrl.hiddenSeries[series.label]) {
         series.data = {};
-        series.stack = false;
       }
     }
 
+
     if (panel.legend.sort) {
+      if (ctrl.panel.valueName !== panel.legend.sort) {
+        panel.legend.sort = ctrl.panel.valueName;
+      }
       if (panel.legend.sortDesc === true) {
-        data.sort(function(a, b) {
-          return b.data - a.data;
+        data.sort(function (a, b) {
+          return b.legendData - a.legendData;
         });
       } else {
-        data.sort(function(a, b){
-          return a.data - b.data;
+        data.sort(function (a, b) {
+          return a.legendData - b.legendData;
         });
       }
     }
@@ -158,8 +143,8 @@ export default function link(scope, elem, attrs, ctrl) {
       var percent = parseFloat(item.series.percent).toFixed(2);
       var formatted = ctrl.formatValue(item.series.data[0][1]);
 
-      body = '<div class="graph-tooltip-small"><div class="graph-tooltip-time">';
-      body += '<div class="graph-tooltip-value">' + item.series.label + ': ' + formatted;
+      body = '<div class="piechart-tooltip-small"><div class="piechart-tooltip-time">';
+      body += '<div class="piechart-tooltip-value">' + item.series.label + ': ' + formatted;
       body += " (" + percent + "%)" + '</div>';
       body += "</div></div>";
 
@@ -173,13 +158,16 @@ export default function link(scope, elem, attrs, ctrl) {
     data = ctrl.data;
     panel = ctrl.panel;
 
-    if (setElementHeight()) {
+
+
       if (0 == ctrl.data.length) {
         noDataPoints();
       } else {
         addPieChart();
       }
-    }
+
+
+
     if (incrementRenderCounter) {
       ctrl.renderingCompleted();
     }
