@@ -17,11 +17,11 @@ export default function link(scope, elem, attrs, ctrl) {
 
   function getLegendHeight(panelHeight) {
     if (!ctrl.panel.legend.show || ctrl.panel.legendType === 'Right side' || ctrl.panel.legendType === 'On graph') {
-      return 0;
+      return 20;
     }
 
     if (ctrl.panel.legendType == 'Under graph' && ctrl.panel.legend.percentage || ctrl.panel.legend.values) {
-      let breakPoint = parseInt(ctrl.panel.breakPoint)/100;
+      let breakPoint = parseInt(ctrl.panel.breakPoint) / 100;
       var total = 23 + 20 * data.length;
       return Math.min(total, Math.floor(panelHeight * breakPoint));
     }
@@ -32,7 +32,7 @@ export default function link(scope, elem, attrs, ctrl) {
     var decimal = 2;
     var start = "<div style='font-size:" + ctrl.panel.fontSize + ";text-align:center;padding:2px;color:" + slice.color + ";'>" + label + "<br/>";
 
-    if(ctrl.panel.legend.percentageDecimals) {
+    if (ctrl.panel.legend.percentageDecimals) {
       decimal = ctrl.panel.legend.percentageDecimals;
     }
     if (ctrl.panel.legend.values && ctrl.panel.legend.percentage) {
@@ -158,15 +158,11 @@ export default function link(scope, elem, attrs, ctrl) {
     data = ctrl.data;
     panel = ctrl.panel;
 
-
-
       if (0 == ctrl.data.length) {
         noDataPoints();
       } else {
         addPieChart();
       }
-
-
 
     if (incrementRenderCounter) {
       ctrl.renderingCompleted();

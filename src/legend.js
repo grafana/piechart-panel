@@ -4,6 +4,7 @@ import $ from "jquery";
 import "jquery.flot";
 import "jquery.flot.time";
 import PerfectScrollbar from "./lib/perfect-scrollbar.min";
+//import baron from "./lib/baron.js";
 
 angular
   .module("grafana.directives")
@@ -134,12 +135,16 @@ angular
         }
 
         function render() {
-          if (panel.legendType === "On graph") {
+          if (panel.legendType === "On graph" || !panel.legend.show) {
             $container.empty();
             $(".piechart-legend").css("padding-top", 0);
             return;
           } else {
             $(".piechart-legend").css("padding-top", 6);
+          }
+
+          if (panel.legendType == "Right side") {
+            $(".piechart-panel__chart").css("height", "calc(100% - 10px)")
           }
 
           if (firstRender) {
@@ -155,11 +160,10 @@ angular
 
           $container.empty();
 
-          var width =
-            panel.legendType == "Right side" && panel.legend.sideWidth
-              ? panel.legend.sideWidth + "px"
-              : "";
-          $container.css("min-width", width);
+          var width = panel.legendType == "Right side" && panel.legend.sideWidth ? panel.legend.sideWidth + "px" : "";
+          var ieWidth = panel.legendType == "Right side" && panel.legend.sideWidth ? panel.legend.sideWidth - 1 + "px" : "";
+          elem.css("min-width", width);
+          elem.css("width", ieWidth);
 
           var showValues = panel.legend.values || panel.legend.percentage;
           var tableLayout =
