@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/time_series', './rendering', './legend'], function (_export, _context) {
+  "use strict";
+
   var MetricsPanelCtrl, _, kbn, TimeSeries, rendering, legend, _createClass, PieChartCtrl;
 
   function _classCallCheck(instance, Constructor) {
@@ -72,7 +74,7 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
         function PieChartCtrl($scope, $injector, $rootScope) {
           _classCallCheck(this, PieChartCtrl);
 
-          var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PieChartCtrl).call(this, $scope, $injector));
+          var _this = _possibleConstructorReturn(this, (PieChartCtrl.__proto__ || Object.getPrototypeOf(PieChartCtrl)).call(this, $scope, $injector));
 
           _this.$rootScope = $rootScope;
           _this.hiddenSeries = {};

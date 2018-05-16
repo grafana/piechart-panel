@@ -37,6 +37,10 @@ needs read access to the directory.
 
 # Changelog
 
+## 1.3.1
+
+* Fix scrolling and legend issues in Internet Explorer 11: [#143](https://github.com/grafana/piechart-panel/issues/143)
+
 ## 1.3.0
 
 * Fixes for legend and piechart rendering and sorting: [#138](https://github.com/grafana/piechart-panel/pull/138), [#136](https://github.com/grafana/piechart-panel/pull/136)

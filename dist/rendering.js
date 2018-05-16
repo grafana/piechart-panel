@@ -1,6 +1,8 @@
 'use strict';
 
 System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function (_export, _context) {
+  "use strict";
+
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
@@ -19,7 +21,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
 
     function getLegendHeight(panelHeight) {
       if (!ctrl.panel.legend.show || ctrl.panel.legendType === 'Right side' || ctrl.panel.legendType === 'On graph') {
-        return 0;
+        return 20;
       }
 
       if (ctrl.panel.legendType == 'Under graph' && ctrl.panel.legend.percentage || ctrl.panel.legend.values) {

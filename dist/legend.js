@@ -1,6 +1,8 @@
 "use strict";
 
 System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jquery.flot.time", "./lib/perfect-scrollbar.min"], function (_export, _context) {
+  "use strict";
+
   var angular, kbn, $, PerfectScrollbar;
   return {
     setters: [function (_angular) {
@@ -135,12 +137,12 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
             }
 
             function render() {
-              if (panel.legendType === "On graph") {
+              if (panel.legendType === "On graph" || !panel.legend.show) {
                 $container.empty();
-                $(".piechart-legend").css("padding-top", 0);
+                elem.find(".piechart-legend").css("padding-top", 0);
                 return;
               } else {
-                $(".piechart-legend").css("padding-top", 6);
+                elem.find(".piechart-legend").css("padding-top", 6);
               }
 
               if (firstRender) {
@@ -157,7 +159,9 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
               $container.empty();
 
               var width = panel.legendType == "Right side" && panel.legend.sideWidth ? panel.legend.sideWidth + "px" : "";
-              $container.css("min-width", width);
+              var ieWidth = panel.legendType == "Right side" && panel.legend.sideWidth ? panel.legend.sideWidth - 1 + "px" : "";
+              elem.css("min-width", width);
+              elem.css("width", ieWidth);
 
               var showValues = panel.legend.values || panel.legend.percentage;
               var tableLayout = (panel.legendType === "Under graph" || panel.legendType === "Right side") && showValues;
@@ -244,12 +248,14 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
               }
 
               if (panel.legendType === "Under graph") {
+                console.log('under graph');
                 addScrollbar();
               } else {
                 destroyScrollbar();
               }
             }
             function addScrollbar() {
+              console.log('addScroll');
               var scrollbarOptions = {
                 // Number of pixels the content height can surpass the container height without enabling the scroll bar.
                 scrollYMarginOffset: 2,
@@ -257,7 +263,8 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
               };
 
               if (!legendScrollbar) {
-                legendScrollbar = new PerfectScrollbar(".piechart-legend", scrollbarOptions);
+                console.log('no legendScrollbar');
+                legendScrollbar = new PerfectScrollbar(elem[0], scrollbarOptions);
               } else {
                 legendScrollbar.update();
               }
