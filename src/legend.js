@@ -136,17 +136,12 @@ angular
         function render() {
           if (panel.legendType === "On graph" || !panel.legend.show) {
             $container.empty();
-            $(".piechart-legend").css("padding-top", 0);
+            elem.find(".piechart-legend").css("padding-top", 0);
             return;
           } else {
-            $(".piechart-legend").css("padding-top", 6);
+            elem.find(".piechart-legend").css("padding-top", 6);
           }
 
-          if (panel.legendType == "Right side") {
-            $(".piechart-panel__chart").css("height", "calc(100% - 10px)")
-          } else {
-            $(".piechart-panel__chart").css("height", "auto")
-          }
 
           if (firstRender) {
             elem.append($container);
@@ -263,12 +258,14 @@ angular
           }
 
           if (panel.legendType === "Under graph") {
+            console.log('under graph');
             addScrollbar();
           } else {
             destroyScrollbar();
           }
         }
         function addScrollbar() {
+          console.log('addScroll')
           const scrollbarOptions = {
             // Number of pixels the content height can surpass the container height without enabling the scroll bar.
             scrollYMarginOffset: 2,
@@ -276,8 +273,9 @@ angular
           };
 
           if (!legendScrollbar) {
+            console.log('no legendScrollbar');
             legendScrollbar = new PerfectScrollbar(
-              ".piechart-legend",
+              elem[0],
               scrollbarOptions
             );
           } else {
