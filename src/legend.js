@@ -134,13 +134,14 @@ angular
         }
 
         function render() {
-          if (panel.legendType === "On graph") {
+          if (panel.legendType === "On graph" || !panel.legend.show) {
             $container.empty();
-            $(".piechart-legend").css("padding-top", 0);
+            elem.find(".piechart-legend").css("padding-top", 0);
             return;
           } else {
-            $(".piechart-legend").css("padding-top", 6);
+            elem.find(".piechart-legend").css("padding-top", 6);
           }
+
 
           if (firstRender) {
             elem.append($container);
@@ -155,11 +156,10 @@ angular
 
           $container.empty();
 
-          var width =
-            panel.legendType == "Right side" && panel.legend.sideWidth
-              ? panel.legend.sideWidth + "px"
-              : "";
-          $container.css("min-width", width);
+          var width = panel.legendType == "Right side" && panel.legend.sideWidth ? panel.legend.sideWidth + "px" : "";
+          var ieWidth = panel.legendType == "Right side" && panel.legend.sideWidth ? panel.legend.sideWidth - 1 + "px" : "";
+          elem.css("min-width", width);
+          elem.css("width", ieWidth);
 
           var showValues = panel.legend.values || panel.legend.percentage;
           var tableLayout =
@@ -258,12 +258,14 @@ angular
           }
 
           if (panel.legendType === "Under graph") {
+            console.log('under graph');
             addScrollbar();
           } else {
             destroyScrollbar();
           }
         }
         function addScrollbar() {
+          console.log('addScroll')
           const scrollbarOptions = {
             // Number of pixels the content height can surpass the container height without enabling the scroll bar.
             scrollYMarginOffset: 2,
@@ -271,8 +273,9 @@ angular
           };
 
           if (!legendScrollbar) {
+            console.log('no legendScrollbar');
             legendScrollbar = new PerfectScrollbar(
-              ".piechart-legend",
+              elem[0],
               scrollbarOptions
             );
           } else {
