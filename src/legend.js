@@ -144,6 +144,8 @@ angular
 
           if (panel.legendType == "Right side") {
             $(".piechart-panel__chart").css("height", "calc(100% - 10px)")
+          } else {
+            $(".piechart-panel__chart").css("height", "auto")
           }
 
           if (firstRender) {
