@@ -4,7 +4,6 @@ import $ from "jquery";
 import "jquery.flot";
 import "jquery.flot.time";
 import PerfectScrollbar from "./lib/perfect-scrollbar.min";
-//import baron from "./lib/baron.js";
 
 angular
   .module("grafana.directives")
