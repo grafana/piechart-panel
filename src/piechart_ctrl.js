@@ -150,10 +150,6 @@ export class PieChartCtrl extends MetricsPanelCtrl {
   link(scope, elem, attrs, ctrl) {
     rendering(scope, elem, attrs, ctrl);
   }
-
-  addAlias(){
-
-  }
 }
 
 PieChartCtrl.templateUrl = 'module.html';
