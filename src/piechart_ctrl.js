@@ -15,7 +15,9 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       pieType: 'pie',
       legend: {
         show: true, // disable/enable legend
-        values: true
+        values: true,
+        hideEmpty:true,
+        hideZero:true
       },
       links: [],
       datasource: null,
@@ -147,6 +149,10 @@ export class PieChartCtrl extends MetricsPanelCtrl {
 
   link(scope, elem, attrs, ctrl) {
     rendering(scope, elem, attrs, ctrl);
+  }
+
+  addAlias(){
+
   }
 }
 

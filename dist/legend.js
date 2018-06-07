@@ -153,11 +153,29 @@ System.register(['angular', 'app/core/utils/kbn', 'jquery', 'jquery.flot', 'jque
                 if (panel.legend.hideEmpty && series.allIsNull) {
                   continue;
                 }
+
+                // ignore zero series
+                if (panel.legend.hideZero && series.allIsZero) {
+                  continue;
+                }
+
+                // ignore zero series
+                if (panel.legend.hideZero && series.formatValue(series.stats[ctrl.panel.valueName]) == 0) {
+                  continue;
+                }
+
                 // ignore series excluded via override
                 if (!series.legend) {
                   continue;
                 }
 
+                if (series.label != undefined && panel.legend.regexp != undefined && panel.legend.regexp.length > 0) {
+                  if (panel.legend.replacement != undefined && panel.legend.replacement.length > 0) {
+                    series.label = series.label.replace(panel.legend.regexp, panel.legend.replacement);
+                  } else {
+                    series.label = series.label.replace(panel.legend.regexp, "");
+                  }
+                }
                 // ######## START JIRA RL-607 ##################
                 if (panel.drilldowns && panel.drilldowns.length > 0) {
                   for (var y = 0; y < panel.drilldowns.length; y++) {

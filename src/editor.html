@@ -44,10 +44,22 @@
 		</div>
 		<gf-form-switch class="gf-form" label="Legend Values" label-class="width-10" checked="ctrl.panel.legend.values" on-change="ctrl.refresh()"></gf-form-switch>
 		<gf-form-switch class="gf-form" label="Show Percentage" label-class="width-10" checked="ctrl.panel.legend.percentage" on-change="ctrl.refresh()"></gf-form-switch>
+		<gf-form-switch class="gf-form" label="Hide Empty" label-class="width-10" checked="ctrl.panel.legend.hideEmpty" on-change="ctrl.refresh()"></gf-form-switch>
+		<gf-form-switch class="gf-form" label="Hide Zero" label-class="width-10" checked="ctrl.panel.legend.hideZero" on-change="ctrl.refresh()"></gf-form-switch>
 		<div class="gf-form">
 			<span class="gf-form-label width-10">Label length:</span>
 			<input type="text" class="gf-form-input max-width-10" ng-model="ctrl.panel.legend.maxSize" ng-change="ctrl.render()">
 			<info-popover mode="right-absolute">The label length attribute specifies the maximum number of characters allowed in the label, i.e. a value of '100' will truncation begins at 100 characters.</info-popover>
+		</div>
+		<div class="gf-form">
+			<span class="gf-form-label width-10">Regexp:</span>
+			<input type="text" class="gf-form-input max-width-10" ng-model="ctrl.panel.legend.regexp" ng-change="ctrl.render()">
+			<info-popover mode="right-absolute">a string for a specified value, or a regular expression.The match or matches are replaced with Replacement.</info-popover>
+		</div>
+		<div class="gf-form">
+			<span class="gf-form-label width-10">Replacement:</span>
+			<input type="text" class="gf-form-input max-width-10" ng-model="ctrl.panel.legend.replacement" ng-change="ctrl.render()">
+			<info-popover mode="right-absolute">The String that replaces the substring specified by the specified Regexp.</info-popover>
 		</div>
 	</div>
 

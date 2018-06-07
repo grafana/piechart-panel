@@ -82,7 +82,9 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
             pieType: 'pie',
             legend: {
               show: true, // disable/enable legend
-              values: true
+              values: true,
+              hideEmpty: true,
+              hideZero: true
             },
             links: [],
             datasource: null,
@@ -232,6 +234,9 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           value: function link(scope, elem, attrs, ctrl) {
             rendering(scope, elem, attrs, ctrl);
           }
+        }, {
+          key: 'addAlias',
+          value: function addAlias() {}
         }]);
 
         return PieChartCtrl;
