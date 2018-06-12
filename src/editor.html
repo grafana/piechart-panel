@@ -32,12 +32,12 @@
       <span class="gf-form-label width-11">Position</span>
       <div class="gf-form-select-wrapper width-9">
         <select class="gf-form-input" ng-model="ctrl.panel.legendType" ng-options="t for t in ['On graph', 'Under graph', 'Right side']"
-          ng-change="ctrl.render()"></select>
+          ng-change="ctrl.onLegendTypeChanged()"></select>
       </div>
     </div>
     <div ng-if="ctrl.panel.legendType == 'Right side'" class="gf-form">
       <label class="gf-form-label width-11">Width</label>
-      <input type="number" class="gf-form-input max-width-5" placeholder="250" bs-tooltip="'Set a min-width for the legend side table/block'"
+      <input type="number" class="gf-form-input max-width-5" placeholder="150" bs-tooltip="'Set a min-width for the legend side table/block'"
         data-placement="right" ng-model="ctrl.panel.legend.sideWidth" ng-change="ctrl.render()" ng-model-onblur>
     </div>
     <div ng-if="ctrl.panel.legendType == 'Under graph'" class="gf-form">

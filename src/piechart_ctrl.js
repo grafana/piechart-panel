@@ -46,6 +46,8 @@ export class PieChartCtrl extends MetricsPanelCtrl {
     this.events.on('data-error', this.onDataError.bind(this));
     this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
     this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
+
+    this.setLegendWidthForLegacyBrowser();
   }
 
   onInitEditMode() {
@@ -159,6 +161,18 @@ export class PieChartCtrl extends MetricsPanelCtrl {
       this.hiddenSeries[serie.label] = true;
     }
     this.render();
+  }
+
+  onLegendTypeChanged() {
+    this.setLegendWidthForLegacyBrowser();
+    this.render();
+  }
+
+  setLegendWidthForLegacyBrowser() {
+    var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+    if (isIE11 && this.panel.legendType === 'Right side' && !this.panel.legend.sideWidth) {
+      this.panel.legend.sideWidth = 150;
+    }
   }
 }
 
