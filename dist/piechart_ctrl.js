@@ -113,6 +113,8 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
           _this.events.on('data-error', _this.onDataError.bind(_this));
           _this.events.on('data-snapshot-load', _this.onDataReceived.bind(_this));
           _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
+
+          _this.setLegendWidthForLegacyBrowser();
           return _this;
         }
 
@@ -244,6 +246,20 @@ System.register(['app/plugins/sdk', 'lodash', 'app/core/utils/kbn', 'app/core/ti
               this.hiddenSeries[serie.label] = true;
             }
             this.render();
+          }
+        }, {
+          key: 'onLegendTypeChanged',
+          value: function onLegendTypeChanged() {
+            this.setLegendWidthForLegacyBrowser();
+            this.render();
+          }
+        }, {
+          key: 'setLegendWidthForLegacyBrowser',
+          value: function setLegendWidthForLegacyBrowser() {
+            var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+            if (isIE11 && this.panel.legendType === 'Right side' && !this.panel.legend.sideWidth) {
+              this.panel.legend.sideWidth = 150;
+            }
           }
         }]);
 

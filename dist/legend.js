@@ -248,14 +248,12 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
               }
 
               if (panel.legendType === "Under graph") {
-                console.log('under graph');
                 addScrollbar();
               } else {
                 destroyScrollbar();
               }
             }
             function addScrollbar() {
-              console.log('addScroll');
               var scrollbarOptions = {
                 // Number of pixels the content height can surpass the container height without enabling the scroll bar.
                 scrollYMarginOffset: 2,
@@ -263,7 +261,6 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
               };
 
               if (!legendScrollbar) {
-                console.log('no legendScrollbar');
                 legendScrollbar = new PerfectScrollbar(elem[0], scrollbarOptions);
               } else {
                 legendScrollbar.update();
