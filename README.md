@@ -37,6 +37,10 @@ needs read access to the directory.
 
 # Changelog
 
+## 1.3.3
+
+* Fix legend sorting: [#145](https://github.com/grafana/piechart-panel/issues/145)
+
 ## 1.3.2
 
 * Automatically set legend width if Internet Explorer 11 and positioned to the right: [#148](https://github.com/grafana/piechart-panel/issues/148)
