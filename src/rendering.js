@@ -144,7 +144,7 @@ export default function link(scope, elem, attrs, ctrl) {
       var formatted = ctrl.formatValue(item.series.data[0][1]);
 
       body = '<div class="piechart-tooltip-small"><div class="piechart-tooltip-time">';
-      body += '<div class="piechart-tooltip-value">' + item.series.label + ': ' + formatted;
+      body += '<div class="piechart-tooltip-value">' + _.escape(item.series.label) + ': ' + formatted;
       body += " (" + percent + "%)" + '</div>';
       body += "</div></div>";
 
