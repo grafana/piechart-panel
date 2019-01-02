@@ -9,9 +9,11 @@ export default function link(scope, elem, attrs, ctrl) {
   var $tooltip = $('<div id="tooltip">');
 
   ctrl.events.on('render', function () {
-    render(false);
     if (panel.legendType === 'Right side') {
+      render(false);
       setTimeout(function () { render(true); }, 50);
+    } else {
+      render(true);
     }
   });
 
