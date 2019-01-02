@@ -4,7 +4,8 @@ import 'jquery.flot';
 import 'jquery.flot.pie';
 
 export default function link(scope, elem, attrs, ctrl) {
-  var data, panel;
+  var data;
+  var panel = ctrl.panel;
   elem = elem.find('.piechart-panel__chart');
   var $tooltip = $('<div id="tooltip">');
 
@@ -158,7 +159,6 @@ export default function link(scope, elem, attrs, ctrl) {
     if (!ctrl.data) { return; }
 
     data = ctrl.data;
-    panel = ctrl.panel;
 
       if (0 == ctrl.data.length) {
         noDataPoints();
