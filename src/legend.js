@@ -118,8 +118,8 @@ angular
               element: el[0],
               position: "bottom center",
               template:
-                '<series-color-picker series="series" onToggleAxis="toggleAxis" onColorChange="colorSelected">' +
-                "</series-color-picker>",
+                '<series-color-picker-popover series="series" onToggleAxis="toggleAxis" onColorChange="colorSelected">' +
+                "</series-color-picker-popover>",
               openOn: "hover",
               model: {
                 autoClose: true,
