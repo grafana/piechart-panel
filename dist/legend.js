@@ -1,9 +1,10 @@
 "use strict";
 
-System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jquery.flot.time", "./lib/perfect-scrollbar.min"], function (_export, _context) {
+System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jquery.flot.time", "lodash", "./lib/perfect-scrollbar.min"], function (_export, _context) {
   "use strict";
 
-  var angular, kbn, $, PerfectScrollbar;
+  var angular, kbn, $, _, PerfectScrollbar;
+
   return {
     setters: [function (_angular) {
       angular = _angular.default;
@@ -11,7 +12,9 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
       kbn = _appCoreUtilsKbn.default;
     }, function (_jquery) {
       $ = _jquery.default;
-    }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}, function (_libPerfectScrollbarMin) {
+    }, function (_jqueryFlot) {}, function (_jqueryFlotTime) {}, function (_lodash) {
+      _ = _lodash.default;
+    }, function (_libPerfectScrollbarMin) {
       PerfectScrollbar = _libPerfectScrollbarMin.default;
     }],
     execute: function () {
@@ -86,7 +89,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
                 name = panel.legend.header;
               }
 
-              var html = '<th class="pointer" data-stat="' + statName + '">' + name;
+              var html = '<th class="pointer" data-stat="' + _.escape(statName) + '">' + name;
 
               if (panel.legend.sort === statName) {
                 var cssClass = panel.legend.sortDesc ? "fa fa-caret-down" : "fa fa-caret-up";
@@ -218,7 +221,7 @@ System.register(["angular", "app/core/utils/kbn", "jquery", "jquery.flot", "jque
                 html += '<i class="fa fa-minus pointer" style="color:' + seriesData.color + '"></i>';
                 html += "</span>";
 
-                html += '<a class="piechart-legend-alias" style="float:none;">' + seriesData.label + "</a>";
+                html += '<a class="piechart-legend-alias" style="float:none;">' + _.escape(seriesData.label) + "</a>";
 
                 if (showValues && tableLayout) {
                   var value = seriesData.legendData;

@@ -150,7 +150,7 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
         var formatted = ctrl.formatValue(item.series.data[0][1]);
 
         body = '<div class="piechart-tooltip-small"><div class="piechart-tooltip-time">';
-        body += '<div class="piechart-tooltip-value">' + item.series.label + ': ' + formatted;
+        body += '<div class="piechart-tooltip-value">' + _.escape(item.series.label) + ': ' + formatted;
         body += " (" + percent + "%)" + '</div>';
         body += "</div></div>";
 

@@ -3,6 +3,7 @@ import kbn from "app/core/utils/kbn";
 import $ from "jquery";
 import "jquery.flot";
 import "jquery.flot.time";
+import _ from "lodash";
 import PerfectScrollbar from "./lib/perfect-scrollbar.min";
 
 angular
@@ -77,7 +78,7 @@ angular
             name = panel.legend.header;
           }
 
-          var html = '<th class="pointer" data-stat="' + statName + '">' + name;
+          var html = '<th class="pointer" data-stat="' + _.escape(statName) + '">' + name;
 
           if (panel.legend.sort === statName) {
             var cssClass = panel.legend.sortDesc
@@ -224,7 +225,7 @@ angular
 
             html +=
               '<a class="piechart-legend-alias" style="float:none;">' +
-              seriesData.label +
+              _.escape(seriesData.label) +
               "</a>";
 
             if (showValues && tableLayout) {
