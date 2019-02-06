@@ -6,16 +6,19 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
   var _, $;
 
   function link(scope, elem, attrs, ctrl) {
-    var data, panel;
+    var data;
+    var panel = ctrl.panel;
     elem = elem.find('.piechart-panel__chart');
     var $tooltip = $('<div id="tooltip">');
 
     ctrl.events.on('render', function () {
-      render(false);
       if (panel.legendType === 'Right side') {
+        render(false);
         setTimeout(function () {
           render(true);
         }, 50);
+      } else {
+        render(true);
       }
     });
 
@@ -161,7 +164,6 @@ System.register(['lodash', 'jquery', 'jquery.flot', 'jquery.flot.pie'], function
       }
 
       data = ctrl.data;
-      panel = ctrl.panel;
 
       if (0 == ctrl.data.length) {
         noDataPoints();
