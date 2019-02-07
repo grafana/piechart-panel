@@ -15,8 +15,12 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - dependency-cache-
       - run:
-          name: yarn install
-          command: 'yarn install --pure-lockfile --no-progress'
+          name: Build
+          command: |
+            yarn install --pure-lockfile --no-progress
+            sudo npm install -g grunt-cli
+            sudo npm install -g jest
+            grunt
           no_output_timeout: 5m
       - save_cache:
           paths:
