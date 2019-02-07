@@ -1,0 +1,35 @@
+defaults: &defaults
+  working_directory: ~/piechart-panel
+  docker:
+    - image: circleci/node:8
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - dependency-cache-{{ checksum "yarn.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependency-cache-
+      - run:
+          name: Build
+          command: |
+            yarn install --pure-lockfile --no-progress
+            sudo npm install -g grunt-cli
+            sudo npm install -g jest
+            grunt
+          no_output_timeout: 5m
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run: grunt
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
