@@ -117,11 +117,12 @@ angular
           $timeout(function() {
             popoverSrv.show({
               element: el[0],
-              position: "bottom center",
+              position: 'right center',
               template:
-                '<series-color-picker series="series" onToggleAxis="toggleAxis" onColorChange="colorSelected">' +
-                "</series-color-picker>",
+                '<series-color-picker-popover series="series" onToggleAxis="toggleAxis" onColorChange="colorSelected">' +
+                "</series-color-picker-popover>",
               openOn: "hover",
+              classNames: 'drop-popover drop-popover--transparent',
               model: {
                 autoClose: true,
                 series: series,
