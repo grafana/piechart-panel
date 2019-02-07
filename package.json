@@ -1,8 +1,8 @@
 {
   "name": "piechart-panel",
   "private": true,
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.3.5",
+  "description": "Pie chart panel for Grafana",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/grafana/piechart-panel.git"
