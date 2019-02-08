@@ -1,21 +1,23 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "PanelCtrl", {
-  enumerable: true,
-  get: function get() {
-    return _piechart_ctrl.PieChartCtrl;
-  }
-});
+System.register(["./piechart_ctrl", "app/plugins/sdk"], function (_export, _context) {
+  "use strict";
 
-var _piechart_ctrl = require("./piechart_ctrl");
+  var PieChartCtrl, loadPluginCss;
+  return {
+    setters: [function (_piechart_ctrl) {
+      PieChartCtrl = _piechart_ctrl.PieChartCtrl;
+    }, function (_appPluginsSdk) {
+      loadPluginCss = _appPluginsSdk.loadPluginCss;
+    }],
+    execute: function () {
+      loadPluginCss({
+        dark: 'plugins/grafana-piechart-panel/css/piechart.dark.css',
+        light: 'plugins/grafana-piechart-panel/css/piechart.light.css'
+      });
 
-var _sdk = require("app/plugins/sdk");
-
-(0, _sdk.loadPluginCss)({
-  dark: 'plugins/grafana-piechart-panel/css/piechart.dark.css',
-  light: 'plugins/grafana-piechart-panel/css/piechart.light.css'
+      _export("PanelCtrl", PieChartCtrl);
+    }
+  };
 });
 //# sourceMappingURL=module.js.map
