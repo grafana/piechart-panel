@@ -39,7 +39,12 @@ module.exports = function(grunt) {
     babel: {
       options: {
         sourceMap: true,
-        presets: ['@babel/preset-env']
+        plugins: [
+          "@babel/plugin-transform-modules-systemjs",
+        ],
+        presets: [
+          ["@babel/preset-env"]
+        ]
       },
       dist: {
         files: [{
