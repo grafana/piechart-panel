@@ -3,6 +3,8 @@
   "name": "Pie Chart",
   "id": "grafana-piechart-panel",
 
+  "hiddenQueries": true,
+
   "info": {
     "description": "Pie chart panel for grafana",
     "author": {
