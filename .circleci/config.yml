@@ -85,7 +85,7 @@ jobs:
           command: |
             yarn install --pure-lockfile --no-progress
             sudo npm install -g jest
-            yarn test
+            yarn test --coverage
       - store_artifacts:
           path: coverage
 
