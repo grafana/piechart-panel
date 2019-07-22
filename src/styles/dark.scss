@@ -79,63 +79,63 @@
 }
 
 .piechart-legend-icon.current::before {
-  content: "Current: ";
+  content: 'Current: ';
 }
 
 .piechart-legend-icon.max::before {
-  content: "Max: ";
+  content: 'Max: ';
 }
 
 .piechart-legend-icon.min::before {
-  content: "Min: ";
+  content: 'Min: ';
 }
 
 .piechart-legend-icon.total::before {
-  content: "Total: ";
+  content: 'Total: ';
 }
 
 .piechart-legend-icon.avg::before {
-  content: "Avg: ";
+  content: 'Avg: ';
 }
 
 .piechart-legend-alias.current::before {
-  content: "Current: ";
+  content: 'Current: ';
 }
 
 .piechart-legend-alias.max::before {
-  content: "Max: ";
+  content: 'Max: ';
 }
 
 .piechart-legend-alias.min::before {
-  content: "Min: ";
+  content: 'Min: ';
 }
 
 .piechart-legend-alias.total::before {
-  content: "Total: ";
+  content: 'Total: ';
 }
 
 .piechart-legend-alias.avg::before {
-  content: "Avg: ";
+  content: 'Avg: ';
 }
 
 .piechart-legend-value.current::before {
-  content: "Current: ";
+  content: 'Current: ';
 }
 
 .piechart-legend-value.max::before {
-  content: "Max: ";
+  content: 'Max: ';
 }
 
 .piechart-legend-value.min::before {
-  content: "Min: ";
+  content: 'Min: ';
 }
 
 .piechart-legend-value.total::before {
-  content: "Total: ";
+  content: 'Total: ';
 }
 
 .piechart-legend-value.avg::before {
-  content: "Avg: ";
+  content: 'Avg: ';
 }
 
 .piechart-legend-icon .fa {
@@ -178,7 +178,7 @@
 }
 
 .piechart-legend-table .piechart-legend-series--right-y .piechart-legend-alias::after {
-  content: "(right-y)";
+  content: '(right-y)';
   padding: 0 5px;
   color: #8e8e8e;
 }
@@ -222,23 +222,23 @@
 }
 
 .piechart-legend-table .piechart-legend-value.current::before {
-  content: "";
+  content: '';
 }
 
 .piechart-legend-table .piechart-legend-value.max::before {
-  content: "";
+  content: '';
 }
 
 .piechart-legend-table .piechart-legend-value.min::before {
-  content: "";
+  content: '';
 }
 
 .piechart-legend-table .piechart-legend-value.total::before {
-  content: "";
+  content: '';
 }
 
 .piechart-legend-table .piechart-legend-value.avg::before {
-  content: "";
+  content: '';
 }
 
 .piechart-legend-table th {
@@ -257,7 +257,7 @@
 
 .piechart-tooltip {
   white-space: nowrap;
-  font-size:12px;
+  font-size: 12px;
   background-color: #141414;
   color: #d8d9da;
 }
