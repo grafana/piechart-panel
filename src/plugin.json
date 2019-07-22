@@ -22,11 +22,11 @@
       {"name": "MIT License", "url": "https://github.com/grafana/piechart-panel/blob/master/LICENSE"}
     ],
     "screenshots": [
-      {"name": "Donut!", "path": "src/img/piechart-donut.png"},
-      {"name": "Legend on the graph", "path": "src/img/piechart-legend-on-graph.png"},
-      {"name": "Legend to the right", "path": "src/img/piechart-legend-rhs.png"},
-      {"name": "Legend underneath", "path": "src/img/piechart-legend-under.png"},
-      {"name": "Piechart options", "path": "src/img/piechart-options.png"}
+      {"name": "Donut!", "path": "img/piechart-donut.png"},
+      {"name": "Legend on the graph", "path": "img/piechart-legend-on-graph.png"},
+      {"name": "Legend to the right", "path": "img/piechart-legend-rhs.png"},
+      {"name": "Legend underneath", "path": "img/piechart-legend-under.png"},
+      {"name": "Piechart options", "path": "img/piechart-options.png"}
     ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
