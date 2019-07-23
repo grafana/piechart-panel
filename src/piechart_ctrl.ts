@@ -14,6 +14,7 @@ class PieChartCtrl extends MetricsPanelCtrl {
   series: any;
   data: any;
 
+  /** @ngInject */
   constructor($scope: any, $injector: any, $rootScope: any) {
     super($scope, $injector);
     this.$rootScope = $rootScope;
