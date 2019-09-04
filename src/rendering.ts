@@ -37,7 +37,7 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
   function formatter(label: any, slice: any) {
     const sliceData = slice.data[0][slice.data[0].length - 1];
     let decimal = 2;
-    const start = "<div style='font-size:" + ctrl.panel.fontSize + ';text-align:center;padding:2px;color:' + slice.color + ";'>" + label + '<br/>';
+    const start = `<div class="hejsan" style="font-size:${ctrl.panel.fontSize};text-align:center;padding:2px;">${label}<br/>`;
 
     if (ctrl.panel.legend.percentageDecimals) {
       decimal = ctrl.panel.legend.percentageDecimals;
