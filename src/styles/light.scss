@@ -1,5 +1,10 @@
 @import '../../node_modules/@grafana/toolkit/sass/_variables.light.scss';
 @import 'piechart';
+
+.pieLabel > div {
+  color: $black;
+}
+
 .piechart-panel {
   display: flex;
   flex-direction: column;
