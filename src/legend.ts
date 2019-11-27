@@ -205,11 +205,14 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           const seriesData = dataList[i];
           // combine lower values than threshold and not include into legent
           if (seriesData.data / total < panel.combine.threshold) {
-            combineNum++;
-            combineVal.legendData += seriesData.data;
-            // Take the first color as piechart
-            if (combineVal.color === '') {
-              combineVal.color = seriesData.color;
+            // Jump hidden series
+            if (!ctrl.hiddenSeries[seriesData.label]) {
+              combineNum++;
+              combineVal.legendData += seriesData.data;
+              // Take the first color as piechart
+              if (combineVal.color === '') {
+                combineVal.color = seriesData.color;
+              }
             }
           } else {
             // ignore empty series
