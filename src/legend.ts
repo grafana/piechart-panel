@@ -189,54 +189,42 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           }
         }
 
-        //let seriesShown = 0;
+        let combineNum = 0,
+          combineVal = {
+            label: panel.combine.label,
+            color: '',
+            legendData: 0,
+          };
         const seriesElements = [];
 
         for (i = 0; i < seriesList.length; i++) {
           const series = seriesList[i];
           const seriesData = dataList[i];
-
-          // ignore empty series
-          if (panel.legend.hideEmpty && series.allIsNull) {
-            continue;
-          }
-          // ignore series excluded via override
-          if (!series.legend) {
-            continue;
-          }
-
-          let decimal = 0;
-          if (ctrl.panel.legend.percentageDecimals) {
-            decimal = ctrl.panel.legend.percentageDecimals;
-          }
-
-          let html = '<div class="piechart-legend-series';
-          if (ctrl.hiddenSeries[seriesData.label]) {
-            html += ' piechart-legend-series-hidden';
-          }
-          html += '" data-series-index="' + i + '">';
-          html += '<span class="piechart-legend-icon" style="float:none;">';
-          html += '<i class="fa fa-minus pointer" style="color:' + seriesData.color + '"></i>';
-          html += '</span>';
-
-          html += '<a class="piechart-legend-alias" style="float:none;">' + _.escape(seriesData.label) + '</a>';
-
-          if (showValues && tableLayout) {
-            const value = seriesData.legendData;
-            if (panel.legend.values) {
-              html += '<div class="piechart-legend-value">' + ctrl.formatValue(value) + '</div>';
+          // combine lower values than threshold and not include into legent
+          if (seriesData.data / total < panel.combine.threshold) {
+            combineNum++;
+            combineVal.legendData += seriesData.data;
+            // Take the first color as piechart
+            if (combineVal.color === '') combineVal.color = seriesData.color;
+          } else {
+            // ignore empty series
+            if (panel.legend.hideEmpty && series.allIsNull) {
+              continue;
             }
-            if (total) {
-              const pvalue = ((value / total) * 100).toFixed(decimal) + '%';
-              html += '<div class="piechart-legend-value">' + pvalue + '</div>';
+            // ignore series excluded via override
+            if (!series.legend) {
+              continue;
             }
+
+            seriesElements.push($(generateLegendItem(seriesData, i, total, showValues, tableLayout)));
           }
-
-          html += '</div>';
-
-          seriesElements.push($(html));
-          //seriesShown++;
         }
+
+        // Add combine to legend
+        if (combineNum > 0) {
+          seriesElements.push($(generateLegendItem(combineVal, seriesList.length - combineNum, total, showValues, tableLayout)));
+        }
+
         if (tableLayout) {
           // const topPadding = 6;
           const tbodyElem = $('<tbody></tbody>');
@@ -256,6 +244,38 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           destroyScrollbar();
         }
       }
+
+      function generateLegendItem(data: any, index: any, total: any, showValues: Boolean, tableLayout: Boolean) {
+        let html = '<div class="piechart-legend-series';
+        if (ctrl.hiddenSeries[data.label]) {
+          html += ' piechart-legend-series-hidden';
+        }
+        html += '" data-series-index="' + index + '">';
+        html += '<span class="piechart-legend-icon" style="float:none;">';
+        html += '<i class="fa fa-minus pointer" style="color:' + data.color + '"></i>';
+        html += '</span>';
+
+        html += '<a class="piechart-legend-alias" style="float:none;">' + _.escape(data.label) + '</a>';
+        let decimal = 0;
+        if (ctrl.panel.legend.percentageDecimals) {
+          decimal = ctrl.panel.legend.percentageDecimals;
+        }
+
+        if (showValues && tableLayout) {
+          const value = data.legendData;
+          if (panel.legend.values) {
+            html += '<div class="piechart-legend-value">' + ctrl.formatValue(value) + '</div>';
+          }
+          if (total) {
+            const pvalue = ((value / total) * 100).toFixed(decimal) + '%';
+            html += '<div class="piechart-legend-value">' + pvalue + '</div>';
+          }
+        }
+        html += '</div>';
+
+        return html;
+      }
+
       function addScrollbar() {
         const scrollbarOptions = {
           // Number of pixels the content height can surpass the container height without enabling the scroll bar.
