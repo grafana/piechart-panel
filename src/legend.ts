@@ -192,12 +192,12 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           }
         }
 
-        let combineNum = 0,
-          combineVal = {
-            label: panel.combine.label,
-            color: '',
-            legendData: 0,
-          };
+        let combineNum = 0;
+        const combineVal = {
+          label: panel.combine.label,
+          color: '',
+          legendData: 0,
+        };
         const seriesElements = [];
 
         for (i = 0; i < seriesList.length; i++) {
@@ -208,7 +208,9 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
             combineNum++;
             combineVal.legendData += seriesData.data;
             // Take the first color as piechart
-            if (combineVal.color === '') combineVal.color = seriesData.color;
+            if (combineVal.color === '') {
+              combineVal.color = seriesData.color;
+            }
           } else {
             // ignore empty series
             if (panel.legend.hideEmpty && series.allIsNull) {
