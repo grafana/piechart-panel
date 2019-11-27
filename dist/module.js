@@ -377,14 +377,17 @@ angular__WEBPACK_IMPORTED_MODULE_0___default.a.module('grafana.directives').dire
       }
 
       function toggleSeries(e) {
-        var el = jquery__WEBPACK_IMPORTED_MODULE_1___default()(e.currentTarget);
-        var index = getSeriesIndexForElement(el);
-        var seriesInfo = dataList[index];
-        var scrollPosition = jquery__WEBPACK_IMPORTED_MODULE_1___default()($container.children('tbody')).scrollTop();
-        ctrl.toggleSeries(seriesInfo);
+        var el = jquery__WEBPACK_IMPORTED_MODULE_1___default()(e.currentTarget); // Consider Combine entry as special case (not clickable)
 
-        if (typeof scrollPosition !== 'undefined') {
-          jquery__WEBPACK_IMPORTED_MODULE_1___default()($container.children('tbody')).scrollTop(scrollPosition);
+        if (el && el.text() !== panel.combine.label) {
+          var index = getSeriesIndexForElement(el);
+          var seriesInfo = dataList[index];
+          var scrollPosition = jquery__WEBPACK_IMPORTED_MODULE_1___default()($container.children('tbody')).scrollTop();
+          ctrl.toggleSeries(seriesInfo);
+
+          if (typeof scrollPosition !== 'undefined') {
+            jquery__WEBPACK_IMPORTED_MODULE_1___default()($container.children('tbody')).scrollTop(scrollPosition);
+          }
         }
       }
 

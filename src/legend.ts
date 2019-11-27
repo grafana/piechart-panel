@@ -47,12 +47,15 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
 
       function toggleSeries(e: any) {
         const el = $(e.currentTarget);
-        const index = getSeriesIndexForElement(el);
-        const seriesInfo = dataList[index];
-        const scrollPosition = $($container.children('tbody')).scrollTop();
-        ctrl.toggleSeries(seriesInfo);
-        if (typeof scrollPosition !== 'undefined') {
-          $($container.children('tbody')).scrollTop(scrollPosition);
+        // Consider Combine entry as special case (not clickable)
+        if (el && el.text() !== panel.combine.label) {
+          const index = getSeriesIndexForElement(el);
+          const seriesInfo = dataList[index];
+          const scrollPosition = $($container.children('tbody')).scrollTop();
+          ctrl.toggleSeries(seriesInfo);
+          if (typeof scrollPosition !== 'undefined') {
+            $($container.children('tbody')).scrollTop(scrollPosition);
+          }
         }
       }
 
@@ -245,7 +248,7 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
         }
       }
 
-      function generateLegendItem(data: any, index: any, total: any, showValues: Boolean, tableLayout: Boolean) {
+      function generateLegendItem(data: any, index: any, total: any, showValues: boolean, tableLayout: boolean) {
         let html = '<div class="piechart-legend-series';
         if (ctrl.hiddenSeries[data.label]) {
           html += ' piechart-legend-series-hidden';
