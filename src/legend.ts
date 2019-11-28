@@ -188,7 +188,9 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
         let total = 0;
         if (panel.legend.percentage) {
           for (i = 0; i < seriesList.length; i++) {
-            total += seriesList[i].stats[ctrl.panel.valueName];
+            if (!ctrl.hiddenSeries[seriesList[i].label]) {
+              total += seriesList[i].stats[ctrl.panel.valueName];
+            }
           }
         }
 
@@ -209,10 +211,6 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
             if (!ctrl.hiddenSeries[seriesData.label]) {
               combineNum++;
               combineVal.legendData += seriesData.data;
-              // Take the first color as piechart
-              if (combineVal.color === '') {
-                combineVal.color = seriesData.color;
-              }
             }
           } else {
             // ignore empty series
@@ -230,7 +228,30 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
 
         // Add combine to legend
         if (combineNum > 0) {
-          seriesElements.push($(generateLegendItem(combineVal, seriesList.length - combineNum, total, showValues, tableLayout)));
+          // Define color according to hiddenSeries and combineNum
+          if (typeof panel.legend.sortDesc === 'undefined' || panel.legend.sortDesc === null || panel.legend.sortDesc) {
+            if (Object.keys(ctrl.hiddenSeries).length > 0) {
+              let _el, _max;
+              for (const _key in ctrl.hiddenSeries) {
+                _el = dataList.find((x: any) => x.label === _key);
+                if (typeof _max === 'undefined') {
+                  _max = _el.legendData;
+                  combineVal.color = _el.color;
+                } else {
+                  if (_el.legendData > _max) {
+                    _max = _el.legendData;
+                    combineVal.color = _el.color;
+                  }
+                }
+              }
+            } else {
+              combineVal.color = seriesList[seriesList.length - combineNum].color;
+            }
+          } else {
+            combineVal.color = seriesList[0].color;
+          }
+
+          seriesElements.push($(generateLegendItem(combineVal, dataList.length - combineNum, total, showValues, tableLayout)));
         }
 
         if (tableLayout) {
