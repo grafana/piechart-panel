@@ -47,12 +47,15 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
 
       function toggleSeries(e: any) {
         const el = $(e.currentTarget);
-        const index = getSeriesIndexForElement(el);
-        const seriesInfo = dataList[index];
-        const scrollPosition = $($container.children('tbody')).scrollTop();
-        ctrl.toggleSeries(seriesInfo);
-        if (typeof scrollPosition !== 'undefined') {
-          $($container.children('tbody')).scrollTop(scrollPosition);
+        // Consider Combine entry as special case (not clickable)
+        if (el && el.text() !== panel.combine.label) {
+          const index = getSeriesIndexForElement(el);
+          const seriesInfo = dataList[index];
+          const scrollPosition = $($container.children('tbody')).scrollTop();
+          ctrl.toggleSeries(seriesInfo);
+          if (typeof scrollPosition !== 'undefined') {
+            $($container.children('tbody')).scrollTop(scrollPosition);
+          }
         }
       }
 
@@ -185,58 +188,72 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
         let total = 0;
         if (panel.legend.percentage) {
           for (i = 0; i < seriesList.length; i++) {
-            total += seriesList[i].stats[ctrl.panel.valueName];
+            if (!ctrl.hiddenSeries[seriesList[i].label]) {
+              total += seriesList[i].stats[ctrl.panel.valueName];
+            }
           }
         }
 
-        //let seriesShown = 0;
+        let combineNum = 0;
+        const combineVal = {
+          label: panel.combine.label,
+          color: '',
+          legendData: 0,
+        };
         const seriesElements = [];
 
         for (i = 0; i < seriesList.length; i++) {
           const series = seriesList[i];
           const seriesData = dataList[i];
-
-          // ignore empty series
-          if (panel.legend.hideEmpty && series.allIsNull) {
-            continue;
-          }
-          // ignore series excluded via override
-          if (!series.legend) {
-            continue;
-          }
-
-          let decimal = 0;
-          if (ctrl.panel.legend.percentageDecimals) {
-            decimal = ctrl.panel.legend.percentageDecimals;
-          }
-
-          let html = '<div class="piechart-legend-series';
-          if (ctrl.hiddenSeries[seriesData.label]) {
-            html += ' piechart-legend-series-hidden';
-          }
-          html += '" data-series-index="' + i + '">';
-          html += '<span class="piechart-legend-icon" style="float:none;">';
-          html += '<i class="fa fa-minus pointer" style="color:' + seriesData.color + '"></i>';
-          html += '</span>';
-
-          html += '<a class="piechart-legend-alias" style="float:none;">' + _.escape(seriesData.label) + '</a>';
-
-          if (showValues && tableLayout) {
-            const value = seriesData.legendData;
-            if (panel.legend.values) {
-              html += '<div class="piechart-legend-value">' + ctrl.formatValue(value) + '</div>';
+          // combine lower values than threshold and not include into legent
+          if (seriesData.data / total < panel.combine.threshold) {
+            // Jump hidden series
+            if (!ctrl.hiddenSeries[seriesData.label]) {
+              combineNum++;
+              combineVal.legendData += seriesData.data;
             }
-            if (total) {
-              const pvalue = ((value / total) * 100).toFixed(decimal) + '%';
-              html += '<div class="piechart-legend-value">' + pvalue + '</div>';
+          } else {
+            // ignore empty series
+            if (panel.legend.hideEmpty && series.allIsNull) {
+              continue;
             }
+            // ignore series excluded via override
+            if (!series.legend) {
+              continue;
+            }
+
+            seriesElements.push($(generateLegendItem(seriesData, i, total, showValues, tableLayout)));
           }
-
-          html += '</div>';
-
-          seriesElements.push($(html));
-          //seriesShown++;
         }
+
+        // Add combine to legend
+        if (combineNum > 0) {
+          // Define color according to hiddenSeries and combineNum
+          if (typeof panel.legend.sortDesc === 'undefined' || panel.legend.sortDesc === null || panel.legend.sortDesc) {
+            if (Object.keys(ctrl.hiddenSeries).length > 0) {
+              let _el, _max;
+              for (const _key in ctrl.hiddenSeries) {
+                _el = dataList.find((x: any) => x.label === _key);
+                if (typeof _max === 'undefined') {
+                  _max = _el.legendData;
+                  combineVal.color = _el.color;
+                } else {
+                  if (_el.legendData > _max) {
+                    _max = _el.legendData;
+                    combineVal.color = _el.color;
+                  }
+                }
+              }
+            } else {
+              combineVal.color = seriesList[seriesList.length - combineNum].color;
+            }
+          } else {
+            combineVal.color = seriesList[0].color;
+          }
+
+          seriesElements.push($(generateLegendItem(combineVal, dataList.length - combineNum, total, showValues, tableLayout)));
+        }
+
         if (tableLayout) {
           // const topPadding = 6;
           const tbodyElem = $('<tbody></tbody>');
@@ -256,6 +273,38 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           destroyScrollbar();
         }
       }
+
+      function generateLegendItem(data: any, index: any, total: any, showValues: boolean, tableLayout: boolean) {
+        let html = '<div class="piechart-legend-series';
+        if (ctrl.hiddenSeries[data.label]) {
+          html += ' piechart-legend-series-hidden';
+        }
+        html += '" data-series-index="' + index + '">';
+        html += '<span class="piechart-legend-icon" style="float:none;">';
+        html += '<i class="fa fa-minus pointer" style="color:' + data.color + '"></i>';
+        html += '</span>';
+
+        html += '<a class="piechart-legend-alias" style="float:none;">' + _.escape(data.label) + '</a>';
+        let decimal = 0;
+        if (ctrl.panel.legend.percentageDecimals) {
+          decimal = ctrl.panel.legend.percentageDecimals;
+        }
+
+        if (showValues && tableLayout) {
+          const value = data.legendData;
+          if (panel.legend.values) {
+            html += '<div class="piechart-legend-value">' + ctrl.formatValue(value) + '</div>';
+          }
+          if (total) {
+            const pvalue = ((value / total) * 100).toFixed(decimal) + '%';
+            html += '<div class="piechart-legend-value">' + pvalue + '</div>';
+          }
+        }
+        html += '</div>';
+
+        return html;
+      }
+
       function addScrollbar() {
         const scrollbarOptions = {
           // Number of pixels the content height can surpass the container height without enabling the scroll bar.
