@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.4.0] - 2020-02-04
+
+- Added combine option for legend
+
 ## [1.3.9] - 2019-09-05
 
 - Fixed dark/light mode text font colors: [#189](https://github.com/grafana/piechart-panel/issues/189).

@@ -1,5 +1,6 @@
 import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk';
 import _ from 'lodash';
+import { PanelEvents } from '@grafana/data';
 import kbn from 'grafana/app/core/utils/kbn';
 // @ts-ignore
 import TimeSeries from 'grafana/app/core/time_series';
@@ -49,11 +50,11 @@ class PieChartCtrl extends MetricsPanelCtrl {
     _.defaults(this.panel, panelDefaults);
     _.defaults(this.panel.legend, panelDefaults.legend);
 
-    this.events.on('render', this.onRender.bind(this));
-    this.events.on('data-received', this.onDataReceived.bind(this));
-    this.events.on('data-error', this.onDataError.bind(this));
-    this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
-    this.events.on('init-edit-mode', this.onInitEditMode.bind(this));
+    this.events.on(PanelEvents.render, this.onRender.bind(this));
+    this.events.on(PanelEvents.dataReceived, this.onDataReceived.bind(this));
+    this.events.on(PanelEvents.dataError, this.onDataError.bind(this));
+    this.events.on(PanelEvents.dataSnapshotLoad, this.onDataReceived.bind(this));
+    this.events.on(PanelEvents.editModeInitialized, this.onInitEditMode.bind(this));
 
     this.setLegendWidthForLegacyBrowser();
   }
