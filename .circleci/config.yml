@@ -2,97 +2,142 @@ version: 2
 
 aliases:
   # Workflow filters
-  - &filter-only-release
-    branches:
-      ignore: /.*/
-    tags:
-      only: /^v[0-9]+(\.[0-9]+){2}(-.+|[^-.]*)$/
-  - &filter-not-release-or-master
-    tags:
-      ignore: /^v[0-9]+(\.[0-9]+){2}(-.+|[^-.]*)$/
-    branches:
-      ignore: master
   - &filter-only-master
     branches:
       only: master
 
 defaults: &defaults
-  working_directory: ~/grafana-piechart-panel
+  working_directory: ~/plugin
   docker:
-    - image: circleci/node:10.15.3-stretch
+    - image: circleci/node:12
 
 jobs:
-  build:
+  build_plugin:
     <<: *defaults
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Build
-          command: |
-            PLUGIN_NAME=grafana-piechart-panel
-            yarn install --pure-lockfile --no-progress
-            yarn build
-            sudo apt-get install jq
-            VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
-            # create zip file
-            cd ~
-            echo "Creating ZIP"
-            zip \
-              -x ${PLUGIN_NAME}/.git/**\* \
-              -x ${PLUGIN_NAME}/node_modules/**\* \
-              -r /tmp/${PLUGIN_NAME}-${VERSION}.zip \
-              ${PLUGIN_NAME}
-            # create tar file
-            echo "Creating TAR"
-            tar \
-              --exclude .git \
-              --exclude ${PLUGIN_NAME}/node_modules \
-              -cvf /tmp/${PLUGIN_NAME}-${VERSION}.tar \
-              ${PLUGIN_NAME}
-            gzip /tmp/${PLUGIN_NAME}-${VERSION}.tar
-            # create artifacts
-            mkdir -p ~/${PLUGIN_NAME}/artifacts
-            mv /tmp/${PLUGIN_NAME}-${VERSION}.zip ~/${PLUGIN_NAME}/artifacts/
-            mv /tmp/${PLUGIN_NAME}-${VERSION}.tar.gz ~/${PLUGIN_NAME}/artifacts/
-          no_output_timeout: 5m
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
-      - persist_to_workspace:
-          root: .
-          paths:
-            - artifacts
-            - dist
-      - store_artifacts:
-          path: artifacts
-      - store_artifacts:
-          path: dist
+    - checkout
+    - restore_cache:
+        keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+    - run:
+        name: Install modules
+        command: |
+          yarn install --pure-lockfile
+    - run:
+        name: Run Toolkit Build
+        command: npx grafana-toolkit plugin:ci-build
+    - save_cache:
+        paths:
+        - node_modules
+        key: yarn-packages-{{ checksum "yarn.lock" }}
+    - persist_to_workspace:
+        root: .
+        paths:
+        - ci
 
-  test:
+  build_docs:
     <<: *defaults
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Test
-          command: |
-            yarn install --pure-lockfile --no-progress
-            sudo npm install -g jest
-            yarn test --coverage
-      - store_artifacts:
-          path: coverage
+    - checkout
+    - restore_cache:
+        keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+    - run:
+        name: Install yarn
+        command: |
+          yarn install --pure-lockfile
+    - run:
+        name: Build Docs
+        command: |
+          mkdir ci # Avoid error if not exists
+          npx grafana-toolkit plugin:ci-docs
+    - save_cache:
+        paths:
+        - node_modules
+        key: yarn-packages-{{ checksum "yarn.lock" }}
+    - persist_to_workspace:
+        root: .
+        paths:
+        - ci
 
-  publish-github-release:
-    working_directory: ~/grafana-piechart-panel
+  package:
+    <<: *defaults
+    steps:
+    - checkout
+    - attach_workspace:
+        at: .
+    - restore_cache:
+        keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+    - run:
+        name: Package Distribution
+        command: npx grafana-toolkit plugin:ci-package
+    - persist_to_workspace:
+        root: .
+        paths:
+        - ci/jobs/package
+        - ci/packages
+        - ci/dist
+        - ci/grafana-test-env
+
+  test_6_5_2:
+    <<: *defaults
     docker:
-      - image: cibuilds/github:0.12
+    - image: circleci/node:12-browsers
+    steps:
+    - checkout
+    - attach_workspace:
+        at: .
+    - restore_cache:
+        keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+    - run:
+        name: Setup Grafana (local install)
+        command: |
+          wget https://dl.grafana.com/oss/release/grafana_6.5.2_amd64.deb
+          sudo apt-get install -y adduser libfontconfig1
+          sudo dpkg -i grafana_6.5.2_amd64.deb
+          sudo apt-get install locate
+          sudo updatedb
+          sudo locate grafana
+          sudo cat /etc/grafana/grafana.ini
+          sudo echo ------------------------
+          sudo cp ci/grafana-test-env/custom.ini /usr/share/grafana/conf/custom.ini
+          sudo cp ci/grafana-test-env/custom.ini /etc/grafana/grafana.ini
+          sudo service grafana-server start
+          sudo grafana-cli --version
+    - run:
+        name: Run e2e tests
+        command: |
+          npx grafana-toolkit plugin:ci-test
+    - persist_to_workspace:
+        root: .
+        paths:
+        - ci/jobs/test_6_5_2
+    - store_test_results:
+        path: ci/jobs/test_6_5_2
+    - store_artifacts:
+        path: ci/jobs/test_6_5_2
+
+  report:
+    <<: *defaults
+    steps:
+    - checkout
+    - attach_workspace:
+        at: .
+    - restore_cache:
+        keys:
+        - yarn-packages-{{ checksum "yarn.lock" }}
+    - run:
+        name: Toolkit Report
+        command: npx grafana-toolkit plugin:ci-report
+    - store_artifacts:
+        path: ci
+
+  publish_github_release:
+    working_directory: ~/plugin
+    docker:
+      - image: cibuilds/github:0.13
     steps:
       - checkout
       - add_ssh_keys:
@@ -103,12 +148,15 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            PLUGIN_NAME=grafana-piechart-panel
+            # copy ci dist
+            cp -r ci/jobs/build_plugin/dist .
+            # copy ci artifacts
+            mkdir -p artifacts
+            cp -r ci/packages/* artifacts
             apk add --update --no-cache jq
+            PLUGIN_NAME=`cat dist/plugin.json|jq '.id'| sed s/\"//g`
             RELEASE_NOTES=`awk 'BEGIN {FS="##"; RS=""} FNR==3 {print; exit}' CHANGELOG.md`
             VERSION=`cat dist/plugin.json|jq '.info.version'| sed s/\"//g`
-            ls -al
-            ls -al ./artifacts
             git config user.email "eng@grafana.com"
             git config user.name "CircleCI Automation"
             git checkout -b release-${VERSION}
@@ -150,11 +198,28 @@ workflows:
             - approve-release
           filters: *filter-only-master
 
-  build-branches-and-prs:
+workflows:
+  version: 2
+  plugin_workflow:
     jobs:
-      - build:
-          filters: *filter-not-release-or-master
-      - test:
-          requires:
-            - build
-          filters: *filter-not-release-or-master
+    - build_plugin
+    - build_docs
+    - package:
+        requires:
+        - build_plugin
+        - build_docs
+    - test_6_5_2:
+        requires:
+        - package
+    - report:
+        requires:
+        - test_6_5_2
+    - approve_release:
+        type: approval
+        requires:
+          - report
+        filters: *filter-only-master
+    - publish_github_release:
+        requires:
+          - approve_release
+        filters: *filter-only-master
