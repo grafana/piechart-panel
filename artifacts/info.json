@@ -1,0 +1,14 @@
+{
+  "plugin": {
+    "name": "grafana-piechart-panel-1.4.0.zip",
+    "size": 221788,
+    "contents": {
+      "json": {
+        "bytes": 1645,
+        "count": 1
+      }
+    },
+    "sha1": "d0c85d444ee93109f3f016ace7420b9760cc14d7",
+    "md5": "a99c9650971a1b37f6a0aa46c4b5bd90"
+  }
+}
