@@ -23,6 +23,7 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "@grafana/data": "next",
     "@grafana/toolkit": "next",
     "@grafana/ui": "next",
     "@types/angular": "^1.6.57",
