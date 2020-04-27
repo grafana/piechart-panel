@@ -61,8 +61,6 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
   function addPieChart() {
     const width = elem.width();
     const height = ctrl.height - getLegendHeight(ctrl.height);
-    console.log('ctrl.height', ctrl.height);
-    console.log('height', height);
 
     const size = Math.min(width, height);
 
