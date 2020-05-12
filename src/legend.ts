@@ -87,7 +87,7 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           name = panel.legend.header;
         }
 
-        let html = '<th class="pointer" data-stat="' + _.escape(statName) + '">' + name;
+        let html = '<th class="pointer" data-stat="' + _.escape(statName) + '">' + _.escape(name);
 
         if (panel.legend.sort === statName) {
           const cssClass = panel.legend.sortDesc ? 'fa fa-caret-down' : 'fa fa-caret-up';
