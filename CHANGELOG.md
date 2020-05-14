@@ -1,5 +1,12 @@
 # Change Log
 
+
+## [1.5.0] - 2020-05-14
+
+- Updated logo
+- Sanitize legend header
+- build for 7x
+
 ## [1.4.0] - 2020-02-04
 
 - Added combine option for legend
