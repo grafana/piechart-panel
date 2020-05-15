@@ -1,11 +1,12 @@
 # Change Log
 
 
-## [1.5.0] - 2020-05-14
+## [1.5.0] - 2020-05-15
 
 - Updated logo
-- Sanitize legend header
-- build for 7x
+- Sanitize legend header. Thanks rotemreiss [#230](https://github.com/grafana/piechart-panel/pull/230)
+- Signed for Grafana 7.0
+
 
 ## [1.4.0] - 2020-02-04
 
