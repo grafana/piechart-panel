@@ -1,7 +1,3 @@
-[![CircleCI](https://circleci.com/gh/grafana/piechart-panel.svg?style=svg)](https://circleci.com/gh/grafana/piechart-panel)
-[![David Dependancy Status](https://david-dm.org/grafana/piechart-panel.svg)](https://david-dm.org/grafana/piechart-panel)
-[![David Dev Dependency Status](https://david-dm.org/grafana/piechart-panel/dev-status.svg)](https://david-dm.org/grafana/piechart-panel/?type=dev)
-
 Use the new grafana-cli tool to install piechart-panel from the commandline:
 
 ```
