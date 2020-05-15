@@ -8,10 +8,7 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/grafana/piechart-panel.git"
-  },
+  "repository": "github:grafana/piechart-panel.git",
   "author": "Grafana Labs",
   "license": "MIT",
   "private": true,

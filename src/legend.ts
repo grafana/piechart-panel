@@ -163,7 +163,8 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
         $container.empty();
 
         const width = panel.legendType === 'Right side' && panel.legend.sideWidth ? panel.legend.sideWidth + 'px' : '';
-        const ieWidth = panel.legendType === 'Right side' && panel.legend.sideWidth ? panel.legend.sideWidth - 1 + 'px' : '';
+        const ieWidth =
+          panel.legendType === 'Right side' && panel.legend.sideWidth ? panel.legend.sideWidth - 1 + 'px' : '';
         elem.css('min-width', width);
         elem.css('width', ieWidth);
 
@@ -251,7 +252,9 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
             combineVal.color = seriesList[0].color;
           }
 
-          seriesElements.push($(generateLegendItem(combineVal, dataList.length - combineNum, total, showValues, tableLayout)));
+          seriesElements.push(
+            $(generateLegendItem(combineVal, dataList.length - combineNum, total, showValues, tableLayout))
+          );
         }
 
         if (tableLayout) {
