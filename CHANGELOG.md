@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.5.0] - 2020-02-04
+
+- Sanitize XSS in header name.  Thanks rotemreiss [#230](https://github.com/grafana/piechart-panel/pull/230)
+- signed for Grafana 7.0
+
+
 ## [1.4.0] - 2020-02-04
 
 - Added combine option for legend
