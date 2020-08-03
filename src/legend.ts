@@ -11,6 +11,7 @@ import _ from 'lodash';
 
 // @ts-ignore
 import PerfectScrollbar from './lib/perfect-scrollbar.min';
+import { stringToJsRegex } from '@grafana/data';
 
 angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: any, $timeout: any) => {
   return {
@@ -20,7 +21,7 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
       const ctrl = scope.ctrl;
       const panel = ctrl.panel;
       let data: any;
-      let seriesList: any;
+      // let seriesList: any;
       let dataList: any;
       let i;
       let legendScrollbar: any;
@@ -87,7 +88,7 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           name = panel.legend.header;
         }
 
-        let html = '<th class="pointer" data-stat="' + _.escape(statName) + '">' + _.escape(name);
+        let html = '<th class="pointer" data-stat="' + _.escape(statName) + '">' + name;
 
         if (panel.legend.sort === statName) {
           const cssClass = panel.legend.sortDesc ? 'fa fa-caret-down' : 'fa fa-caret-up';
@@ -117,7 +118,7 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
 
         const el = $(e.currentTarget).find('.fa-minus');
         const index = getSeriesIndexForElement(el);
-        const series = seriesList[index];
+        const series = dataList[index];
 
         $timeout(() => {
           popoverSrv.show({
@@ -157,14 +158,14 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
           firstRender = false;
         }
 
-        seriesList = data;
+        // seriesList = data;
+
         dataList = ctrl.data;
 
         $container.empty();
 
         const width = panel.legendType === 'Right side' && panel.legend.sideWidth ? panel.legend.sideWidth + 'px' : '';
-        const ieWidth =
-          panel.legendType === 'Right side' && panel.legend.sideWidth ? panel.legend.sideWidth - 1 + 'px' : '';
+        const ieWidth = panel.legendType === 'Right side' && panel.legend.sideWidth ? panel.legend.sideWidth - 1 + 'px' : '';
         elem.css('min-width', width);
         elem.css('width', ieWidth);
 
@@ -188,28 +189,52 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
 
         let total = 0;
         if (panel.legend.percentage) {
-          for (i = 0; i < seriesList.length; i++) {
-            if (!ctrl.hiddenSeries[seriesList[i].label]) {
-              total += seriesList[i].stats[ctrl.panel.valueName];
+          for (i = 0; i < dataList.length; i++) {
+            if (!ctrl.hiddenSeries[dataList[i].alias ? dataList[i].alias : dataList[i].label]) {
+              total += dataList[i].stats[ctrl.panel.valueName];
             }
           }
         }
+        const seriesElements: any = [];
+        for (let i = 0; i < dataList.length; i++) {
+          const seriesData = dataList[i];
+          seriesData.alias = seriesData.label;
 
+          if (panel.legend.regexPattern !== '' && panel.legend.regexPattern !== undefined) {
+            const regexVal = stringToJsRegex(panel.legend.regexPattern);
+            if (seriesData.label && regexVal.test(seriesData.label.toString())) {
+              let extractedtxt = '';
+              const temp = regexVal.exec(seriesData.label);
+              if (!temp) {
+                continue;
+              }
+              if (temp.length > 1) {
+                temp.slice(1).forEach(function(value) {
+                  extractedtxt += ' ' + value.toString();
+                });
+                seriesData.label = extractedtxt.trim();
+                panel.legend.regexData = seriesData;
+              }
+            }
+          } else {
+            panel.legend.regexData = [];
+          }
+        }
+        panel.legend.dataList = dataList;
         let combineNum = 0;
         const combineVal = {
           label: panel.combine.label,
           color: '',
           legendData: 0,
         };
-        const seriesElements = [];
 
-        for (i = 0; i < seriesList.length; i++) {
-          const series = seriesList[i];
+        for (i = 0; i < dataList.length; i++) {
+          const series = dataList[i];
           const seriesData = dataList[i];
           // combine lower values than threshold and not include into legent
           if (seriesData.data / total < panel.combine.threshold) {
             // Jump hidden series
-            if (!ctrl.hiddenSeries[seriesData.label]) {
+            if (!ctrl.hiddenSeries[seriesData.alias ? seriesData.alias : seriesData.label]) {
               combineNum++;
               combineVal.legendData += seriesData.data;
             }
@@ -246,15 +271,13 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
                 }
               }
             } else {
-              combineVal.color = seriesList[seriesList.length - combineNum].color;
+              combineVal.color = dataList[dataList.length - combineNum].color;
             }
           } else {
-            combineVal.color = seriesList[0].color;
+            combineVal.color = dataList[0].color;
           }
 
-          seriesElements.push(
-            $(generateLegendItem(combineVal, dataList.length - combineNum, total, showValues, tableLayout))
-          );
+          seriesElements.push($(generateLegendItem(combineVal, dataList.length - combineNum, total, showValues, tableLayout)));
         }
 
         if (tableLayout) {
@@ -279,7 +302,7 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
 
       function generateLegendItem(data: any, index: any, total: any, showValues: boolean, tableLayout: boolean) {
         let html = '<div class="piechart-legend-series';
-        if (ctrl.hiddenSeries[data.label]) {
+        if (ctrl.hiddenSeries[data.alias ? data.alias : data.label]) {
           html += ' piechart-legend-series-hidden';
         }
         html += '" data-series-index="' + index + '">';

@@ -1,3 +1,4 @@
+import { TemplateSrv } from 'grafana/app/features/templating/template_srv';
 import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk';
 import _ from 'lodash';
 import kbn from 'grafana/app/core/utils/kbn';
@@ -13,22 +14,32 @@ class PieChartCtrl extends MetricsPanelCtrl {
   unitFormats: any;
   series: any;
   data: any;
+  templateSrv: TemplateSrv;
 
   /** @ngInject */
-  constructor($scope: any, $injector: any, $rootScope: any) {
+  constructor($scope: any, $injector: any, $rootScope: any, templateSrv: any) {
     super($scope, $injector);
     this.$rootScope = $rootScope;
     this.hiddenSeries = {};
-
+    this.templateSrv = templateSrv;
+    //this.$document = $document;
     const panelDefaults = {
       pieType: 'pie',
       legend: {
         show: true, // disable/enable legend
         values: true,
+        regexPattern: '',
+        regexData: [],
+        dataList: [],
+        applySeriesName: false,
       },
       links: [],
+      // prettier-ignore
+      piechartDrilldownData : [],
       datasource: null,
-      maxDataPoints: 1,
+      // prettier-ignore
+      seriesnameSuggestion: ["{__series_name}"],
+      maxDataPoints: 3,
       interval: null,
       targets: [{}],
       cacheTimeout: null,
@@ -48,6 +59,10 @@ class PieChartCtrl extends MetricsPanelCtrl {
 
     _.defaults(this.panel, panelDefaults);
     _.defaults(this.panel.legend, panelDefaults.legend);
+    _.defaults(this.panel.piechartDrilldownData, panelDefaults.piechartDrilldownData);
+    _.defaults(this.panel.seriesnameSuggestion, panelDefaults.seriesnameSuggestion);
+
+    // prettier-ignore
 
     this.events.on('render', this.onRender.bind(this));
     this.events.on('data-received', this.onDataReceived.bind(this));
@@ -62,7 +77,68 @@ class PieChartCtrl extends MetricsPanelCtrl {
     this.addEditorTab('Options', 'public/plugins/grafana-piechart-panel/editor.html', 2);
     this.unitFormats = kbn.getUnitFormats();
   }
+  // prettier-ignore
+  addPiechatDatalink() {
+    this.render();
+    //Add the new item to the Array.
+    const item: any = {};
+    item.datalinktitle = item.datalinktitle;
+    item.url = item.url;
+    item.datalinkcheck = item.datalinkcheck;
+    this.panel.piechartDrilldownData.push(item);
+    //Clear the TextBoxes.
+    item.datalinktitle = "";
+    item.url = "";
+    item.datalinkcheck = "";
+  }
+  // prettier-ignore
+  currentindex: any = "";
+  caretPoint: any = 0;
+  suggestionList: any = [];
+  getSuggestions(e: any, name: any, index1: any, item: any) {
+    this.currentindex = index1;
+    if (!(this.suggestionList && this.suggestionList.length)) {
+      if (e.key === '=' || e.key === '$' || e.key === '&' || (e.keyCode === 32 && e.ctrlKey)) {
+        e.preventDefault();
+        this.caretPoint = e.target.selectionEnd;
+        this.suggestionList = [this.panel.seriesnameSuggestion, ...this.templateSrv.variables];
+      } else {
+        this.suggestionList = null;
+      }
+    }
 
+    if (e.key === 'Backspace' || e.key === 'Escape') {
+      this.suggestionList = null;
+    }
+  }
+  // Calculate the suggestion box position by cursor position
+  getSuggestionPosition() {
+    const left = this.caretPoint * 0.5;
+    return `${left}em`;
+  }
+  insertData(url: string, index: number, rem: number, data: any) {
+    return url.slice(0, index) + data + url.slice(index + Math.abs(rem));
+  }
+  selectSuggestion(data: any, index1: any, item: any) {
+    this.panel.piechartDrilldownData.forEach((item: any, index: any) => {
+      item.datalinktitle = item.datalinktitle;
+      if (index1 === index) {
+        item.url = this.insertData(item.url, this.caretPoint, 0, data);
+      }
+      item.datalinkcheck = item.datalinkcheck;
+      this.panel.piechartDrilldownData.splice(index, 1, item);
+      this.render();
+    });
+    this.suggestionList = null;
+  }
+  removePiechatDatalink(index: any) {
+    this.panel.piechartDrilldownData.splice(index, 1);
+    this.render();
+  }
+  // prettier-ignore
+  closeSuggestionPopup() {
+    this.suggestionList = null;
+  }
   setUnitFormat(subItem: any) {
     this.panel.format = subItem.value;
     this.render();
@@ -86,10 +162,14 @@ class PieChartCtrl extends MetricsPanelCtrl {
   parseSeries(series: any) {
     return _.map(this.series, (serie, i) => {
       return {
-        label: serie.alias,
+        label: serie.label,
+        alias: serie.alias,
         data: serie.stats[this.panel.valueName],
         color: this.panel.aliasColors[serie.alias] || this.$rootScope.colors[i],
         legendData: serie.stats[this.panel.valueName],
+        legend: serie.legend,
+        allIsNull: serie.allIsNull,
+        stats: serie.stats,
       };
     });
   }
@@ -163,15 +243,16 @@ class PieChartCtrl extends MetricsPanelCtrl {
     return value;
   }
 
-  link(scope: any, elem: any, attrs: any, ctrl: any) {
-    rendering(scope, elem, attrs, ctrl);
+  link(scope: any, elem: any, attrs: any, ctrl: any, templateSrv: any) {
+    rendering(scope, elem, attrs, ctrl, templateSrv);
   }
 
   toggleSeries(serie: any) {
-    if (this.hiddenSeries[serie.label]) {
-      delete this.hiddenSeries[serie.label];
+    const selectedSeriesLabel = serie.alias ? serie.alias : serie.label;
+    if (this.hiddenSeries[selectedSeriesLabel]) {
+      delete this.hiddenSeries[selectedSeriesLabel];
     } else {
-      this.hiddenSeries[serie.label] = true;
+      this.hiddenSeries[selectedSeriesLabel] = true;
     }
     this.render();
   }
