@@ -28,7 +28,6 @@ class PieChartCtrl extends MetricsPanelCtrl {
       },
       links: [],
       datasource: null,
-      maxDataPoints: 1,
       interval: null,
       targets: [{}],
       cacheTimeout: null,
