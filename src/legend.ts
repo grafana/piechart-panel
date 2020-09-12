@@ -124,7 +124,7 @@ angular.module('grafana.directives').directive('piechartLegend', (popoverSrv: an
             element: el[0],
             position: 'right center',
             template:
-              '<series-color-picker-popover series="series" onToggleAxis="toggleAxis" onColorChange="colorSelected">' +
+              '<series-color-picker-popover color="series.color" onToggleAxis="toggleAxis" onColorChange="colorSelected">' +
               '</series-color-picker-popover>',
             openOn: 'hover',
             classNames: 'drop-popover drop-popover--transparent',
