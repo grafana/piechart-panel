@@ -75,7 +75,7 @@
   <div class="section gf-form-group">
     <h5 class="section-heading">Combine (only for percentages)</h5>
     <div class="gf-form">
-      <span class="gf-form-label width-8">Threshold:</span>
+      <span class="gf-form-label width-8">Threshold</span>
       <input type="text" class="gf-form-input max-width-10" ng-model="ctrl.panel.combine.threshold" ng-change="ctrl.render()">
       <info-popover mode="right-absolute">Combines all slices that are smaller than the specified percentage (ranging from 0 to 1) i.e. a value of '0.03' will
         combine all slices 3% or less into one slice).</info-popover>
@@ -86,4 +86,73 @@
       <info-popover mode="right-absolute">Label text for the combined slice.</info-popover>
     </div>
   </div>
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Regex</h5>
+    <div class="gf-form">
+      <span class="gf-form-label width-9">Regex Pattern</span>
+      <input type="text" placeholder="regex" class="gf-form-input width-13" ng-model="ctrl.panel.legend.regexPattern" placeholder="/.*-(.*)-.*/"
+             ng-blur="ctrl.render()" data-min-length=0 data-items=100
+             data-placement="right">
+      <info-popover mode="right-absolute">
+        Optional, The values in the specified column are filtered and displayed according to this regex.
+        Ex: String: "Url|broadcom.com|mirror|location-1"
+        regex: "/Url\|(.*?)\|/"
+        Output: broadcom.com
+      </info-popover>
+    </div>
+    <div>
+      <gf-form-switch class="gf-form" label="Apply to Series Name" label-class="width-9" checked="ctrl.panel.legend.applySeriesName" on-change="ctrl.render()"></gf-form-switch>
+    </div>
+  </div>
+  <div class="section gf-form-group" ng-click="ctrl.closeSuggestionPopup()">
+    <h5 class="section-heading">DrillDown</h5>
+      <div ng-if="ctrl.panel.piechartDrilldownData.length>0" style="margin-top:15px;">
+        <div class="gf-form gf-form--inline css-utw9fo" style="margin-bottom:4px;" ng-repeat="item in ctrl.panel.piechartDrilldownData">
+          <div class="form-field"><label class="gf-form-label width-5">Title</label>
+            <input type="text" class="gf-form-input width-15" ng-model="item.datalinktitle"  ng-change="ctrl.render()" placeholder="Show details" value="test it first">
+          </div>
+          <div class="form-field css-1700k5z"  style="margin-left: 4px;">
+            <label  class="gf-form-label width-4">URL</label>
+            <input autocomplete="off" type="text" class="gf-form-input width-15" ng-keyup="ctrl.getSuggestions($event,item.url,$index,item)" spellcheck="true" ng-model="item.url" ng-change="ctrl.render()"  style="width: 583px!important;" placeholder="http://your-dashboard.com/d/000000010/annotations" value="test it first">
+            <div ng-if="ctrl.currentindex === $index">
+              <div class="autocomplete-items"  ng-if="ctrl.suggestionList.length>0" ng-style="{'left': ctrl.getSuggestionPosition()}">
+                <div ng-if="ctrl.templateSrv.variables.length>0"><div class="autopopuptitle">Template variables</div>
+                  <div class="autopopuplist" ng-repeat="suggestiondata in ctrl.suggestionList" ng-click="ctrl.selectSuggestion(suggestiondata.name,$parent.$index,item)">{{suggestiondata.name.replace('$','').replace('{','').replace('}','')}}</div>
+                </div>
+                <div ng-repeat="suggestiondata in ctrl.suggestionList">
+                  <div ng-if="suggestiondata[0] === '{__series_name}'">
+                    <div class="autopopuptitle">Built-in variables</div>
+                    <div class="autopopuplist"  ng-click="ctrl.selectSuggestion(suggestiondata[0],$parent.$parent.$index,item)">{{suggestiondata[0].replace('$','').replace('{','').replace('}','')}}
+                      <div class="autopopuplistsub">Adds current variables</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="gf-form-switch-container-react">
+            <label for="{{$index}}" class="gf-form gf-form-switch-container " style="margin-left: 4px;">
+              <div class="gf-form-label pointer">Open in new tab</div>
+              <div class="gf-form-switch">
+                <input id="{{$index}}" type="checkbox" ng-model="item.datalinkcheck" ng-change="ctrl.render()" checked="">
+                <span class="gf-form-switch__slider"></span>
+              </div>
+            </label>
+          </div>
+          <div class="gf-form">
+          <button class="gf-form-label gf-form-label--btn" style="margin-left: 4px;" ng-click="ctrl.removePiechatDatalink($index)"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="gf-form">
+        <button class="btn btn-secondary btn-small" style="margin-top: 10px;" ng-click="ctrl.addPiechatDatalink()">
+          <span class="css-1dxly9g-button-icon-wrap">
+          <span class="css-1dxly9g-button-icon-wrap">
+            <i class="fa fa-plus datalink-btn-icon piechart-plus-btn"></i>
+            <span>Add link</span>
+          </span>
+        </button>
+      </div>
+  </div>
 </div>
+
