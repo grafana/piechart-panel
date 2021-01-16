@@ -3,11 +3,13 @@ import './lib/jquery.flot.pie';
 import $ from 'jquery';
 //import './lib/jquery.flot';
 
-export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
+export default function link(scope: any, elem: any, attrs: any, ctrl: any, templateSrv: any) {
   let data;
   const panel = ctrl.panel;
+  let piechartPopupShow = false;
   elem = elem.find('.piechart-panel__chart');
   const $tooltip = $('<div id="tooltip">') as any;
+  const $piechartPopup = $('<div id="piechartPopup" class="piechartpopup-main">') as any;
 
   ctrl.events.on('render', () => {
     if (panel.legendType === 'Right side') {
@@ -19,7 +21,6 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
       render(true);
     }
   });
-
   function getLegendHeight(panelHeight: any) {
     if (!ctrl.panel.legend.show || ctrl.panel.legendType === 'Right side' || ctrl.panel.legendType === 'On graph') {
       return 20;
@@ -56,6 +57,24 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
   function noDataPoints() {
     const html = '<div class="datapoints-warning"><span class="small">No data points</span></div>';
     elem.html(html);
+  }
+  function applyRegex(seriesLabel: any, seriesAlias: any) {
+    let extractedSeriesLabel;
+    let serieslabel;
+    if (panel.legend.dataList) {
+      // @ts-ignore
+      panel.legend.dataList.forEach(serie => {
+        if (serie.alias === seriesLabel || serie.alias === seriesAlias) {
+          extractedSeriesLabel = serie.label;
+          serieslabel = serie.alias;
+        }
+      });
+    }
+    if (panel.legend.applySeriesName && panel.legend.regexPattern !== '') {
+      return extractedSeriesLabel ? extractedSeriesLabel : serieslabel;
+    } else {
+      return serieslabel;
+    }
   }
 
   function addPieChart() {
@@ -104,7 +123,7 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
       },
       grid: {
         hoverable: true,
-        clickable: false,
+        clickable: true,
       },
     };
 
@@ -116,9 +135,9 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
 
     for (let i = 0; i < data.length; i++) {
       const series = data[i];
-
       // if hidden remove points
-      if (ctrl.hiddenSeries[series.label]) {
+      const selectedSeriesLabel = panel.legend.regexData.alias === series.label ? panel.legend.regexData.alias : series.label;
+      if (ctrl.hiddenSeries[selectedSeriesLabel]) {
         series.data = {};
       }
     }
@@ -142,6 +161,43 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
 
     // @ts-ignore
     $.plot(plotCanvas, data, options);
+    plotCanvas.bind('plotclick', (event: any, pos: any, item: any) => {
+      piechartPopupShow = false;
+      if (!item) {
+        $piechartPopup.detach();
+        return;
+      }
+      // prettier-ignore
+      if (panel.piechartDrilldownData.length > 0) {
+        let body: any;
+        body =
+          '<div class="piechart-tooltip-small"><div class="piechart-tooltip-time">';
+        body += '<div class="piechartpopup-title">Data links</div>';
+        // prettier-ignore
+        panel.piechartDrilldownData.forEach((datalinkitem: any) => {
+                          if (datalinkitem.datalinktitle !=="") {
+                          const url = datalinkitem.url
+            ? datalinkitem.url.split('${__series_name}').join(`${_.escape(applyRegex(item.series.label, item.series.alias))}`): '';
+          const hrefUrl = ctrl.templateSrv.replace(url);
+          piechartPopupShow = true;
+                          body += `<a href="${hrefUrl.split(" ").join("")}"`;
+                          body += `target="${datalinkitem.datalinkcheck ? "_blank" : "_self"}" class="datalinkanchor">`;
+                          if (datalinkitem.url !=="" || datalinkitem.datalinktitle !=="") {
+                          body += `<div class="piechartpopup-item " ><i class="fa ${
+                            datalinkitem.datalinkcheck ? "fa-external-link" : "fa-link"
+                          }  datalink-icon"></i>`;
+                          }
+                          body += `${datalinkitem.datalinktitle}</div></a>`;
+                          }
+                        });
+        body += "</div></div>";
+        $piechartPopup.html(body).place_tt(pos.pageX - 10, pos.pageY - 10);
+      }
+      if (!piechartPopupShow) {
+        $piechartPopup.detach();
+        return;
+      }
+    });
     plotCanvas.bind('plothover', (event: any, pos: any, item: any) => {
       if (!item) {
         $tooltip.detach();
@@ -149,11 +205,12 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
       }
 
       let body;
+      // prettier-ignore
       const percent = parseFloat(item.series.percent).toFixed(2);
       const formatted = ctrl.formatValue(item.series.data[0][1]);
 
       body = '<div class="piechart-tooltip-small"><div class="piechart-tooltip-time">';
-      body += '<div class="piechart-tooltip-value">' + _.escape(item.series.label) + ': ' + formatted;
+      body += '<div class="piechart-tooltip-value">' + _.escape(applyRegex(item.series.label, item.series.alias)) + ': ' + formatted;
       body += ' (' + percent + '%)' + '</div>';
       body += '</div></div>';
 
@@ -163,13 +220,21 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
 
   function render(incrementRenderCounter: any) {
     if (!ctrl.data) {
+      $piechartPopup.detach();
       return;
     }
 
     data = ctrl.data;
-
-    if (0 === ctrl.data.length) {
+    if (!ctrl.data.length) {
       noDataPoints();
+    } else if (ctrl.data.length === 1) {
+      ctrl.data.forEach((dataitem: any) => {
+        if (dataitem.label === undefined) {
+          noDataPoints();
+        } else {
+          addPieChart();
+        }
+      });
     } else {
       addPieChart();
     }
@@ -177,5 +242,20 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
     if (incrementRenderCounter) {
       ctrl.renderingCompleted();
     }
+    if (piechartPopupShow === true) {
+      $piechartPopup.detach();
+    }
   }
+  // prettier-ignore
+  scope.$on("$destroy", () => {
+    if (piechartPopupShow === true) {
+      $piechartPopup.detach();
+    }
+  });
+  // prettier-ignore
+  $('.navbar-button--settings').on('click', (e: any) => {
+    if (piechartPopupShow === true) {
+    $piechartPopup.detach();
+    }
+  });
 }
