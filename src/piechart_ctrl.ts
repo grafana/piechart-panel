@@ -1,6 +1,7 @@
 import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk';
 import _ from 'lodash';
 import kbn from 'grafana/app/core/utils/kbn';
+import config from 'grafana/app/core/config';
 // @ts-ignore
 import TimeSeries from 'grafana/app/core/time_series';
 import rendering from './rendering';
@@ -76,6 +77,10 @@ class PieChartCtrl extends MetricsPanelCtrl {
     series.color = color;
     this.panel.aliasColors[series.alias] = series.color;
     this.render();
+  }
+
+  migrateToPanel(type: string) {
+    this.onPluginTypeChange(config.panels[type]);
   }
 
   onRender() {
