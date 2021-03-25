@@ -1530,7 +1530,7 @@
 
 "@types/grafana@github:CorpGlory/types-grafana":
   version "4.6.3"
-  resolved "https://codeload.github.com/CorpGlory/types-grafana/tar.gz/c58c08dc33585cc234f4d69013616edc05760e21"
+  resolved "https://codeload.github.com/CorpGlory/types-grafana/tar.gz/4beede5fa0e5bdebdb23b09e4e1e214dcc4c267f"
 
 "@types/html-minifier@*":
   version "3.5.3"
