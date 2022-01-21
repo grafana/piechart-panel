@@ -2,6 +2,12 @@
 [![David Dependancy Status](https://david-dm.org/grafana/piechart-panel.svg)](https://david-dm.org/grafana/piechart-panel)
 [![David Dev Dependency Status](https://david-dm.org/grafana/piechart-panel/dev-status.svg)](https://david-dm.org/grafana/piechart-panel/?type=dev)
 
+# **Notice:** This plugin is deprecated
+
+As of [Grafana 8.0](https://grafana.com/docs/grafana/latest/whatsnew/whats-new-in-v8-0/#whats-new-in-grafana-v80) Pie chart panel is included with Grafana. Please refer to the [Pie chart panel](<(https://grafana.com/docs/grafana/latest/visualizations/pie-chart-panel/)>) documentation for more information.
+
+# Installation
+
 Use the new grafana-cli tool to install piechart-panel from the commandline:
 
 ```
@@ -23,6 +29,7 @@ wget -nv https://grafana.com/api/plugins/grafana-piechart-panel/versions/latest/
 ```
 
 Extract and move into place
+
 ```BASH
 unzip -q /tmp/grafana-piechart-panel.zip -d /tmp
 mv /tmp/grafana-piechart-panel-* /var/lib/grafana/plugins/grafana-piechart-panel
@@ -30,6 +37,7 @@ sudo service grafana-server restart
 ```
 
 ### Git clone
+
 You can clone this repo directly into your plugins directory.
 
 Afterwards restart grafana-server and the plugin should be automatically detected and used.
