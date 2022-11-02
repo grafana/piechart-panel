@@ -13,17 +13,17 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "angular": "^1.7.9",
+    "angular": "1.7.9",
     "flot": "4.2.3",
     "jquery": "3.6.1",
     "jquery.flot": "0.8.3",
     "lodash": "4.17.21"
   },
   "devDependencies": {
-    "@grafana/data": "7.5.17",
-    "@grafana/toolkit": "latest",
-    "@grafana/ui": "7.5.17",
-    "@types/angular": "^1.6.57",
+    "@grafana/data": "7.0.6",
+    "@grafana/toolkit": "8.4.11",
+    "@grafana/ui": "7.0.6",
+    "@types/angular": "1.7.4",
     "@types/flot": "^0.0.32",
     "@types/grafana": "github:CorpGlory/types-grafana",
     "@types/lodash": "4.14.187"
