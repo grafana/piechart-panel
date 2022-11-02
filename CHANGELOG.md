@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.6.3] - 2022-11-02
+
+- Bump version for publishing
+
 ## [1.6.2] - 2022-11-02
 
 - Bump version for deprecation notice
