@@ -1,12 +1,21 @@
-grafana:
-  image: grafana/grafana:6.6.0
-  #image: grafana/grafana:6.5.3
-  #image: grafana/grafana:6.4.5
-  #image: grafana/grafana:5.4.4
-  ports:
-    - "3000:3000"
-  volumes:
-    - ./:/var/lib/grafana/plugins/grafana-piechart-panel
-    - ./provisioning:/etc/grafana/provisioning
-  environment:
-    - TERM=linux
+version: "3.7"
+services:
+  grafana:
+    # plugin verified to run on versions up to 9.2.3
+    image: grafana/grafana:9.2.3
+    #image: grafana/grafana:8.0.6
+    #image: grafana/grafana:7.5.17
+    #image: grafana/grafana:7.0.6
+    #image: grafana/grafana:6.3.7
+    #image: grafana/grafana:6.0.2
+    #image: grafana/grafana:5.4.5
+    # absolute minimum version is 4.6.5
+    #image: grafana/grafana:4.6.5
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/grafana-piechart-panel
+      - ./provisioning:/etc/grafana/provisioning
+    environment:
+      TERM: linux
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: grafana-piechart-panel
