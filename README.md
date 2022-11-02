@@ -20,7 +20,7 @@ The plugin will be installed into your Grafana plugins directory; the default is
 
 More instructions on the Grafana CLI tool can be found in [Grafana CLI](https://grafana.com/docs/grafana/latest/administration/cli/).
 
-You must have Grafana 4.6 or newer installed to run this plugin. You can get it here : <https://grafana.com/grafana/download>
+You must have Grafana 4.6.5 or newer installed to run this plugin. You can get it here: <https://grafana.com/grafana/download>
 
 ## Alternative installation methods
 
