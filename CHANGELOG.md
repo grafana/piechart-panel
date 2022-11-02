@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.6.2] - 2022-11-02
+
+- Bump version for deprecation notice
+- Update packages
+- Switch to drone vs circleci
+
 ## [1.6.1] - 2020-09-14
 
 - Fixed issue with legend color picker [#248](https://github.com/grafana/piechart-panel/issues/248)
