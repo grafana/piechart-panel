@@ -2,7 +2,6 @@
   "type": "panel",
   "name": "Pie Chart",
   "id": "grafana-piechart-panel",
-
   "info": {
     "description": "Pie chart panel for grafana",
     "author": {
@@ -31,7 +30,8 @@
   },
 
   "dependencies": {
-    "grafanaVersion": "4.6",
+    "grafanaVersion": "4.6.5",
+    "grafanaDependency": ">=4.6.5",
     "plugins": []
   }
 }
