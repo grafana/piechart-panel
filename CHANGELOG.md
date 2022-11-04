@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.6.4] - 2022-11-04
+
+- Readme fix
+
 ## [1.6.3] - 2022-11-02
 
 - Bump version for publishing
