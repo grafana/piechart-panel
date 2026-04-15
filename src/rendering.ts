@@ -62,6 +62,11 @@ export default function link(scope: any, elem: any, attrs: any, ctrl: any) {
     const width = elem.width();
     const height = ctrl.height - getLegendHeight(ctrl.height);
 
+    // return if container has no dimensions
+    if (width <= 0 || height <= 0) {
+      return;
+    }
+
     const size = Math.min(width, height);
 
     const plotCanvas = $('<div></div>');
