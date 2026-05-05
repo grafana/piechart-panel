@@ -2,7 +2,7 @@ version: "3.7"
 services:
   grafana:
     # plugin verified to run on versions up to 9.2.3
-    image: grafana/grafana:9.2.3
+    image: grafana/grafana:13.0.1@sha256:0f86bada30d65ef9d0183b90c1e2682ac92d53d95da8bed322b984ea78a4a73a
     #image: grafana/grafana:8.0.6
     #image: grafana/grafana:7.5.17
     #image: grafana/grafana:7.0.6
