@@ -6599,10 +6599,10 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.3.tgz#c1283ac9f27b368abc1e36d1ff7b04501a30356b"
   integrity sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==
 
-flot@4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/flot/-/flot-4.2.3.tgz#d327be738a06b6617deeaf346bcbfe0ee5242e48"
-  integrity sha512-r1t2gfhILE6dt7cnYDHX/D2VHERyD0YoV0UdFJg5dWbjkcu05MugfhNY7VspfBFTa+hjVNYVZw6/t9ZyYNen+w==
+flot@4.2.6:
+  version "4.2.6"
+  resolved "https://registry.yarnpkg.com/flot/-/flot-4.2.6.tgz#f2ea48270099567a6ccf8b5ab1ef18a5b65f356d"
+  integrity sha512-Iz4HCet1ZBQnjGwECz4jseD1zMnh7m2XJIMI6A62l8h2SeceLYOEmYGNQto1XhkSM9fUmqzyKhWwJ+RolWLydg==
 
 flush-write-stream@^1.0.0:
   version "1.1.1"

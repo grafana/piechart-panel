@@ -14,7 +14,7 @@
   "private": true,
   "dependencies": {
     "angular": "1.7.9",
-    "flot": "4.2.3",
+    "flot": "4.2.6",
     "jquery": "3.6.1",
     "jquery.flot": "0.8.3",
     "lodash": "4.18.1"
