@@ -2563,10 +2563,10 @@
   resolved "https://registry.yarnpkg.com/@types/flatbuffers/-/flatbuffers-1.10.0.tgz#aa74e30ffdc86445f2f060e1808fc9d56b5603ba"
   integrity sha512-7btbphLrKvo5yl/5CC2OCxUSMx1wV1wvGT1qDXkSt7yi00/YW7E8k6qzXqJHsp+WU0eoG7r6MTQQXI9lIvd0qA==
 
-"@types/flot@^0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@types/flot/-/flot-0.0.32.tgz#2ab260f2958dcab1acfb5c24b87898f1d22417d8"
-  integrity sha512-aturel4TWMY86N4Pkpc9pSoUd/p8c3BjGj4fTDkaZIpkRPzLH1VXZCAKGUywcFkTqgZMhPJFPWxd4pl87y8h/w==
+"@types/flot@^0.0.36":
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/@types/flot/-/flot-0.0.36.tgz#59961afa913561236ed7dd2f2c710de0695ec3e2"
+  integrity sha512-xRo4MUIMnRPGXJCuQXAWvo+uKRmziRGHAy9LQHsLgbKanknpe5z3EThqVuYkVCC6ZWPZ/8pllBXnzQmGzFkJ/Q==
   dependencies:
     "@types/jquery" "*"
 
