@@ -26,6 +26,6 @@
     "@types/angular": "1.7.4",
     "@types/flot": "^0.0.32",
     "@types/grafana": "github:CorpGlory/types-grafana",
-    "@types/lodash": "4.14.187"
+    "@types/lodash": "4.17.25"
   }
 }
