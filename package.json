@@ -20,9 +20,9 @@
     "lodash": "4.18.1"
   },
   "devDependencies": {
-    "@grafana/data": "7.0.6",
-    "@grafana/toolkit": "8.4.11",
-    "@grafana/ui": "7.0.6",
+    "@grafana/data": "13.2.1",
+    "@grafana/toolkit": "9.5.21",
+    "@grafana/ui": "13.2.1",
     "@types/angular": "1.7.4",
     "@types/flot": "^0.0.32",
     "@types/grafana": "github:CorpGlory/types-grafana",
